@@ -60,8 +60,29 @@ h1 {
 
 body {
     font: 16px/26px 'Montserrat', sans-serif;
-    color: #4e5054;
-    background: linear-gradient(10deg, #74ebd5, #ACB6E5) 0% 0% / 200% 200%;
+    color: #fff;
+    background: linear-gradient(270deg, #a24bcf, #4b79cf, #4bc5cf);
+    background-size: 600% 600%;
+    -webkit-animation: customAnimation 30s ease infinite;
+    -moz-animation: customAnimation 30s ease infinite;
+    animation: customAnimation 30s ease infinite;
+
+}
+
+@-webkit-keyframes customAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes customAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes customAnimation {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
 }
 
 .wrapper {
@@ -158,13 +179,17 @@ header {
    ========================================================================== */
 
 h3 {
-    color: #4e5054;
+    color: #fff;
     font-size: .8em;
     font-weight: 400;
 }
 
 a {
-    color: #4e5054;
+    color: #fff;
+}
+
+.icon {
+    max-width: 70px;
 }
 
 .button {
