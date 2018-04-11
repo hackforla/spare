@@ -83,3 +83,4 @@ http://localhost:8000/admin/
 * Browsable API - http://localhost:8000/api/
 * API Login - http://localhost:8000/api-auth/login/
 * API Docs - http://localhost:8000/docs/
+* Client App - http://localhost:3000/

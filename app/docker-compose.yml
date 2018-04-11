@@ -23,3 +23,16 @@ services:
             POSTGRES_DB: postgres_db
         ports:
             - "5432:5432"
+
+    client:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        command: npm run start
+        volumes:
+            - ./client:/app
+            - /app/node_modules
+        ports:
+            - "3000:3000"
+        depends_on:
+            - server
