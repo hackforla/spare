@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+    server:
+        build:
+            context: ./server
+            dockerfile: Dockerfile.web
+        env_file: .env.dev
+        command: python3 manage.py runserver 0.0.0.0:8000
+        volumes:
+            - ./server:/app
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
+        stdin_open: true  # These two lines allow us to use pdb via stdin:
+        tty: true         # docker attach <container>
+
+    db:
+        image: postgres
+        environment:
+            POSTGRES_USER: postgres_user
+            POSTGRES_DB: postgres_db
+        ports:
+            - "5432:5432"

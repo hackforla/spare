@@ -11,5 +11,5 @@ __pycache__/
 .tox
 .cache
 
-/app/server/static/public/
-/app/server/media/
+/spare/static/public/
+/spare/media/
