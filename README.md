@@ -10,3 +10,6 @@ Spare Team is
 * Miguel G
 * Joshi
 * @ultraturtle0
+* Shawn
+* @mfgryan
+
