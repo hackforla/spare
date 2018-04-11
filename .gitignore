@@ -16,3 +16,5 @@ bower_components/
 
 /app/server/static/public/
 /app/server/media/
+
+.DS_Store
