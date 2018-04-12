@@ -1,0 +1,15 @@
+build/
+*.egg-info/
+*.egg
+*.py[cod]
+__pycache__/
+*.so
+*.swp
+*~
+*.env.*
+
+.tox
+.cache
+
+/spare/static/public/
+/spare/media/
