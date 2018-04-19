@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.utils import timezone
-from rest_framework import mixins, viewsets
+from rest_framework import generics, mixins, viewsets
 
 from donations.models import DonationFulfillment, DonationRequest
 from donations.serializers import (
@@ -27,3 +27,9 @@ class DonationRequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, vie
 class DonationFulfillmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = DonationFulfillment.objects.all()
     serializer_class = DonationFulfillmentSerializer
+
+
+class DonationRequestCodeDetailView(generics.RetrieveAPIView):
+    queryset = DonationRequest.objects.all()
+    serializer_class = DonationRequestSerializer
+    lookup_field = 'code'

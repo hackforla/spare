@@ -2,7 +2,6 @@ import random
 
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-
 from rest_framework.exceptions import ValidationError
 
 from donations.models import DonationRequest
