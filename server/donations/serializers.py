@@ -42,10 +42,11 @@ class DonationRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationRequest
         fields = (
-            'id', 'name', 'phone', 'email', 'item', 'size', 'created'
+            'id', 'name', 'phone', 'email', 'item', 'size', 'code',
+            'created'
         )
         read_only_fields = (
-            'id', 'created',
+            'id', 'created', 'code'
         )
         validators = [ContactInfoValidator()]
 
