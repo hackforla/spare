@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
-import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
+import { Alert, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
 
 class RequestForm extends Component {
 
 	constructor(props, context) {
 		super(props, context);
 
-		this.handleChange = this.handleChange.bind(this);
-        
+		this.handleChange = this.handleChange.bind(this); 
+		this.handleSubmit = this.handleSubmit.bind(this);
+        this.sendForm = this.sendForm.bind(this);
+
         this.fields = [
             { "key": "name", "name": "Full Name", "type": "text", "placeholder": "Enter name" },
 			{ "key": "email", "name": "Email", "type": "email", "placeholder": "Enter Email" },
@@ -19,9 +22,17 @@ class RequestForm extends Component {
         
         //initialize state with keys from fields array
         this.state = {};
+
+        //initialize form inputs for submission
+        this.inputs = {};
+
         this.fields.forEach(field => {
+            // eslint-disable-next-line
             this.state[field.key] = ''; 
+            this.inputs[field.key] = '';
         });
+
+        this.inputs.item = '';
 
 	}
 
@@ -40,6 +51,38 @@ class RequestForm extends Component {
         this.setState(newState);
   	}
 
+    // Display message and run callback on form submission
+    handleSubmit(e) {
+        e.preventDefault();
+        this.setState({
+            alert: 'info',
+            message: 'Sending...'
+        }, this.sendForm);
+    }
+
+    // Send HTTP post request
+    sendForm() {
+        var data = {};
+        this.fields.forEach((field) => {
+            data[field.key] = this.inputs[field.key].value;
+        });
+        data.item = this.inputs.item.value;
+        console.log(data);
+
+        // localhost shouldn't be hard-coded. how do we 
+        // handle this in development if the API endpoint
+        // is on a different port?
+        axios.post('http://localhost:8000/api/', data)
+            .then((res) => {
+                this.setState((oldState) => ({alert: 'success', message: 'Request received.'}));
+                console.log(res);
+            })
+            .catch((err) => {
+                this.setState((oldState) => ({alert: 'danger', message: 'Request failed.'}));
+                console.log(err)
+            });
+    }
+
     getBasicFields(fields){
         return fields.map((field, index) =>
             <FormGroup controlId={field.key} key={index}
@@ -49,6 +92,7 @@ class RequestForm extends Component {
                     type={field.type}
                     value={this.state[field.key]}
                     placeholder={field.placeholder}
+                    inputRef={(ref) => {this.inputs[field.key] = ref}}
                     onChange={event => {this.handleChange(event, field.key)}}
                 />
                 <FormControl.Feedback />
@@ -56,22 +100,35 @@ class RequestForm extends Component {
     }
 
     getItemOptions(items){
-        return items.map(item => <option value={item}>{item}</option>)
+        return items.map((item, index) => <option key={index} value={item}>{item}</option>)
     }
 	
     render() {
+        if (this.state.alert && this.state.message) {
+            var formStatus = (
+                <Alert bsStyle={this.state.alert}>
+                    {this.state.message}
+                </Alert>
+            );
+        }
+
         return (
             <div className="RequestForm">
                 <h2>Request form</h2>
-                <form>
+                <form onSubmit={this.handleSubmit}>
                     {this.getBasicFields(this.fields)}
                     <FormGroup>
                         <ControlLabel>Select an Item</ControlLabel>
-                        <FormControl componentClass="select" placeholder="select">
+                        <FormControl
+                            componentClass="select"
+                            placeholder="select"
+                            inputRef={(ref) => {this.inputs.item = ref}}
+                        >
                             {this.getItemOptions(this.itemOptions)}
                         </FormControl>
                     </FormGroup>
                     <Button type="submit">Submit</Button>
+                    {formStatus}
                 </form>
             </div>
         );
