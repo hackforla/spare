@@ -8,7 +8,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Spare</h1>
-          <RequestForm />
+          {/* <RequestForm /> */}
           <DonateItems />
         </header>
       </div>

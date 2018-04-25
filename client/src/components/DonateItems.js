@@ -12,7 +12,7 @@ export default class DonateItems extends Component {
             <div>
                 <h2>Give spare items directly to people in need.</h2>
                 <h2>What could you spare?</h2>
-                <Nav bsStyle="tabs" activeKey={1}>
+                <Nav bsStyle="pills" activeKey={1}>
                     <NavItem eventKey={1} href="/clothing">Clothing</NavItem>
                     <NavItem eventKey={2} href="/essentials">Essentials</NavItem>
                     <NavItem eventKey={3} href="/hygiene">Hygiene</NavItem>
