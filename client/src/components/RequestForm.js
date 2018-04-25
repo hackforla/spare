@@ -18,7 +18,8 @@ class RequestForm extends Component {
             { "key": "phone", "name": "Phone Number", "type": "text", "placeholder": "Enter Phone Number" },
         ];
 
-        this.itemOptions = ["hygiene","essentials","clothing"];
+        //this.itemOptions = ["hygiene","essentials","clothing"];
+        this.itemOptions = ["Shoes", "Socks", "Dresses and Skirts"];
         
         //initialize state with keys from fields array
         this.state = {};
@@ -72,7 +73,7 @@ class RequestForm extends Component {
         // localhost shouldn't be hard-coded. how do we 
         // handle this in development if the API endpoint
         // is on a different port?
-        axios.post('http://localhost:8000/api/', data)
+        axios.post('http://localhost:8000/api/requests/', data)
             .then((res) => {
                 this.setState((oldState) => ({alert: 'success', message: 'Request received.'}));
                 console.log(res);
@@ -100,7 +101,7 @@ class RequestForm extends Component {
     }
 
     getItemOptions(items){
-        return items.map((item, index) => <option key={index} value={item}>{item}</option>)
+        return items.map((item, index) => <option key={index} value={index+1}>{item}</option>)
     }
 	
     render() {
