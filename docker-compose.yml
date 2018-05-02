@@ -23,7 +23,6 @@ services:
             POSTGRES_DB: postgres_db
         ports:
             - "5432:5432"
-
     client:
         build:
             context: ./client
@@ -31,8 +30,10 @@ services:
         command: bash -c "npm install; npm run start"
         volumes:
             - ./client:/app
-            - /app/node_modules
+            - node_modules:/app/node_modules
         ports:
             - "3000:3000"
         depends_on:
             - server
+volumes:
+    node_modules:
