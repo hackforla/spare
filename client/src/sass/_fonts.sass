@@ -1,0 +1,27 @@
+@font-face
+  font-family: 'Lato'
+  src: url('https://fonts.googleapis.com/css?family=Lato')
+
+=textedit($font, $size, $height, $weight)
+  font-family: $font
+  font-size: $size
+  line-height: $height
+  font-weight: $weight
+
+  
+h1
+  +textedit('Lato', 1.875em, 2.8125em, 600)
+
+h2
+  +textedit('Lato', 1.375em, 1.75em, 400)
+
+.text-label-small
+  +textedit('Lato', 1em, 1.25em, 400)
+
+.text-label
+  +textedit('Lato', 0.875em, 1.125em, 600)
+
+.text-form
+  +textedit('Lato', 1em, 1.25em, 400)
+
+
