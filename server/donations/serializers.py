@@ -57,5 +57,5 @@ class DonationRequestPublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationRequest
         fields = (
-            'id', 'item', 'size', 'created'
+            'id', 'item', 'size', 'created', 'city'
         )

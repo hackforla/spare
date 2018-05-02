@@ -13,6 +13,11 @@ import './css/index.css';
 import App from './components/App.js';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
+ReactDOM.render((
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+), document.getElementById('root')
+);
 registerServiceWorker();
 
