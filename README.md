@@ -1,4 +1,4 @@
-# Spare App
+# Spare App [![Build Status](https://travis-ci.org/hackforla/spare.svg?branch=master)](https://travis-ci.org/hackforla/spare)
 
 ## Setup Instructions
 
