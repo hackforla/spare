@@ -4,9 +4,10 @@ import { Button, Nav, NavItem, Row } from 'react-bootstrap';
 import ItemsList from './ItemsList';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Switch, Redirect, Route } from 'react-router-dom';
+import CategoryNav from './CategoryNav';
 
 
-export default class CategoriesList extends Component {
+export default class Donate extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -41,54 +42,44 @@ export default class CategoriesList extends Component {
     if (mode === 'donate') {
       switchModeButton = (
         <LinkContainer to={ paths.request }>
-          <Button>Request</Button>
+          <Button>Request an item</Button>
         </LinkContainer>
       )
     }
     else if (mode === 'request') {
       switchModeButton = (
         <LinkContainer to={ paths.donate }>
-          <Button>Donate</Button>
+          <Button>Donate an item</Button>
         </LinkContainer>
       )
     }
 
     return (
-      <div>
-        { switchModeButton }
-        <Row className='text-center'>
-          <h2>
-            Give spare items directly to people in need.
-            <br />
-            What could you spare?
-          </h2>
-        </Row>
-        <Row>
-          <Nav bsStyle="pills" justified>
-            <LinkContainer to={ paths.clothing }>
-              <NavItem eventKey={'clothing'}>Clothing</NavItem>
-            </LinkContainer>
-            <LinkContainer to={ paths.essentials }>
-              <NavItem eventKey={'essentials'}>Essentials</NavItem>
-            </LinkContainer>
-            <LinkContainer to={ paths.hygiene }>
-              <NavItem eventKey={'hygiene'}>Hygiene</NavItem>
-            </LinkContainer>
-          </Nav>
-        </Row>
-        <Switch>
-          <Route exact path={ paths.clothing }>
-            <ItemsList mode={ mode } category='clothing' requests={ requests } />
+      <Switch>
+        <div>
+          { switchModeButton }
+          <Row className='text-center'>
+            <h2>
+              Give spare items directly to people in need.
+              <br />
+              What could you spare?
+            </h2>
+          </Row>
+          <Row>
+            <CategoryNav mode={ mode } match={ match } paths={ paths  } />
+          </Row>
+          <Route path={ paths.clothing }>
+            <ItemsList mode={ mode } category='clothing' requests={ requests } paths={ paths } />
           </Route>
-          <Route exact path={ paths.essentials }>
-            <ItemsList mode={ mode } category='essentials' requests={ requests } />
+          <Route path={ paths.essentials }>
+            <ItemsList mode={ mode } category='essentials' requests={ requests } paths={ paths } />
           </Route>
-          <Route exact path={ paths.hygiene }>
-            <ItemsList mode={ mode } category='hygiene' requests={ requests } />
+          <Route path={ paths.hygiene }>
+            <ItemsList mode={ mode } category='hygiene' requests={ requests } paths={ paths }/>
           </Route>
           <Redirect exact from={ match.path } to={ paths.clothing }/>
-        </Switch>
-      </div>
+        </div>
+      </Switch>
     )
   }
 };

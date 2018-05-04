@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
-import { itemsByCategory, itemInfo } from '../constants';
+import { itemTypesByCategory, itemInfo } from '../constants';
+import { Link, Route, Switch } from 'react-router-dom';
 
 
 class RequestItem extends Component {
@@ -8,7 +9,7 @@ class RequestItem extends Component {
     const { displayName } = this.props.info;
     // TODO: Put these styles in CSS/SASS
     return (
-      <div class="col-sm-4 col-xs-12" style={{
+      <div className="col-sm-4 col-xs-12" style={{
         minWidth: '150px',
         minHeight: '150px',
       }}>{ displayName }</div>
@@ -17,20 +18,31 @@ class RequestItem extends Component {
 }
 
 
-export default class RequestItemsList extends Component {
+class RequestItemsLinks extends Component {
   render() {
     const { category } = this.props;
 
-    const categoryItems = itemsByCategory[category];
+    const categoryItems = itemTypesByCategory[category];
 
     return (
       <Row>
         {
-          categoryItems.map(function(item){
+          categoryItems.map((item) => {
             return (<RequestItem key={ item } info={ itemInfo[item] }/>)
           })
         }
       </Row>
+    )
+  }
+}
+
+
+export default class RequestItemsList extends Component {
+  render() {
+    return (
+      <Switch>
+        <RequestItemsLinks { ...this.props } />
+      </Switch>
     )
   }
 }

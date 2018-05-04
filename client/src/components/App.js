@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Switch, Redirect, Route } from 'react-router-dom';
-import CategoriesList from '../components/CategoriesList';
+import Request from './Request';
+import Donate from './Donate';
 import { Grid, PageHeader } from 'react-bootstrap';
 
 
@@ -12,9 +13,9 @@ class App extends Component {
           Spare
         </PageHeader>
         <Switch>
-          <Route path='/donate' render={props => (<CategoriesList mode='donate' {...props}/>)} />
+          <Route path='/donate' render={props => (<Donate mode='donate' {...props}/>)} />
           <Redirect exact from="/" to="/donate" />
-          <Route path='/request' render={props => (<CategoriesList mode='request' {...props}/>)} />
+          <Route path='/request' render={props => (<Request mode='request' {...props}/>)} />
           <Route path='/code'>
             <h2>Code</h2>
           </Route>

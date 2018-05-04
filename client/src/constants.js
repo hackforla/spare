@@ -1,4 +1,4 @@
-export const itemsByCategory = {
+export const itemTypesByCategory = {
   clothing: [
     'shirts',
     'dresses_skirts',
