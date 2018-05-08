@@ -1,3 +1,41 @@
+@font-face {
+  font-family: 'Lato';
+  src: url("https://fonts.googleapis.com/css?family=Lato"); }
+
+h1 {
+  font-family: "Lato";
+  font-size: 1.875em;
+  line-height: 2.8125em;
+  font-weight: 600; }
+
+h2 {
+  font-family: "Lato";
+  font-size: 1.375em;
+  line-height: 1.75em;
+  font-weight: 400; }
+
+.text-label-small {
+  font-family: "Lato";
+  font-size: 1em;
+  line-height: 1.25em;
+  font-weight: 400;
+  text-align: center; }
+
+.text-label {
+  font-family: "Lato";
+  font-size: 0.875em;
+  line-height: 1.125em;
+  font-weight: 600; }
+
+.text-form {
+  font-family: "Lato";
+  font-size: 1em;
+  line-height: 1.25em;
+  font-weight: 400; }
+
+.tile {
+  border-radius: 10px; }
+
 body {
   margin: 0px;
   padding: 0px; }
