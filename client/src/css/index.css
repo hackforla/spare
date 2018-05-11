@@ -1,3 +1,11 @@
 body {
   margin: 0px;
-  padding: 0px; }
+  padding: 0px;
+}
+
+.navbar-default {
+  background-image: none;
+  box-shadow: none;
+  background: none;
+  border: none;
+}
