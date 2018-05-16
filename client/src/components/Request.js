@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Button, Nav, NavItem, Row } from 'react-bootstrap';
+import { Button, Row } from 'react-bootstrap';
 import ItemsList from './ItemsList';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Switch, Redirect, Route } from 'react-router-dom';

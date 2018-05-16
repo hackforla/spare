@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Button, Table } from 'react-bootstrap';
 import { itemTypesByCategory, itemInfo } from '../constants';
 import DonateItemsTable from './DonateItemsTable';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 class DonateItem extends Component {
@@ -32,13 +31,16 @@ class DonateItemsLinks extends Component {
       const categoryItems = itemTypesByCategory[category];
       const itemType = request.item.tag;
 
-      if (itemTypesByCategory[category].indexOf(itemType) > 0) {
+      if (categoryItems.indexOf(itemType) > 0) {
         if (!(itemType in requestsByItemType)) {
           requestsByItemType[itemType] = [];
         }
 
         requestsByItemType[itemType].push(request);
         return request;
+      }
+      else {
+        return null;
       }
     }) : [];
 
@@ -63,8 +65,6 @@ class DonateItemsLinks extends Component {
 
 export default class DonateItemsList extends Component {
   render() {
-    const { category, mode } = this.props;
-
     return (
       <div>
         <DonateItemsTable {...this.props} />

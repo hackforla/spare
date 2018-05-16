@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Button, Table } from 'react-bootstrap';
-import { itemTypesByCategory, itemInfo } from '../constants';
-import { Link, Route, Switch } from 'react-router-dom';
+import { itemTypesByCategory } from '../constants';
+import { Route, Switch } from 'react-router-dom';
 
 
 class DonateItemsTypeTable extends Component {
   render() {
 
-    const { category, categoryPath, requests } = this.props;
+    const { category, requests } = this.props;
 
     return (
       <Table>
@@ -28,6 +28,9 @@ class DonateItemsTypeTable extends Component {
                     <td><Button>Donate</Button></td>
                   </tr>
                 )
+              }
+              else {
+                return null;
               }
             }) : null
           }
@@ -54,6 +57,9 @@ export default class DonateItemsTable extends Component {
         visibleItems[itemType] = true; // Only show items with requests
         return request;
       }
+      else {
+        return null;
+      }
     }) : null
 
     const categoryPath = paths[category];
@@ -64,7 +70,7 @@ export default class DonateItemsTable extends Component {
         const categoryItemPath = '/' + categoryPath + '/' + categoryItem + '/';
 
         return (
-          <Route exact path={ categoryPath + '/:id' } key={ index }>
+          <Route exact path={ categoryItemPath } key={ index }>
             <div>
               <DonateItemsTypeTable {...this.props } categoryRequests={ categoryRequests }  />
             </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import { itemTypesByCategory, itemInfo } from '../constants';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import Tile from './Tile';
 
 

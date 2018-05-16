@@ -7,7 +7,7 @@ import RequestItemsList from './RequestItemsList';
 
 export default class ItemsList extends Component {
   render() {
-    const { paths, match, mode } = this.props;
+    const { mode } = this.props;
 
     if ( mode === 'donate' ){
       return (
