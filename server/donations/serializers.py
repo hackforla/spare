@@ -1,6 +1,7 @@
+from collections import defaultdict
 from rest_framework import serializers
 
-from donations.models import DonationFulfillment, DonationRequest, Item
+from donations.models import Category, DonationFulfillment, DonationRequest, Item
 
 
 class ContactInfoValidator(object):
@@ -51,6 +52,39 @@ class DonationRequestSerializer(serializers.ModelSerializer):
         validators = [ContactInfoValidator()]
 
 
+class DonationRequestListSerializer(serializers.ListSerializer):
+    def to_representation(self, instance):
+        results = super(DonationRequestListSerializer, self).to_representation(instance)
+        results_count = defaultdict(lambda: defaultdict(int))
+
+        for result in results:
+            item = result['item']
+            item_type = item['tag']
+            category = item['category_tag']
+            results_count[category][item_type] += 1
+
+        results_by_category = []
+        for category in Category.objects.all():
+
+            item_results = []
+            for item_type in Item.objects.filter(category=category):
+                item_results.append(
+                    {
+                        'item_type': item_type.tag,
+                        'count': results_count[category.tag][item_type.tag],
+                    }
+                )
+
+            results_by_category.append(
+                {
+                    'category': category.tag,
+                    'requests': item_results
+                }
+            )
+
+        return results_by_category
+
+
 class DonationRequestPublicSerializer(serializers.ModelSerializer):
     item = ItemRequestSerializer()
 
@@ -59,3 +93,4 @@ class DonationRequestPublicSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'item', 'size', 'created', 'city'
         )
+        list_serializer_class = DonationRequestListSerializer
