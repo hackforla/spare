@@ -1,3 +1,49 @@
+@font-face {
+  font-family: 'Lato';
+  src: url("https://fonts.googleapis.com/css?family=Lato"); }
+
+h1 {
+  font-family: "Lato";
+  font-size: 1.875em;
+  line-height: 2.8125em;
+  font-weight: 600; }
+
+h2 {
+  font-family: "Lato";
+  font-size: 1.375em;
+  line-height: 1.75em;
+  font-weight: 400; }
+
+.text-label-small {
+  font-family: "Lato";
+  font-size: 1em;
+  line-height: 1.25em;
+  font-weight: 400; }
+
+.text-label {
+  font-family: "Lato";
+  font-size: 0.875em;
+  line-height: 1.125em;
+  font-weight: 600;
+  text-align: center; }
+
+.text-form {
+  font-family: "Lato";
+  font-size: 1em;
+  line-height: 1.25em;
+  font-weight: 400; }
+
+.tile {
+  border-radius: 10px;
+  background: url("https://github.com/hackforla/spare/blob/master/design/assets/tiles/dress.png");
+  text-align: center; }
+
+.tile-label {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -25%); }
+
 body {
   margin: 0px;
   padding: 0px;
