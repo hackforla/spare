@@ -55,19 +55,19 @@ export default class Donate extends Component {
     }
 
     return (
-      <Switch>
-        <div>
-          { switchModeButton }
-          <Row className='text-center'>
-            <h2>
-              Give spare items directly to people in need.
-              <br />
-              What could you spare?
-            </h2>
-          </Row>
-          <Row>
-            <CategoryNav mode={ mode } match={ match } paths={ paths  } />
-          </Row>
+      <div>
+        { switchModeButton }
+        <Row className='text-center'>
+          <h2>
+            Give spare items directly to people in need.
+            <br />
+            What could you spare?
+          </h2>
+        </Row>
+        <Row>
+          <CategoryNav mode={ mode } match={ match } paths={ paths  } />
+        </Row>
+        <Switch>
           <Route path={ paths.clothing }>
             <ItemsList mode={ mode } category='clothing' requests={ requests } paths={ paths } />
           </Route>
@@ -78,8 +78,8 @@ export default class Donate extends Component {
             <ItemsList mode={ mode } category='hygiene' requests={ requests } paths={ paths }/>
           </Route>
           <Redirect exact from={ match.path } to={ paths.clothing }/>
-        </div>
-      </Switch>
+        </Switch>
+      </div>
     )
   }
 };

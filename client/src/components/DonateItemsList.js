@@ -67,9 +67,7 @@ export default class DonateItemsList extends Component {
 
     return (
       <div>
-        <Switch>
-          <DonateItemsTable {...this.props} />
-        </Switch>
+        <DonateItemsTable {...this.props} />
       </div>
     )
   }

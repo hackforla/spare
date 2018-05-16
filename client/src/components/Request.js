@@ -69,9 +69,6 @@ export default class Request extends Component {
           <Route exact path={ paths.clothing }>
             <ItemsList mode={ mode } category='clothing' requests={ requests } paths={ paths } />
           </Route>
-          <Route exact path={ paths.clothing + '/:id'}>
-            <p>Content here</p>
-          </Route>
           <Route exact path={ paths.essentials }>
             <ItemsList mode={ mode } category='essentials' requests={ requests } paths={ paths } />
           </Route>
