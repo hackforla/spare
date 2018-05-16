@@ -29,7 +29,7 @@ services:
         build:
             context: ./client
             dockerfile: Dockerfile
-        command: bash -c "npm install; npm run start-js"
+        command: bash -c "npm install; npm run start"
         volumes:
             - ./client:/app
             - node_modules:/app/node_modules

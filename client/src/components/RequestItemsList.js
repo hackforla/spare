@@ -14,8 +14,11 @@ class RequestItem extends Component {
         minWidth: '150px',
         minHeight: '150px',
       }}>
-        <Tile side='request' alt={displayName} icon={icon} />
-        <p className='text-label'>{displayName}</p>
+        <div>
+            <Tile side='request' alt={displayName} icon={icon} />
+            <h1 className="text-center tile-label">#NEEDED</h1>
+            <p className='text-label'>{displayName}</p>
+        </div>
       </div>
     )
   }
