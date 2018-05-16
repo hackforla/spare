@@ -2,19 +2,24 @@ import React, { Component } from 'react';
 import { itemTypesByCategory, itemInfo } from '../constants';
 import DonateItemsTable from './DonateItemsTable';
 import { Link } from 'react-router-dom';
-
+import Tile from './Tile';
 
 class DonateItem extends Component {
   render() {
     const { category, tag } = this.props;
-    const { displayName } = this.props.info;
+    const { displayName, icon } = this.props.info;
     // TODO: Put these styles in CSS/SASS
     return (
       <div className="col-sm-4 col-xs-12" style={{
         minWidth: '150px',
         minHeight: '150px',
       }}>
-        <Link to={ '/donate/' + category + '/' + tag } >{ displayName }</Link>
+         <div>
+            <Tile side='donate' alt={displayName} icon={icon} />
+            <h1 className="text-center tile-label">#NEEDED</h1>
+            <p className='text-label'>{displayName}</p>
+        </div>
+       
       </div>
     )
   }
@@ -53,8 +58,7 @@ class DonateItemsLinks extends Component {
       return visibleItems.map((item) => {
         return <DonateItem key={ item } category={ category } tag={ item } info={ itemInfo[item] } />;
       });
-    }
-    else {
+    } else {
       return (
         <p>No current requests for this item. Please check back later!</p>
       )
@@ -67,7 +71,8 @@ export default class DonateItemsList extends Component {
   render() {
     return (
       <div>
-        <DonateItemsTable {...this.props} />
+        {/*<DonateItemsTable {...this.props} />*/}
+        <DonateItemsLinks {...this.props} />
       </div>
     )
   }
