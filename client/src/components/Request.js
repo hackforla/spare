@@ -1,11 +1,11 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Button, Row } from 'react-bootstrap';
-import ItemsList from './ItemsList';
+import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Switch, Redirect, Route } from 'react-router-dom';
-import CategoryNav from './CategoryNav';
+import { itemTypesByCategory } from '../constants';
 
+import RequestCategory from './RequestCategory';
 
 export default class Request extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ export default class Request extends Component {
   }
 
   render() {
-    const { mode, match } = this.props;
+    const { match } = this.props;
     const { requests } = this.state;
 
     const paths = {
@@ -38,44 +38,33 @@ export default class Request extends Component {
       'request': '/request',
     };
 
-    let switchModeButton;
-    if (mode === 'donate') {
-      switchModeButton = (
-        <LinkContainer to={ paths.request }>
-          <Button>Request an item</Button>
-        </LinkContainer>
+    let routes = [];
+
+    for (var category in itemTypesByCategory) {
+      routes.push(
+          <Route exact path={ paths[category] } key={ paths[category] }>
+            <RequestCategory category={ category } requests={ requests } paths={ paths } />
+          </Route>
       )
-    }
-    else if (mode === 'request') {
-      switchModeButton = (
-        <LinkContainer to={ paths.donate }>
-          <Button>Donate an item</Button>
-        </LinkContainer>
-      )
+
+      itemTypesByCategory[category].forEach((itemType) => {
+        const path = paths[category] + '/' + itemType + '/';
+        routes.push(
+          <Route exact path={ path } key={ path }>
+            <h2>Placeholder for: { itemType }</h2>
+          </Route>
+        );
+      })
     }
 
     return (
       <div>
-        { switchModeButton }
-        <Row className='text-center'>
-          <h2>
-            Choose an item you need
-          </h2>
-        </Row>
-        <Row>
-          <CategoryNav mode={ mode } match={ match } paths={ paths } />
-        </Row>
+        <LinkContainer to={ paths.donate }>
+          <Button>Donate an item</Button>
+        </LinkContainer>
         <Switch>
-          <Route exact path={ paths.clothing }>
-            <ItemsList mode={ mode } category='clothing' requests={ requests } paths={ paths } />
-          </Route>
-          <Route exact path={ paths.essentials }>
-            <ItemsList mode={ mode } category='essentials' requests={ requests } paths={ paths } />
-          </Route>
-          <Route exact path={ paths.hygiene }>
-            <ItemsList mode={ mode } category='hygiene' requests={ requests } paths={ paths } />
-          </Route>
-          <Redirect exact from={ match.path } to={ paths.clothing }/>
+          { routes }
+          <Redirect to={ paths.clothing }/>
         </Switch>
       </div>
     )

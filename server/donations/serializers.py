@@ -56,6 +56,7 @@ class DonationRequestListSerializer(serializers.ListSerializer):
     def to_representation(self, instance):
         results = super(DonationRequestListSerializer, self).to_representation(instance)
         results_count = defaultdict(lambda: defaultdict(int))
+        from collections import OrderedDict
 
         for result in results:
             item = result['item']
@@ -63,26 +64,19 @@ class DonationRequestListSerializer(serializers.ListSerializer):
             category = item['category_tag']
             results_count[category][item_type] += 1
 
-        results_by_category = []
-        for category in Category.objects.all():
+        requests = []
 
-            item_results = []
-            for item_type in Item.objects.filter(category=category):
-                item_results.append(
-                    {
-                        'item_type': item_type.tag,
-                        'count': results_count[category.tag][item_type.tag],
-                    }
-                )
-
-            results_by_category.append(
+        for item in Item.objects.order_by('tag'):
+            requests.append(
                 {
-                    'category': category.tag,
-                    'requests': item_results
+                    'type': item.tag,
+                    'category': item.category.tag,
+                    'count': results_count[item.category.tag][item.tag],
                 }
             )
 
-        return results_by_category
+
+        return requests
 
 
 class DonationRequestPublicSerializer(serializers.ModelSerializer):

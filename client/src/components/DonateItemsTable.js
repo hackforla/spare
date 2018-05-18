@@ -44,51 +44,27 @@ class DonateItemsTypeTable extends Component {
 export default class DonateItemsTable extends Component {
   render() {
 
-    const { requests, category, paths } = this.props;
+    const { category, paths } = this.props;
 
-    const visibleItems = {};
-
-    const categoryItems = itemTypesByCategory[category];
-
-    const categoryRequests = requests ? requests.filter((request) => {
-      const itemType = request.item.tag;
-
-      if (itemTypesByCategory[category].indexOf(itemType) > 0) {
-        visibleItems[itemType] = true; // Only show items with requests
-        return request;
-      }
-      else {
-        return null;
-      }
-    }) : null
-
-    const categoryPath = paths[category];
-
-    if (categoryItems) {
-      const itemsMap = categoryItems.map((categoryItem, index) => {
-
-        const categoryItemPath = '/' + categoryPath + '/' + categoryItem + '/';
-
-        return (
-          <Route exact path={ categoryItemPath } key={ index }>
-            <div>
-              <DonateItemsTypeTable {...this.props } categoryRequests={ categoryRequests }  />
-            </div>
-          </Route>
-        )
-      })
-      return (
-        <Switch>
-          {
-            itemsMap
-          }
-        </Switch>
-      )
+    let items = [];
+    for (var item in itemTypesByCategory[category]) {
+      const itemType = itemTypesByCategory[category][item]
+      items.push(
+        <Route exact path={ paths[category] + '/' + itemType + '/' } key={ item }>
+          <h2>
+            <DonateItemsTypeTable { ...this.props } />
+          </h2>
+        </Route>
+      );
     }
-    else {
-      return (
-        <DonateItemsTypeTable {...this.props } categoryRequests={ categoryRequests }  />
-      )
-    }
+
+
+    return (
+      <Switch>
+        {
+          items
+        }
+      </Switch>
+    )
   }
 }

@@ -22,12 +22,12 @@ class App extends Component {
           <Switch>
             <Route
               path="/donate"
-              render={props => <Donate mode="donate" {...props} />}
+              render={props => <Donate {...props} />}
             />
             <Redirect exact from="/" to="/donate" />
             <Route
               path="/request"
-              render={props => <Request mode="request" {...props} />}
+              render={props => <Request {...props} />}
             />
             <Route path="/code">
               <h2>Code</h2>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
 import { itemTypesByCategory, itemInfo } from '../constants';
-import { Switch } from 'react-router-dom';
+import CategoryNav from './CategoryNav';
 import Tile from './Tile';
 
 
@@ -46,10 +46,20 @@ class RequestItemsLinks extends Component {
 
 export default class RequestItemsList extends Component {
   render() {
+    const { paths } = this.props;
+
     return (
-      <Switch>
-        <RequestItemsLinks { ...this.props } />
-      </Switch>
+      <div>
+        <Row className='text-center'>
+          <h2>
+            Choose an item you need
+          </h2>
+        </Row>
+        <Row>
+          <CategoryNav paths={ paths } />
+          <RequestItemsLinks { ...this.props } />
+        </Row>
+      </div>
     )
   }
 }
