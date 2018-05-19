@@ -1,7 +1,7 @@
 from collections import defaultdict
 from rest_framework import serializers
 
-from donations.models import Category, DonationFulfillment, DonationRequest, Item
+from donations.models import DonationFulfillment, DonationRequest, Item
 
 
 class ContactInfoValidator(object):
@@ -53,30 +53,27 @@ class DonationRequestSerializer(serializers.ModelSerializer):
 
 
 class DonationRequestListSerializer(serializers.ListSerializer):
-    def to_representation(self, instance):
-        results = super(DonationRequestListSerializer, self).to_representation(instance)
-        results_count = defaultdict(lambda: defaultdict(int))
-        from collections import OrderedDict
+    def to_representation(self, data):
+        results = super(DonationRequestListSerializer, self).to_representation(data)
+        results_count = defaultdict(int)
 
         for result in results:
-            item = result['item']
-            item_type = item['tag']
-            category = item['category_tag']
-            results_count[category][item_type] += 1
+            item_type = result['item']['tag']
+            results_count[item_type] += 1
 
-        requests = []
+        grouped_results = []
 
         for item in Item.objects.order_by('tag'):
-            requests.append(
-                {
-                    'type': item.tag,
-                    'category': item.category.tag,
-                    'count': results_count[item.category.tag][item.tag],
-                }
-            )
+            if results_count[item.tag]:
+                grouped_results.append(
+                    {
+                        'type': item.tag,
+                        'category': item.category.tag,
+                        'count': results_count[item.tag],
+                    }
+                )
 
-
-        return requests
+        return grouped_results
 
 
 class DonationRequestPublicSerializer(serializers.ModelSerializer):

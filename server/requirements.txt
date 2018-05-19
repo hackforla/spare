@@ -3,6 +3,7 @@ Django==1.11
 django-cors-headers==2.1.0
 django-debug-toolbar==1.8
 django-extensions==1.9.1
+django-filter==1.1.0
 django-model-utils==3.1.1
 django-grappelli==2.10.1
 djangorestframework==3.7.7
