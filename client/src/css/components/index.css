@@ -1,7 +1,8 @@
 .tile {
   border-radius: 10px;
   background: url("https://github.com/hackforla/spare/blob/master/design/assets/tiles/dress.png");
-  text-align: center; }
+  text-align: center;
+  cursor: pointer; }
 
 .tile-label {
   position: absolute;

@@ -10,7 +10,7 @@ class Tile extends Component {
   render() {
     var src = `/assets/tiles/${this.props.side}/${this.props.icon}`;
     return (
-      <div className='tile'>
+      <div className='tile' onClick={this.props.onClick}>
         <img alt={this.props.alt} src={src} />
         { this.children }
       </div>
