@@ -103,6 +103,7 @@ Spare Team is
 * [@shawnadelic](https://github.com/shawnadelic)
 * [@ultraturtle0](https://github.com/@ultraturtle0)
 * [@ltimin](https://github.com/@ltimin)
+* [@epikkoder](https://github.com/epikkoder)
 * [@mfgryan](https://github.com/@mfgryan)
 * [@vonetta](https://github.com/@vonetta)
 * [@himalchoi](https://github.com/@himalchoi)
