@@ -101,9 +101,11 @@ http://hackforla-slack.herokuapp.com/
 
 Spare Team is
 * [@shawnadelic](https://github.com/shawnadelic)
-* [@ultraturtle0](https://github.com/@ultraturtle0)
-* [@ltimin](https://github.com/@ltimin)
-* [@mfgryan](https://github.com/@mfgryan)
-* [@vonetta](https://github.com/@vonetta)
-* [@himalchoi](https://github.com/@himalchoi)
-* [@calexity](https://github.com/@calexity)
+* [@ultraturtle0](https://github.com/ultraturtle0)
+* [@ltimin](https://github.com/ltimin)
+* [@mfgryan](https://github.com/mfgryan)
+* [@vonetta](https://github.com/vonetta)
+* [@himalchoi](https://github.com/himalchoi)
+* [@calexity](https://github.com/calexity)
+* [@epikkoder](https://github.com/epikkoder)
+* [@allicolyer](https://github.com/allicolyer)
