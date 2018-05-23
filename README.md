@@ -85,17 +85,25 @@ http://localhost:8000/admin/
 * API Docs - http://localhost:8000/docs/
 * Client App - http://localhost:3000/
 
+## Product and Design Contributors
+
+Our [project brief is on Google Drive](https://docs.google.com/document/d/124thgq7tZZ-EexYIPA1Bffl7FYm4T2uc4MgKn_IASd0/edit?usp=sharing). We are using [Github issues](https://github.com/hackforla/spare/issues) to track work that needs to be done. Ping Lex Roman on Slack if you are interested in contributing on the product or design side.
+
+
+* Strategy and research [on Google Drive](https://drive.google.com/drive/folders/1fpH1YDNswWP6DRxHW3QM6MvfKwzWW0ZK?usp=sharing)
+* Design files [in this Github repo](https://github.com/hackforla/spare/tree/master/design)
+* Prototype [on InVision](https://invis.io/YKH1L8TAB56#/291938149_Home)
+
 ## Spare Team
 
-Currently working on a survey
+Join our #spare Slack channel -
+http://hackforla-slack.herokuapp.com/
 
 Spare Team is
-* @epikkoder
-* @himalchoi
-* @estebanuribe
-* @calexity
-* Miguel G
-* Joshi
-* @ultraturtle0
-* Shawn
-* @mfgryan
+* [@shawnadelic](https://github.com/shawnadelic)
+* [@ultraturtle0](https://github.com/@ultraturtle0)
+* [@ltimin](https://github.com/@ltimin)
+* [@mfgryan](https://github.com/@mfgryan)
+* [@vonetta](https://github.com/@vonetta)
+* [@himalchoi](https://github.com/@himalchoi)
+* [@calexity](https://github.com/@calexity)
