@@ -7,11 +7,11 @@ services:
             context: ./server
             dockerfile: Dockerfile.web
         env_file: .env.dev
-        command: python3 manage.py runserver 0.0.0.0:8000
+        command: python3 manage.py runserver 0.0.0.0:${SERVER_PORT:-8000}
         volumes:
             - ./server:/app
         ports:
-            - "8000:8000"
+            - "${SERVER_PORT:-8000}:${SERVER_PORT:-8000}"
         depends_on:
             - db
         stdin_open: true  # These two lines allow us to use pdb via stdin:
@@ -34,7 +34,7 @@ services:
             - ./client:/app
             - node_modules:/app/node_modules
         ports:
-            - "3000:3000"
+            - "${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}"
         depends_on:
             - server
 volumes:
