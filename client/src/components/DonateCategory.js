@@ -29,21 +29,26 @@ class DonateSubcategoryLink extends Component {
 
 
 export default class DonateCategory extends Component {
-  getCategoryRequests(requests) {
+  getRequestsByType(requests) {
     const { category } = this.props;
+
+    const results = {};
 
     if (!requests) {
       return null;
     }
     else {
-      const results = {};
+      // Initialize empty list for each item type
+      itemTypesByCategory[category].map((itemType) => {
+        results[itemType] = [];
+      });
 
-      requests.filter((itemRequests) => {
-        return (
-          (itemRequests.category === category) && (itemRequests.count)
-        );
-      }).forEach((itemRequests) => {
-        results[itemRequests.type] = itemRequests.count;
+      //  Add request to each list
+      requests.map((itemRequest) => {
+        const itemType = itemRequest.item.tag;
+        if (itemRequest.item.category_tag === category) {
+          results[itemType].push(itemRequest);
+        }
       });
 
       return results;
@@ -53,31 +58,22 @@ export default class DonateCategory extends Component {
   render() {
     const { requests, category, paths } = this.props;
 
-    const categoryRequests = this.getCategoryRequests(requests);
+    const requestsByItemType = this.getRequestsByType(requests);
 
-    let items;
+    let items = [];
 
     // Value is only null when there are no requests
-    if (categoryRequests !== null) {
-      if (Object.keys(categoryRequests).length !== 0) {
-        items = [];
+    if (requestsByItemType !== null) {
+      for (var index in itemTypesByCategory[category]) {
+        const itemType = itemTypesByCategory[category][index];
+        const itemTypeRequests = requestsByItemType[itemType];
 
-        for (var item in itemTypesByCategory[category]) {
-          const subcategory = itemTypesByCategory[category][item];
-          if (categoryRequests[subcategory]) {
-            items.push(
-                <DonateSubcategoryLink { ...this.props } info={ itemInfo[subcategory] } key={ item } subcategory={ subcategory } />
-            );
-          }
+        if (itemTypeRequests.length > 0) {
+          items.push(
+            <DonateSubcategoryLink { ...this.props } info={ itemInfo[itemType] } key={ index } subcategory={ itemType } />
+          );
         }
       }
-      else {
-        items = (
-          <p>No current requests for this category. Please check back later!</p>
-        );
-      }
-    }
-    else if(categoryRequests !== null) {
     }
 
     return (
