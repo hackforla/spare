@@ -16,6 +16,7 @@ export default class Request extends Component {
   componentDidMount() {
     axios.get('http://localhost:8000/api/requests/')
       .then((res) => {
+        console.log(res.data);
         this.setState((oldState) => ({
           requests: res.data
         }));
