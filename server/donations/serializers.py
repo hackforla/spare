@@ -52,30 +52,6 @@ class DonationRequestSerializer(serializers.ModelSerializer):
         validators = [ContactInfoValidator()]
 
 
-class DonationRequestListSerializer(serializers.ListSerializer):
-    def to_representation(self, data):
-        results = super(DonationRequestListSerializer, self).to_representation(data)
-        results_count = defaultdict(int)
-
-        for result in results:
-            item_type = result['item']['tag']
-            results_count[item_type] += 1
-
-        grouped_results = []
-
-        for item in Item.objects.order_by('tag'):
-            if results_count[item.tag]:
-                grouped_results.append(
-                    {
-                        'type': item.tag,
-                        'category': item.category.tag,
-                        'count': results_count[item.tag],
-                    }
-                )
-
-        return grouped_results
-
-
 class DonationRequestPublicSerializer(serializers.ModelSerializer):
     item = ItemRequestSerializer()
 
@@ -84,4 +60,3 @@ class DonationRequestPublicSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'item', 'size', 'created', 'city'
         )
-        list_serializer_class = DonationRequestListSerializer
