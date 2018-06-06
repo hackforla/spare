@@ -5,9 +5,40 @@ import { Route, Switch } from 'react-router-dom';
 
 
 class DonateItemsTypeTable extends Component {
-  render() {
+  getRequestsByType(requests) {
+    const { category } = this.props;
 
-    const { category, requests } = this.props;
+    const results = {};
+
+    if (!requests) {
+      return null;
+    }
+    else {
+      // Initialize empty list for each item type
+      itemTypesByCategory[category].map((itemType) => {
+        results[itemType] = [];
+      });
+
+      //  Add request to each list
+      requests.map((itemRequest) => {
+        const itemType = itemRequest.item.tag;
+        if (itemRequest.item.category_tag === category) {
+          results[itemType].push(itemRequest);
+        }
+      });
+
+      return results;
+    }
+  }
+
+  render() {
+    const { category, itemType, requests } = this.props;
+
+    const requestsByItemType = this.getRequestsByType(requests);
+    let requestsForItemType = [];
+    if (requestsByItemType !== null) {
+      requestsForItemType = requestsByItemType[itemType];
+    }
 
     return (
       <Table>
@@ -19,7 +50,7 @@ class DonateItemsTypeTable extends Component {
         </thead>
         <tbody>
           {
-            requests ? requests.map((request) => {
+            requestsForItemType ? requestsForItemType.map((request) => {
               if (category === request.item.category_tag){
                 return (
                   <tr key={request.id}>

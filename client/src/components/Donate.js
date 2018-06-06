@@ -4,7 +4,8 @@ import { Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import { itemTypesByCategory } from '../constants';
-import DonateCategory from './DonateCategory'
+import DonateCategory from './DonateCategory';
+import DonateItemsTable from './DonateItemsTable';
 
 
 export default class Donate extends Component {
@@ -50,7 +51,9 @@ export default class Donate extends Component {
         const path = paths[category] + '/' + itemType + '/';
         routes.push(
           <Route exact path={ path } key={ path }>
-            <h2>Placeholder for: { itemType }</h2>
+            <div>
+              <DonateItemsTable itemType={ itemType } category={ category } requests={ requests } paths={ paths } />
+            </div>
           </Route>
         );
       })
