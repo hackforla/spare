@@ -40,6 +40,18 @@ export default class Donate extends Component {
     };
 
     let routes = [];
+
+    const renderItemTypeForCategory = (category) => (itemType) => {
+      const path = paths[category] + '/' + itemType + '/';
+      routes.push(
+        <Route exact path={ path } key={ path }>
+          <div>
+            <DonateItemsTable itemType={ itemType } category={ category } requests={ requests } paths={ paths } />
+          </div>
+        </Route>
+      );
+    }
+
     for (var category in itemTypesByCategory) {
       routes.push(
         <Route exact path={ paths[category] } key={ paths[category] }>
@@ -47,16 +59,8 @@ export default class Donate extends Component {
         </Route>
       );
 
-      itemTypesByCategory[category].forEach((itemType) => {
-        const path = paths[category] + '/' + itemType + '/';
-        routes.push(
-          <Route exact path={ path } key={ path }>
-            <div>
-              <DonateItemsTable itemType={ itemType } category={ category } requests={ requests } paths={ paths } />
-            </div>
-          </Route>
-        );
-      })
+      const renderItemType = renderItemTypeForCategory(category);
+      itemTypesByCategory[category].forEach(renderItemType);
     }
 
     return (
