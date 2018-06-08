@@ -38,7 +38,16 @@ export default class Request extends Component {
       'request': '/request',
     };
 
-    let routes = [];
+    const routes = [];
+
+    const renderItemTypeForCategory = (category) => (itemType) => {
+      const path = paths[category] + '/' + itemType + '/';
+      routes.push(
+        <Route exact path={ path } key={ path }>
+          <h2>Placeholder for: { itemType }</h2>
+        </Route>
+      );
+    };
 
     for (var category in itemTypesByCategory) {
       routes.push(
@@ -47,14 +56,8 @@ export default class Request extends Component {
           </Route>
       )
 
-      itemTypesByCategory[category].forEach((itemType) => {
-        const path = paths[category] + '/' + itemType + '/';
-        routes.push(
-          <Route exact path={ path } key={ path }>
-            <h2>Placeholder for: { itemType }</h2>
-          </Route>
-        );
-      })
+      const renderItemType = renderItemTypeForCategory(category);
+      itemTypesByCategory[category].forEach(renderItemType);
     }
 
     return (

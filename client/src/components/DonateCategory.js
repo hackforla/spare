@@ -39,12 +39,12 @@ export default class DonateCategory extends Component {
     }
     else {
       // Initialize empty list for each item type
-      itemTypesByCategory[category].map((itemType) => {
+      itemTypesByCategory[category].forEach((itemType) => {
         results[itemType] = [];
       });
 
       //  Add request to each list
-      requests.map((itemRequest) => {
+      requests.forEach((itemRequest) => {
         const itemType = itemRequest.item.tag;
         if (itemRequest.item.category_tag === category) {
           results[itemType].push(itemRequest);
