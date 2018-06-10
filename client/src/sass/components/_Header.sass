@@ -1,0 +1,38 @@
+.header
+  margin-top: 0
+  border-bottom: none
+
+  img
+    vertical-align: baseline
+
+  .flip-button
+    float: right
+    height: 52px
+    width: 255px
+    position: relative
+    top: 7px
+
+    background-image: none
+    border: 2px solid
+    border-radius: 26px
+
+    font-size: 16px
+    font-weight: bold
+    letter-spacing: 2px
+    line-height: 36.75px
+    text-transform: uppercase
+
+    &:hover,
+    &:focus
+      outline: none
+      background-color: white
+      background-image: none
+
+    &.to-request
+      border-color: $donate-primary-color
+      color: $donate-primary-color
+
+    &.to-donate
+      border-color: $request-primary-color
+      color: $request-primary-color
+

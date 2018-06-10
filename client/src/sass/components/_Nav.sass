@@ -1,0 +1,38 @@
+.nav-pills
+  margin-bottom: 25px
+  li
+    a
+      margin-left: calc(50% - (146px /2))
+      height: 35px
+      width: 146px
+
+      border-radius: 17.5px
+
+      font-family: Lato
+      font-size: 14px
+      font-weight: bold
+      letter-spacing: 2.54px
+      line-height: 13.5px
+      text-transform: uppercase
+
+    &.active
+      a:hover
+        cursor: default
+
+=nav-styling($color)
+  .nav-pills
+    li
+      a
+        color: $color
+      &.active a
+        border: 1px solid $color
+        background-color: $color
+        color: white
+        &:hover
+          background-color: $color
+
+#donate-container
+  +nav-styling($donate-primary-color)
+
+#request-container
+  +nav-styling($request-primary-color)

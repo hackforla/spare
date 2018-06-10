@@ -1,7 +1,5 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import { itemTypesByCategory } from '../constants';
 
@@ -31,7 +29,7 @@ export default class Request extends Component {
     const { requests } = this.state;
 
     const paths = {
-      'clothing': match.path + '/clothing',
+    'clothing': match.path + '/clothing',
       'essentials': match.path + '/essentials',
       'hygiene': match.path + '/hygiene',
       'donate': '/donate',
@@ -61,10 +59,7 @@ export default class Request extends Component {
     }
 
     return (
-      <div>
-        <LinkContainer to={ paths.donate }>
-          <Button>Donate an item</Button>
-        </LinkContainer>
+      <div id="request-container">
         <Switch>
           { routes }
           <Redirect to={ paths.clothing }/>
