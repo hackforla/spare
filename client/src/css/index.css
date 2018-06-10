@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Lato");
 @font-face {
   font-family: 'Lato';
   src: url("https://fonts.googleapis.com/css?family=Lato"); }
@@ -10,9 +11,10 @@ h1 {
 
 h2 {
   font-family: "Lato";
-  font-size: 1.375em;
-  line-height: 1.75em;
-  font-weight: 400; }
+  font-size: 30px;
+  line-height: 50px;
+  font-weight: 700;
+  margin-bottom: 75px; }
 
 .text-label-small {
   font-family: "Lato";
@@ -33,6 +35,75 @@ h2 {
   line-height: 1.25em;
   font-weight: 400; }
 
+.header {
+  margin-top: 0;
+  border-bottom: none; }
+  .header img {
+    vertical-align: baseline; }
+  .header .flip-button {
+    float: right;
+    height: 52px;
+    width: 255px;
+    position: relative;
+    top: 7px;
+    background-image: none;
+    border: 2px solid;
+    border-radius: 26px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    line-height: 36.75px;
+    text-transform: uppercase; }
+    .header .flip-button:hover, .header .flip-button:focus {
+      outline: none;
+      background-color: white;
+      background-image: none; }
+    .header .flip-button.to-request {
+      border-color: #253673;
+      color: #253673; }
+    .header .flip-button.to-donate {
+      border-color: #A13604;
+      color: #A13604; }
+
+.nav-pills {
+  margin-bottom: 25px; }
+  .nav-pills li a {
+    margin-left: calc(50% - (146px /2));
+    height: 35px;
+    width: 146px;
+    border-radius: 17.5px;
+    font-family: Lato;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2.54px;
+    line-height: 13.5px;
+    text-transform: uppercase; }
+  .nav-pills li.active a:hover {
+    cursor: default; }
+
+#donate-container .nav-pills li a {
+  color: #253673; }
+
+#donate-container .nav-pills li.active a {
+  border: 1px solid #253673;
+  background-color: #253673;
+  color: white; }
+  #donate-container .nav-pills li.active a:hover {
+    background-color: #253673; }
+
+#request-container .nav-pills li a {
+  color: #A13604; }
+
+#request-container .nav-pills li.active a {
+  border: 1px solid #A13604;
+  background-color: #A13604;
+  color: white; }
+  #request-container .nav-pills li.active a:hover {
+    background-color: #A13604; }
+
+#request-container h2 {
+  color: #A13604; }
+
 .tile {
   border-radius: 10px;
   background: url("https://github.com/hackforla/spare/blob/master/design/assets/tiles/dress.png");
@@ -45,5 +116,5 @@ h2 {
   transform: translate(-50%, -25%); }
 
 body {
-  margin: 0px;
+  margin: 0px 50px;
   padding: 0px; }

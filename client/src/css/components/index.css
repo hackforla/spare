@@ -1,3 +1,10 @@
+.nav-pills li.active a {
+  height: 35px;
+  width: 146px;
+  border: 1px solid #253673;
+  border-radius: 17.5px;
+  background-color: #253673; }
+
 .tile {
   border-radius: 10px;
   background: url("https://github.com/hackforla/spare/blob/master/design/assets/tiles/dress.png");
