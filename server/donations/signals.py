@@ -1,10 +1,11 @@
 import random
 
-from django.db.models.signals import pre_save
+from django.core.mail import send_mail
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from rest_framework.exceptions import ValidationError
 
-from donations.models import DonationRequest
+from donations.models import DonationRequest, DonationFulfillment
 
 # TODO: Use better words
 NOUNS = (
@@ -16,7 +17,6 @@ NOUNS = (
     'study', 'system', 'thing', 'time', 'water', 'way', 'week', 'woman',
     'word', 'work', 'world', 'year',
 )
-
 
 @receiver(pre_save, sender=DonationRequest)
 def create_code(sender, instance, **kwargs):
@@ -39,3 +39,39 @@ def create_code(sender, instance, **kwargs):
 
     if not instance.code:
         raise ValidationError('Unable to generate unique code for this request.')
+
+@receiver(post_save, sender=DonationRequest)
+def send_email(sender, instance, created, **kwargs):
+    if (created):
+        send_mail(
+            'Thank you for your request!',
+            f"Thank you {instance.name}! We've received your request for {instance.item} and we'll let you know when one becomes available.",
+            'requests@spare.com',
+            [instance.email],
+            fail_silently=False,
+        )
+
+@receiver(post_save, sender=DonationFulfillment)
+def send_email(sender, instance, created, **kwargs):
+    print('do we get to donation fulfillment')
+    if (created):
+        # send email to donator
+        send_mail(
+            'Thank you for your donation!',
+            f"Thank you {instance.name}! We'll set you up to donate your {instance.request.item} to {instance.request.name}.",
+            'donations@spare.com',
+            [instance.email],
+            fail_silently=False,
+        )
+        # send email to donatee
+        send_mail(
+            'Your request has been fulfilled!',
+            f"Great news, {instance.request.name}! Your request for {instance.request.item} has been fulfilled. We'll put you in touch with {instance.name} to pick up the item.",
+            'donations@spare.com',
+            [instance.request.email],
+            fail_silently=False,
+        )
+        
+
+
+

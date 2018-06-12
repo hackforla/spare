@@ -127,3 +127,14 @@ REST_FRAMEWORK = {
 # Auth/Login Settings
 LOGIN_REDIRECT_URL = 'api-root'
 LOGIN_URL = 'login'
+
+# Email Settings
+if os.environ.get('EMAIL_BACKEND') == 'mailgun':
+    EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+    ANYMAIL = {
+        'MAILGUN_API_KEY': os.environ['MAILGUN_API_KEY'],
+    }
+# Other settings, etc.
+elif os.environ.get('EMAIL_BACKEND') == 'console':
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
