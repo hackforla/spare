@@ -13,7 +13,7 @@ class DonateSubcategoryLink extends Component {
 
     // TODO: Put these styles in CSS/SASS
     return (
-      <div className="col-sm-4 col-xs-12" style={{
+      <div className="col-sm-3 col-xs-12" style={{
         minWidth: '150px',
         minHeight: '150px',
       }}>
