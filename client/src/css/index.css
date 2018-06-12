@@ -1,13 +1,9 @@
-@import url("https://fonts.googleapis.com/css?family=Lato");
-@font-face {
-  font-family: 'Lato';
-  src: url("https://fonts.googleapis.com/css?family=Lato"); }
-
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
 h1 {
   font-family: "Lato";
   font-size: 1.875em;
   line-height: 2.8125em;
-  font-weight: 600; }
+  font-weight: 700; }
 
 h2 {
   font-family: "Lato";
@@ -24,9 +20,9 @@ h2 {
 
 .text-label {
   font-family: "Lato";
-  font-size: 0.875em;
+  font-size: 1.1em;
   line-height: 1.125em;
-  font-weight: 600;
+  font-weight: 400;
   text-align: center; }
 
 .text-form {
@@ -115,6 +111,10 @@ h2 {
   left: 50%;
   transform: translate(-50%, -25%); }
 
+.text-label {
+  padding: 10px 0 15px; }
+
 body {
   margin: 0px 50px;
-  padding: 0px; }
+  padding: 0px;
+  color: #4f5464; }
