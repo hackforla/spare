@@ -16,7 +16,6 @@ class RequestItem extends Component {
       }}>
         <div>
           <Tile side='request' alt={displayName} icon={icon} />
-          <h1 className="text-center tile-label">#NEEDED</h1>
           <p className='text-label'>{displayName}</p>
         </div>
       </div>
