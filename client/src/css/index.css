@@ -1,43 +1,46 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+body {
+  font-family: 'Lato'; }
+
 h1 {
-  font-family: "Lato";
   font-size: 1.875em;
   line-height: 2.8125em;
   font-weight: 700; }
 
 h2 {
-  font-family: "Lato";
   font-size: 30px;
   line-height: 50px;
   font-weight: 700; }
 
 .text-label-small {
-  font-family: "Lato";
   font-size: 1em;
   line-height: 1.25em;
   font-weight: 400; }
 
 .text-label {
-  font-family: "Lato";
   font-size: 1.1em;
   line-height: 1.125em;
   font-weight: 400;
   text-align: center; }
 
 .text-form {
-  font-family: "Lato";
   font-size: 1em;
   line-height: 1.25em;
   font-weight: 400; }
 
 .hero {
-  font-family: "Lato";
   font-size: 1.5em;
   line-height: 1.25em;
   font-weight: 400; }
 
 .hero {
   margin-bottom: 50px; }
+
+#donate-container form .btn {
+  color: white;
+  background: #253673; }
+  #donate-container form .btn:hover {
+    background: #1f2d60; }
 
 .header {
   margin-top: 0;
@@ -76,7 +79,6 @@ h2 {
     height: 35px;
     width: 146px;
     border-radius: 17.5px;
-    font-family: Lato;
     font-size: 14px;
     font-weight: bold;
     letter-spacing: 2.54px;
@@ -103,6 +105,11 @@ h2 {
   color: #874b21; }
   #request-container h2 {
     color: #874b21; }
+  #request-container form .btn {
+    color: white;
+    background: #874b21; }
+    #request-container form .btn:hover {
+      background: #73401c; }
 
 .tile {
   text-align: center;
@@ -123,8 +130,31 @@ h2 {
 .text-label {
   padding: 10px 0 30px; }
 
+form {
+  color: #4f5464; }
+  form .form-control {
+    padding: 2em 1.5em;
+    background-color: #f8f8fa;
+    border: 1px solid #cecfd5; }
+  form .form-group {
+    margin-bottom: 35px; }
+  form .control-label {
+    line-height: 2em;
+    letter-spacing: 2.54px;
+    font-weight: bold;
+    text-transform: uppercase; }
+  form .btn {
+    height: 50px;
+    border-radius: 25px;
+    box-sizing: border-box;
+    padding: 0 50px;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 2.54px;
+    text-transform: uppercase; }
+
 body {
-  margin: 0px 50px;
+  margin: 0px 50px 85px;
   padding: 0px;
   color: #4f5464; }
 

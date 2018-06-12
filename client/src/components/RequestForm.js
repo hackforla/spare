@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import { itemInfo } from '../constants';
-import { Alert, Button, ControlLabel, FormControl, FormGroup } from 'react-bootstrap';
+import { Alert, Button, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
 
 class RequestForm extends Component {
   constructor(props, context) {
@@ -122,7 +122,7 @@ class RequestForm extends Component {
 
     return (
       <div>
-        <div class="hero text-center">
+        <div className="hero text-center">
           <h2>{ headerMessage }</h2>
           <p>
             We send your name and contact info to the person who wants to donate.
@@ -130,21 +130,25 @@ class RequestForm extends Component {
             We don't post it on our site.
           </p>
         </div>
-        <form onSubmit={this.handleSubmit}>
-          {this.getBasicFields(this.fields)}
-          <FormGroup>
-            <ControlLabel>Select an Item</ControlLabel>
-            <FormControl
-              componentClass="select"
-              placeholder="select"
-              inputRef={(ref) => {this.inputs.item = ref}}
-            >
-              {this.getItemOptions(this.itemOptions)}
-            </FormControl>
-          </FormGroup>
-          <Button type="submit">Submit</Button>
-          {formStatus}
-        </form>
+        <Row>
+          <form onSubmit={this.handleSubmit} className="col-sm-6 col-sm-offset-3">
+            {this.getBasicFields(this.fields)}
+            <FormGroup>
+              <ControlLabel>Select an Item</ControlLabel>
+              <FormControl
+                componentClass="select"
+                placeholder="select"
+                inputRef={(ref) => {this.inputs.item = ref}}
+              >
+                {this.getItemOptions(this.itemOptions)}
+              </FormControl>
+            </FormGroup>
+            <div className="text-center">
+              <Button type="submit">Confirm Request</Button>
+            </div>
+            {formStatus}
+          </form>
+        </Row>
       </div>
     );
   }
