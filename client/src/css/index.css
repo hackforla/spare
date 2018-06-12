@@ -31,6 +31,12 @@ h2 {
   font-weight: 400; }
 
 .hero {
+  font-family: "Lato";
+  font-size: 1.5em;
+  line-height: 1.25em;
+  font-weight: 400; }
+
+.hero {
   margin-bottom: 50px; }
 
 .header {

@@ -122,9 +122,13 @@ class RequestForm extends Component {
 
     return (
       <div>
-        <div class="hero">
+        <div class="hero text-center">
           <h2>{ headerMessage }</h2>
-          <p>We send your name and contact info to the person who wants to donate. We don't post it on our site.</p>
+          <p>
+            We send your name and contact info to the person who wants to donate.
+            <br />
+            We don't post it on our site.
+          </p>
         </div>
         <form onSubmit={this.handleSubmit}>
           {this.getBasicFields(this.fields)}
