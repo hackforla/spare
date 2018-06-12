@@ -13,9 +13,9 @@ class RequestForm extends Component {
     this.sendForm = this.sendForm.bind(this);
 
     this.fields = [
-      { "key": "name", "name": "Full Name", "type": "text", "placeholder": "Enter name" },
-      { "key": "email", "name": "Email", "type": "email", "placeholder": "Enter Email" },
-      { "key": "phone", "name": "Phone Number", "type": "text", "placeholder": "Enter Phone Number" },
+      { "key": "name", "name": "Your Name", "type": "text", "placeholder": "Name" },
+      { "key": "email", "name": "Your Email", "type": "email", "placeholder": "Email address" },
+      { "key": "phone", "name": "Your Phone Number", "type": "text", "placeholder": "Phone number" },
     ];
 
     //this.itemOptions = ["hygiene","essentials","clothing"];
