@@ -1,10 +1,12 @@
 // Import components, themes, etc. here.
 // @import('./ComponentName/_index')
 @import "./_themes";
+@import "./_variables";
 @import "./_fonts";
 @import "./components/index";
 
 body {
   margin: 0px 50px;
   padding: 0px;
+  color: $text-color;
 }

@@ -19,8 +19,9 @@ class DonateSubcategoryLink extends Component {
       }}>
         <div>
           <Tile side='donate' alt={displayName} icon={ icon } />
-          <h1 className="text-center tile-label">#NEEDED</h1>
-          <Link to={ '/donate/' + category + '/' + subcategory + '/' } >{ displayName }</Link>
+          <p className='text-label'>
+            <Link to={ '/donate/' + category + '/' + subcategory + '/' } >{ displayName }</Link>
+          </p>
         </div>
       </div>
     )

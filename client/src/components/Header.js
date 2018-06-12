@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, PageHeader } from 'react-bootstrap';
 import logo from "./../assets/logo/logo_spare.png";
-import { Route, Switch } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 import { LinkContainer } from 'react-router-bootstrap';
 
 const renderFlipButton = (currentSide) => {
@@ -17,9 +17,9 @@ const renderFlipButton = (currentSide) => {
 
 const header = () => (
   <PageHeader className="header">
-    <LinkContainer to="/">
+    <Link to="/">
       <img src={logo} alt="" />
-    </LinkContainer>
+    </Link>
     <Switch>
         <Route
           path="/donate"
