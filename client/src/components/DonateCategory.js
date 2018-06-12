@@ -13,16 +13,16 @@ class DonateSubcategoryLink extends Component {
 
     // TODO: Put these styles in CSS/SASS
     return (
-      <div className="col-sm-4 col-xs-12" style={{
+      <div className="col-sm-3 col-xs-12" style={{
         minWidth: '150px',
         minHeight: '150px',
       }}>
         <div>
           <Tile side='donate' alt={displayName} icon={ icon } />
           <h1 className="text-center tile-label">#NEEDED</h1>
-          <p className='text-label'>
+          <div className='text-label'>
             <Link to={ '/donate/' + category + '/' + subcategory + '/' } >{ displayName }</Link>
-          </p>
+          </div>
         </div>
       </div>
     )
@@ -80,7 +80,7 @@ export default class DonateCategory extends Component {
 
     return (
       <div>
-        <Row className='text-center'>
+        <Row className='hero text-center'>
           <h2>
             Give spare items directly to people in need.
             <br />
