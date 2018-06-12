@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { Component } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import { itemTypesByCategory } from '../constants';
@@ -11,22 +10,8 @@ export default class Request extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    axios.get('http://localhost:8000/api/requests/')
-      .then((res) => {
-        this.setState((oldState) => ({
-          requests: res.data
-        }));
-      })
-      .catch((err) => {
-        this.setState((oldState) => ({alert: 'danger', message: 'Unable to get donation data. Please try again later.'}));
-        console.log(err)
-      });
-  }
-
   render() {
     const { match } = this.props;
-    const { requests } = this.state;
 
     const paths = {
     'clothing': match.path + '/clothing',
@@ -50,7 +35,7 @@ export default class Request extends Component {
     for (var category in itemTypesByCategory) {
       routes.push(
           <Route exact path={ paths[category] } key={ paths[category] }>
-            <RequestCategory category={ category } requests={ requests } paths={ paths } />
+            <RequestCategory category={ category } paths={ paths } />
           </Route>
       )
 
