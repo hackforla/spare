@@ -3,10 +3,20 @@
 @import "./_themes";
 @import "./_variables";
 @import "./_fonts";
+@import "./_layout";
 @import "./components/index";
 
 body {
   margin: 0px 50px;
   padding: 0px;
   color: $text-color;
+}
+
+a {
+  color: $text-color;
+}
+
+a:hover, a:active {
+  text-decoration: none;
+  color: darken($text-color, 15%);
 }

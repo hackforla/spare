@@ -18,7 +18,7 @@ class RequestItem extends Component {
       }}>
         <Link to={ '/request/' + category + '/' + itemType + '/' }>
           <Tile side='request' alt={displayName} icon={icon} />
-          <p className='text-label'>{displayName}</p>
+          <div className='text-label'>{displayName}</div>
         </Link>
       </div>
     )
@@ -51,7 +51,7 @@ export default class RequestItemsList extends Component {
 
     return (
       <div>
-        <Row className='text-center'>
+        <Row className='hero text-center'>
           <h2>
             Choose an item you need
           </h2>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import { itemTypesByCategory } from '../constants';
 
+import RequestForm from './RequestForm';
 import RequestCategory from './RequestCategory';
 
 export default class Request extends Component {
@@ -27,7 +28,7 @@ export default class Request extends Component {
       const path = paths[category] + '/' + itemType + '/';
       routes.push(
         <Route exact path={ path } key={ path }>
-          <h2>Placeholder for: { itemType }</h2>
+          <RequestForm itemType={ itemType }/>
         </Route>
       );
     };

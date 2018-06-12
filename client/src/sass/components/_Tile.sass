@@ -1,7 +1,12 @@
 .tile
-  border-radius: 10px
-  background: url('https://github.com/hackforla/spare/blob/master/design/assets/tiles/dress.png')
   text-align: center
+  box-sizing: border-box
+
+.tile img
+  border-radius: 10px
+
+.tile:hover img
+  box-shadow: 0 0 10px rgba(10, 10, 10, 0.25)
 
 .tile-label
   position: absolute
@@ -10,4 +15,4 @@
   transform: translate(-50%, -25%)
 
 .text-label
-  padding: 10px 0 15px;
+  padding: 10px 0 30px

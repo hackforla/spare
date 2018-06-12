@@ -9,8 +9,7 @@ h2 {
   font-family: "Lato";
   font-size: 30px;
   line-height: 50px;
-  font-weight: 700;
-  margin-bottom: 75px; }
+  font-weight: 700; }
 
 .text-label-small {
   font-family: "Lato";
@@ -30,6 +29,9 @@ h2 {
   font-size: 1em;
   line-height: 1.25em;
   font-weight: 400; }
+
+.hero {
+  margin-bottom: 50px; }
 
 .header {
   margin-top: 0;
@@ -58,8 +60,8 @@ h2 {
       border-color: #253673;
       color: #253673; }
     .header .flip-button.to-donate {
-      border-color: #A13604;
-      color: #A13604; }
+      border-color: #874b21;
+      color: #874b21; }
 
 .nav-pills {
   margin-bottom: 25px; }
@@ -77,9 +79,6 @@ h2 {
   .nav-pills li.active a:hover {
     cursor: default; }
 
-#donate-container .nav-pills li a {
-  color: #253673; }
-
 #donate-container .nav-pills li.active a {
   border: 1px solid #253673;
   background-color: #253673;
@@ -87,23 +86,27 @@ h2 {
   #donate-container .nav-pills li.active a:hover {
     background-color: #253673; }
 
-#request-container .nav-pills li a {
-  color: #A13604; }
-
 #request-container .nav-pills li.active a {
-  border: 1px solid #A13604;
-  background-color: #A13604;
+  border: 1px solid #874b21;
+  background-color: #874b21;
   color: white; }
   #request-container .nav-pills li.active a:hover {
-    background-color: #A13604; }
+    background-color: #874b21; }
 
-#request-container h2 {
-  color: #A13604; }
+#request-container {
+  color: #874b21; }
+  #request-container h2 {
+    color: #874b21; }
 
 .tile {
-  border-radius: 10px;
-  background: url("https://github.com/hackforla/spare/blob/master/design/assets/tiles/dress.png");
-  text-align: center; }
+  text-align: center;
+  box-sizing: border-box; }
+
+.tile img {
+  border-radius: 10px; }
+
+.tile:hover img {
+  box-shadow: 0 0 10px rgba(10, 10, 10, 0.25); }
 
 .tile-label {
   position: absolute;
@@ -112,9 +115,16 @@ h2 {
   transform: translate(-50%, -25%); }
 
 .text-label {
-  padding: 10px 0 15px; }
+  padding: 10px 0 30px; }
 
 body {
   margin: 0px 50px;
   padding: 0px;
   color: #4f5464; }
+
+a {
+  color: #4f5464; }
+
+a:hover, a:active {
+  text-decoration: none;
+  color: #2d3039; }
