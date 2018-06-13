@@ -123,14 +123,14 @@ h2 {
 
 .tile-label {
   position: absolute;
-  transform: translate(-60px, -70px);
+  transform: translate(0, -70px);
+  padding: 5px 8px;
   right: 0;
   bottom: 0;
   background-color: #ff0050;
   color: #eee;
   font-size: 1em;
   font-weight: bold;
-  padding: 5px 8px;
   box-shadow: 2px 2px 6px rgba(10, 10, 10, 0.1);
   border: 1px solid #e60048; }
 
