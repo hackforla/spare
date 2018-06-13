@@ -4,6 +4,34 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import { itemTypesByCategory } from '../constants';
 import DonateCategory from './DonateCategory';
 import DonateItemsTable from './DonateItemsTable';
+import FulllfillmentForm from './FullfillmentForm';
+
+class DonationDetail extends Component {
+  render() {
+    const { requests } = this.props;
+    const matchParams = this.props.match.params;
+
+    const requestsById = {};
+
+    if (requests) {
+      requests.forEach(
+        request => {
+          requestsById[request.id] = request;
+        }
+      );
+
+      const request = requestsById[matchParams.id];
+
+      if (request) {
+        return (
+          <FulllfillmentForm request={ request } />
+        );
+      }
+    }
+
+      return null;
+  }
+}
 
 
 export default class Donate extends Component {
@@ -40,9 +68,9 @@ export default class Donate extends Component {
     let routes = [];
 
     const renderItemTypeForCategory = (category) => (itemType) => {
-      const path = paths[category] + '/' + itemType + '/';
+      const itemTypePath = paths[category] + '/' + itemType + '/';
       routes.push(
-        <Route exact path={ path } key={ path }>
+        <Route exact path={ itemTypePath } key={ itemTypePath }>
           <DonateItemsTable itemType={ itemType } category={ category } requests={ requests } paths={ paths } />
         </Route>
       );
@@ -58,6 +86,12 @@ export default class Donate extends Component {
       const renderItemType = renderItemTypeForCategory(category);
       itemTypesByCategory[category].forEach(renderItemType);
     }
+
+    const requestPath = "/donate/:id";
+
+    routes.push(
+      <Route exact path={ requestPath } key={ requestPath } render={ props => <DonationDetail {...props} requests={ requests } /> }/ >
+    );
 
     return (
       <div id="donate-container">

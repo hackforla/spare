@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { itemTypesByCategory } from '../constants';
 import { Route, Switch } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
 
 
 class DonateItemsTypeTable extends Component {
@@ -56,7 +57,11 @@ class DonateItemsTypeTable extends Component {
                   <tr key={request.id}>
                     <td>{ request.size }</td>
                     <td>{ request.city }</td>
-                    <td><Button>Donate</Button></td>
+                    <td>
+                      <LinkContainer to={'/specific/page'}>
+                        <Button>Donate</Button>
+                      </LinkContainer>
+                    </td>
                   </tr>
                 )
               }
