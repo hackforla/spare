@@ -1,10 +1,14 @@
 import React, { Component } from "react"
 import { Switch, Redirect, Route } from "react-router-dom"
+import { Grid  } from "react-bootstrap"
+
+//Components
 import Request from "./Request"
 import Donate from "./Donate"
 import Header from "./Header";
 import About from "./About";
-import { Grid  } from "react-bootstrap"
+import Footer from "./Footer";
+
 
 class App extends Component {
   render() {
@@ -39,6 +43,7 @@ class App extends Component {
             </Switch>
           </Grid>
         </div>
+        <Footer />
       </Grid>
     )
   }

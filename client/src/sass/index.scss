@@ -6,7 +6,12 @@
 @import "./_layout";
 @import "./components/index";
 
+html, #root {
+    height: 100%;
+}
+
 body {
+  height: 100%
   margin: 0px 50px 85px;
   padding: 0px;
   color: $text-color;
