@@ -21,13 +21,11 @@ class DonateSubcategoryLink extends Component {
           minWidth: '150px',
           minHeight: '150px',
         }}>
-          <div>
+          <Link to={ '/donate/' + category + '/' + subcategory + '/' } >
             <Tile side='donate' alt={displayName} icon={ icon } />
             <span className="text-center tile-label">{ requests.length } needed</span>
-            <div className='text-label'>
-              <Link to={ '/donate/' + category + '/' + subcategory + '/' } >{ displayName }</Link>
-            </div>
-          </div>
+            <div className='text-label'>{ displayName }</div>
+          </Link>
         </div>
       )
     }
