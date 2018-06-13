@@ -23,7 +23,7 @@ services:
             POSTGRES_USER: postgres_user
             POSTGRES_DB: postgres_db
         ports:
-            - "5432:5432"
+            - "${DB_PORT:-5432}:5432"
     client:
         image: hackforla/spare:client
         build:
@@ -34,7 +34,7 @@ services:
             - ./client:/app
             - node_modules:/app/node_modules
         ports:
-            - "${CLIENT_PORT:-3000}:${CLIENT_PORT:-3000}"
+            - "${CLIENT_PORT:-3000}:3000"
         depends_on:
             - server
 volumes:
