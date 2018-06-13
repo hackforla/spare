@@ -29,91 +29,127 @@ export const itemInfo = {
   shirts: {
     displayName: 'Shirts',
     icon: 'shirts.png',
-    icon_lg: 'shirts@2x.png'
+    icon_lg: 'shirts@2x.png',
+    pluralPronoun: false,
+    verboseName: 'shirt',
   },
   dresses_skirts: {
     displayName: 'Dresses + Skirts',
     icon: 'dressesandskirts.png',
-    icon_lg: 'dressesandskirts@2x.png'
+    icon_lg: 'dressesandskirts@2x.png',
+    pluralPronoun: false,
+    verboseName: 'dress/skirt',
   },
   hats: {
     displayName: 'Hats',
     icon: 'hats.png',
-    icon_lg: 'hats@2x.png'
+    icon_lg: 'hats@2x.png',
+    pluralPronoun: false,
+    verboseName: 'hat',
   },
   pants: {
     displayName: 'Pants',
     icon: 'pants.png',
-    icon_lg: 'pants@2x.png'
+    icon_lg: 'pants@2x.png',
+    pluralPronoun: true,
+    verboseName: 'pants',
   },
   shorts: {
     displayName: 'Shorts',
     icon: 'shorts.png',
-    icon_lg: 'shorts@2x.png'
+    icon_lg: 'shorts@2x.png',
+    pluralPronoun: true,
+    verboseName: 'shorts',
   },
   jacket_sweaters: {
     displayName: 'Jackets + Sweaters',
     icon: 'jacketsandsweaters.png',
-    icon_lg: 'jacketsandsweaters@2x.png'     
+    icon_lg: 'jacketsandsweaters@2x.png',
+    pluralPronoun: false,
+    verboseName: 'jacket/sweater',
   },
   socks: {
     displayName: 'Socks',
     icon: 'socks.png',
-    icon_lg: 'socks@2x.png'
+    icon_lg: 'socks@2x.png',
+    pluralPronoun: true,
+    verboseName: 'socks',
   },
   shoes: {
     displayName: 'Shoes',
     icon: 'shoes.png',
-    icon_lg: 'shoes@2x.png'
+    icon_lg: 'shoes@2x.png',
+    pluralPronoun: true,
+    verboseName: 'shoes',
   },
   toothbrush: {
     displayName: 'Toothbrush',
     icon: 'toothbrush.png',
-    icon_lg: 'toothbrush@2x.png'
+    icon_lg: 'toothbrush@2x.png',
+    pluralPronoun: false,
+    verboseName: 'toothbrush',
   },
   toothpaste: {
     displayName: 'Toothpaste',
     icon: 'toothpaste.png',
-    icon_lg: 'toothpaste@2x.png'
+    icon_lg: 'toothpaste@2x.png',
+    pluralPronoun: false,
+    verboseName: 'toothpaste',
   },
   mouthwash: {
     displayName: 'Mouthwash',
     icon: 'mouthwash.png',
-    icon_lg: 'mouthwash@2x.png'
+    icon_lg: 'mouthwash@2x.png',
+    pluralPronoun: false,
+    verboseName: 'mouthwash',
   },
   soap: {
     displayName: 'Soap',
     icon: 'soap.png',
-    icon_lg: 'soap@2x.png'
+    icon_lg: 'soap@2x.png',
+    pluralPronoun: false,
+    verboseName: 'soap',
   },
   shampoo_conditioner: {
     displayName: 'Shampoo + Conditioner',
     icon: 'shampoo.png',
-    icon_lg: 'shampoo@2x.png'
+    icon_lg: 'shampoo@2x.png',
+    pluralPronoun: false,
+    verboseName: 'shampoo/conditioner',
   },
   feminine_hygiene: {
     displayName: 'Feminine Hygiene',
     icon: 'femininehygiene.png',
-    icon_lg: 'femininehygiene@2x.png'
+    icon_lg: 'femininehygiene@2x.png',
+    pluralPronoun: false,
+    verboseName: 'hygiene product',
   },
   blankets: {
     displayName: 'Blankets',
     icon: 'blankets.png',
-    icon_lg: 'blankets@2x.png'
+    icon_lg: 'blankets@2x.png',
+    pluralPronoun: false,
+    verboseName: 'blanket',
   },
   sleeping_bags: {
     displayName: 'Sleeping Bags',
     icon: 'sleepingbags.png',
-    icon_lg: 'sleepingbags@2x.png'
+    icon_lg: 'sleepingbags@2x.png',
+    pluralPronoun: false,
+    verboseName: 'sleeping bag',
   },
   cat_food: {
     displayName: 'Cat Food',
     icon: 'catfood.png',
-    icon_lg: 'catfood@2x.png'
+    icon_lg: 'catfood@2x.png',
+    pluralPronoun: false,
+    verboseName: 'cat food',
   },
   dog_food: {
     displayName: 'Dog Food',
     icon: 'dogfood.png',
-    icon_lg: 'dogfood@2x.png'
+    icon_lg: 'dogfood@2x.png',
+    pluralPronoun: false,
+    verboseName: 'dog food',
   },
 }

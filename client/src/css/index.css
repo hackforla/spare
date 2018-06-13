@@ -1,35 +1,46 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+body {
+  font-family: 'Lato'; }
+
 h1 {
-  font-family: "Lato";
   font-size: 1.875em;
   line-height: 2.8125em;
   font-weight: 700; }
 
 h2 {
-  font-family: "Lato";
   font-size: 30px;
   line-height: 50px;
-  font-weight: 700;
-  margin-bottom: 75px; }
+  font-weight: 700; }
 
 .text-label-small {
-  font-family: "Lato";
   font-size: 1em;
   line-height: 1.25em;
   font-weight: 400; }
 
 .text-label {
-  font-family: "Lato";
   font-size: 1.1em;
   line-height: 1.125em;
   font-weight: 400;
   text-align: center; }
 
 .text-form {
-  font-family: "Lato";
   font-size: 1em;
   line-height: 1.25em;
   font-weight: 400; }
+
+.hero {
+  font-size: 1.5em;
+  line-height: 1.25em;
+  font-weight: 400; }
+
+.hero {
+  margin-bottom: 50px; }
+
+#donate-container form .btn {
+  color: white;
+  background: #253673; }
+  #donate-container form .btn:hover {
+    background: #1f2d60; }
 
 .header {
   margin-top: 0;
@@ -58,8 +69,8 @@ h2 {
       border-color: #253673;
       color: #253673; }
     .header .flip-button.to-donate {
-      border-color: #A13604;
-      color: #A13604; }
+      border-color: #874b21;
+      color: #874b21; }
 
 .nav-pills {
   margin-bottom: 25px; }
@@ -68,7 +79,6 @@ h2 {
     height: 35px;
     width: 146px;
     border-radius: 17.5px;
-    font-family: Lato;
     font-size: 14px;
     font-weight: bold;
     letter-spacing: 2.54px;
@@ -77,9 +87,6 @@ h2 {
   .nav-pills li.active a:hover {
     cursor: default; }
 
-#donate-container .nav-pills li a {
-  color: #253673; }
-
 #donate-container .nav-pills li.active a {
   border: 1px solid #253673;
   background-color: #253673;
@@ -87,34 +94,80 @@ h2 {
   #donate-container .nav-pills li.active a:hover {
     background-color: #253673; }
 
-#request-container .nav-pills li a {
-  color: #A13604; }
-
 #request-container .nav-pills li.active a {
-  border: 1px solid #A13604;
-  background-color: #A13604;
+  border: 1px solid #874b21;
+  background-color: #874b21;
   color: white; }
   #request-container .nav-pills li.active a:hover {
-    background-color: #A13604; }
+    background-color: #874b21; }
 
-#request-container h2 {
-  color: #A13604; }
+#request-container {
+  color: #874b21; }
+  #request-container h2 {
+    color: #874b21; }
+  #request-container form .btn {
+    color: white;
+    background: #874b21; }
+    #request-container form .btn:hover {
+      background: #73401c; }
 
 .tile {
-  border-radius: 10px;
-  background: url("https://github.com/hackforla/spare/blob/master/design/assets/tiles/dress.png");
-  text-align: center; }
+  text-align: center;
+  box-sizing: border-box; }
+
+.tile img {
+  border-radius: 10px; }
+
+.tile:hover img {
+  box-shadow: 0 0 10px rgba(10, 10, 10, 0.25); }
 
 .tile-label {
   position: absolute;
-  top: 25%;
-  left: 50%;
-  transform: translate(-50%, -25%); }
+  transform: translate(0, -70px);
+  padding: 5px 8px;
+  right: 0;
+  bottom: 0;
+  background-color: #ff0050;
+  color: #eee;
+  font-size: 1em;
+  font-weight: bold;
+  box-shadow: 2px 2px 6px rgba(10, 10, 10, 0.1);
+  border: 1px solid #e60048; }
 
 .text-label {
-  padding: 10px 0 15px; }
+  padding: 10px 0 30px; }
+
+form {
+  color: #4f5464; }
+  form .form-control {
+    padding: 2em 1.5em;
+    background-color: #f8f8fa;
+    border: 1px solid #cecfd5; }
+  form .form-group {
+    margin-bottom: 35px; }
+  form .control-label {
+    line-height: 2em;
+    letter-spacing: 2.54px;
+    font-weight: bold;
+    text-transform: uppercase; }
+  form .btn {
+    height: 50px;
+    border-radius: 25px;
+    box-sizing: border-box;
+    padding: 0 50px;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 2.54px;
+    text-transform: uppercase; }
 
 body {
-  margin: 0px 50px;
+  margin: 0px 50px 85px;
   padding: 0px;
   color: #4f5464; }
+
+a {
+  color: #4f5464; }
+
+a:hover, a:active {
+  text-decoration: none;
+  color: #2d3039; }

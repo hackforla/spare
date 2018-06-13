@@ -43,9 +43,7 @@ export default class Donate extends Component {
       const path = paths[category] + '/' + itemType + '/';
       routes.push(
         <Route exact path={ path } key={ path }>
-          <div>
-            <DonateItemsTable itemType={ itemType } category={ category } requests={ requests } paths={ paths } />
-          </div>
+          <DonateItemsTable itemType={ itemType } category={ category } requests={ requests } paths={ paths } />
         </Route>
       );
     }
