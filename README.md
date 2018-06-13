@@ -2,8 +2,6 @@
 
 A project that connects people in need of clothing and other essentials with people in the community who have things to spare. It's kind of like one on one Goodwill. The main objective is to foster interactions between the housed and unhoused. The donation is the mechanism for building these connections throughout our community.
 
-Here's how it works: people in need or outreach workers request essential items on a website. Donors sign up to donate that item to someone. Then, they meet and the item is exchanged.
-
 ## Project Status
 Currently, we’re working on [building this prototype](https://projects.invisionapp.com/share/YKH1L8TAB56#/291938149_Home). The first objective is to provide a way to request items, share those requests with potential donors and then connect them through an outreach coalition or a nonprofit. While, we’re building this app, we’re also working on a lightweight solution (using Google Forms and email) to gather requests and ask for donations in just a few neighborhoods. You can see that at [whatcanyouspare.org](http://whatcanyouspare.org)
 
@@ -20,7 +18,7 @@ We’re looking for a nonprofit partner right now that can provide a consistent 
 ## Ways to Contribute
 * Pick up an [engineering task from Github](https://github.com/hackforla/spare/issues)
 * Pick up a [design task from Github](https://github.com/hackforla/spare/issues)
-* Help us with (product direction or strategy)[https://github.com/hackforla/spare#product-and-design-contributors]
+* Help us with [product direction or strategy](https://github.com/hackforla/spare#product-and-design-contributors)
 * Help us find nonprofit or government partners to help with donation handoff
 * Help us find potential users
 * Help us define the service design
