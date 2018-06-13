@@ -8,7 +8,7 @@ import Tile from './Tile';
 
 class DonateSubcategoryLink extends Component {
   render() {
-    const { category, subcategory } = this.props;
+    const { count, category, subcategory } = this.props;
     const { displayName, icon } = this.props.info;
 
     // TODO: Put these styles in CSS/SASS
@@ -17,13 +17,11 @@ class DonateSubcategoryLink extends Component {
         minWidth: '150px',
         minHeight: '150px',
       }}>
-        <div>
+        <Link to={ '/donate/' + category + '/' + subcategory + '/' } >
           <Tile side='donate' alt={displayName} icon={ icon } />
-          <h1 className="text-center tile-label">#NEEDED</h1>
-          <div className='text-label'>
-            <Link to={ '/donate/' + category + '/' + subcategory + '/' } >{ displayName }</Link>
-          </div>
-        </div>
+          <span className="text-center tile-label">{ count } needed</span>
+          <div className='text-label'>{ displayName }</div>
+        </Link>
       </div>
     )
   }
@@ -72,10 +70,24 @@ export default class DonateCategory extends Component {
 
         if (itemTypeRequests.length > 0) {
           items.push(
-            <DonateSubcategoryLink { ...this.props } info={ itemInfo[itemType] } key={ index } subcategory={ itemType } />
+            <DonateSubcategoryLink
+              { ...this.props }
+              count={ itemTypeRequests.length }
+              info={ itemInfo[itemType] }
+              key={ index }
+              subcategory={ itemType }
+            />
           );
         }
       }
+    }
+
+    if (items.length < 1) {
+      items.push(
+        <div key={ 0 }>
+          <p>There are not requests for this item right now. Please check back later!</p>
+        </div>
+      )
     }
 
     return (
@@ -89,7 +101,7 @@ export default class DonateCategory extends Component {
         </Row>
         <Row>
           <CategoryNav paths={ paths  } />
-          { items }
+          { requests !== null ? items : [] }
         </Row>
       </div>
     )
