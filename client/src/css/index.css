@@ -160,6 +160,9 @@ form {
     letter-spacing: 2.54px;
     text-transform: uppercase; }
 
+#About {
+  text-align: center; }
+
 body {
   margin: 0px 50px 85px;
   padding: 0px;

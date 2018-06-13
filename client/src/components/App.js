@@ -2,7 +2,8 @@ import React, { Component } from "react"
 import { Switch, Redirect, Route } from "react-router-dom"
 import Request from "./Request"
 import Donate from "./Donate"
-import Header from './Header';
+import Header from "./Header";
+import About from "./About";
 import { Grid  } from "react-bootstrap"
 
 class App extends Component {
@@ -26,7 +27,7 @@ class App extends Component {
                 <h2>Code</h2>
               </Route>
               <Route path="/about">
-                <h2>About</h2>
+                  <About/>
               </Route>
               <Route path="/contact">
                 <h2>Contact</h2>
