@@ -58,7 +58,7 @@ class DonateItemsTypeTable extends Component {
                     <td>{ request.size }</td>
                     <td>{ request.city }</td>
                     <td>
-                      <LinkContainer to={'/specific/page'}>
+                      <LinkContainer to={`/donate/${ request.id }`}>
                         <Button>Donate</Button>
                       </LinkContainer>
                     </td>
