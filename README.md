@@ -139,3 +139,4 @@ Spare Team is
 * [@epikkoder](https://github.com/epikkoder)
 * [@allicolyer](https://github.com/allicolyer)
 * [@jrkoch](https://github.com/jrkoch)
+* [@contrecc](https://github.com/contrecc)
