@@ -33,8 +33,19 @@ h2 {
   line-height: 1.25em;
   font-weight: 400; }
 
+.text-footer {
+  font-size: 14px;
+  line-height: 13.5px;
+  font-weight: bold;
+  letter-spacing: 2.54px; }
+
 .hero {
   margin-bottom: 50px; }
+
+footer {
+  position: fixed;
+  bottom: 0;
+  padding: 20px; }
 
 #donate-container form .btn {
   color: white;

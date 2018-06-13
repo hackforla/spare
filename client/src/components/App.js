@@ -1,13 +1,9 @@
 import React, { Component } from "react"
-import { Switch, Redirect, Route } from "react-router-dom"
-import { Grid  } from "react-bootstrap"
-
-//Components
+import { Switch, Redirect, Route, Link } from "react-router-dom"
 import Request from "./Request"
 import Donate from "./Donate"
-import Header from "./Header";
-import About from "./About";
-import Footer from "./Footer";
+import Header from './Header';
+import { Grid, Row, Col } from "react-bootstrap"
 
 
 class App extends Component {
@@ -31,7 +27,7 @@ class App extends Component {
                 <h2>Code</h2>
               </Route>
               <Route path="/about">
-                  <About/>
+                <h2>About</h2>
               </Route>
               <Route path="/contact">
                 <h2>Contact</h2>
@@ -43,7 +39,15 @@ class App extends Component {
             </Switch>
           </Grid>
         </div>
-        <Footer />
+        <footer className="footer">
+          <Grid>
+            <Row>
+              <Col className="text-center" sm={2} smOffset={5}>
+                <Link className="text-footer" to="/about">ABOUT</Link>
+              </Col>
+            </Row>
+          </Grid>
+        </footer>
       </Grid>
     )
   }
