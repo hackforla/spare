@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import { Image } from "react-bootstrap";
 
@@ -44,3 +45,17 @@ const About = () => (
 );
 
 export default About;
+=======
+import React, { Component } from 'react';
+
+export default class About extends Component {
+    render() {
+
+        return (
+            <h2>About</h2>
+        )
+    }
+}
+
+
+>>>>>>> started About component
