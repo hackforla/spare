@@ -164,14 +164,15 @@ form {
   text-align: center; }
 
 #Footer {
-  position: absolute;
-  bottom: 0;
-  width: 94%;
   height: 60px;
   margin-bottom: 5px;
   text-align: center; }
 
+html, #root {
+  height: 100%; }
+
 body {
+  height: 100%;
   margin: 0px 50px 85px;
   padding: 0px;
   color: #4f5464; }
