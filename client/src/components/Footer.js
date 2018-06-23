@@ -2,11 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => (
-    <div id="Footer">
-        <Link to="/about">About</Link>
-        &nbsp;&nbsp;
-        <a href="mailto:team@whatcanyouspare.com">Contact</a>
-    </div>
+    <nav id="Footer">
+        <ul>
+            <li><Link to="/about">About</Link></li>
+            <li><a href="mailto:team@whatcanyouspare.com">Contact</a></li>
+        </ul>
+    </nav>
 );
 
 export default Footer;
