@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import { itemInfo } from '../constants';
-import { Alert, Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
+import { Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 
 class FullfillmentForm extends Component {
   constructor(props, context) {
     // TODO: This is a pretty much a copy paste of RequestForm (we should probably fix that)
     super(props, context);
 
-    this.handleChange = this.handleChange.bind(this); 
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.sendForm = this.sendForm.bind(this);
 
@@ -27,7 +27,7 @@ class FullfillmentForm extends Component {
 
     this.fields.forEach(field => {
       // eslint-disable-next-line
-      this.state[field.key] = ''; 
+      this.state[field.key] = '';
       this.inputs[field.key] = '';
     });
 
