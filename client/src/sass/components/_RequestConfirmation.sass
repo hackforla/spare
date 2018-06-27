@@ -1,0 +1,25 @@
+.request-confirmation
+  .container
+    width: 510px
+
+    ol
+      counter-reset: next-steps
+      & > li
+        display: flex
+        list-style: none
+        margin-bottom: 70px
+        font-size: 18px
+
+        img
+          margin-right: 20px
+
+        div.step-text
+          display: inline-block
+          &:before
+            content: counter(next-steps) ") "
+            counter-increment: next-steps
+
+          .disclaimer
+            display: block
+            font-size: 14px
+            font-style: italic

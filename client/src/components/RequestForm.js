@@ -4,11 +4,13 @@ import axios from 'axios';
 import { itemInfo } from '../constants';
 import { Alert, Button, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
 
+import RequestConfirmation from './RequestConfirmation';
+
 class RequestForm extends Component {
   constructor(props, context) {
     super(props, context);
 
-    this.handleChange = this.handleChange.bind(this); 
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.sendForm = this.sendForm.bind(this);
 
@@ -29,7 +31,7 @@ class RequestForm extends Component {
 
     this.fields.forEach(field => {
       // eslint-disable-next-line
-      this.state[field.key] = ''; 
+      this.state[field.key] = '';
       this.inputs[field.key] = '';
     });
 
@@ -70,16 +72,16 @@ class RequestForm extends Component {
     data.item = this.inputs.item.value;
     console.log(data);
 
-    // localhost shouldn't be hard-coded. how do we 
+    // localhost shouldn't be hard-coded. how do we
     // handle this in development if the API endpoint
     // is on a different port?
     axios.post('http://localhost:8000/api/requests/', data)
       .then((res) => {
-        this.setState((oldState) => ({alert: 'success', message: 'Request received.'}));
+        this.setState({ submitSuccess: true });
         console.log(res);
       })
       .catch((err) => {
-        this.setState((oldState) => ({alert: 'danger', message: 'Request failed.'}));
+        this.setState({ alert: 'danger', message: 'Request failed.' });
         console.log(err)
       });
   }
@@ -105,6 +107,10 @@ class RequestForm extends Component {
   }
 
   render() {
+    if (this.state.submitSuccess) {
+      return <RequestConfirmation />;
+    }
+
     const { itemType } = this.props;
 
     if (this.state.alert && this.state.message) {
