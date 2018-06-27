@@ -1,23 +1,35 @@
-import React from "react";
-import { Image } from "react-bootstrap";
+import React from 'react';
+import { Image } from 'react-bootstrap';
 
-import HenaoThumbnail from "../assets/thumbnails/HenaoThumbnail.jpeg";
-import AlexaThumbnail from "../assets/thumbnails/AlexaThumbnail.jpeg";
-import JeffThumbnail from "../assets/thumbnails/JeffThumbnail.jpeg";
-import JordanThumbnail from "../assets/thumbnails/JordanThumbnail.jpeg";
-import ShawnThumbnail from "../assets/thumbnails/ShawnThumbnail.jpeg";
-import AlliThumbnail from "../assets/thumbnails/AlliThumbnail.jpeg";
+const hackforlaUrl = 'http://www.hackforla.org/';
+const githubUrl = 'https://github.com/hackforla/spare';
+const slackUrl = 'https://hackforla.slack.com';
 
-let hackforlaUrl = "https://github.com/hackforla";
-let githubUrl = "https://github.com/hackforla/spare";
-let slackUrl = "https://hackforla.slack.com";
+// Thank you, Stack Overflow!
+// https://stackoverflow.com/a/12646864
+const shuffle = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (array.length));
+        [array[i], array[j]] = [array[j], array[i]]; // eslint-disable-line no-param-reassign
+    }
+}
 
+const r = require.context('../../public/assets/teamphotos', false, /\.png$/);
+const images = r.keys().reduce((acc, curr) => {
+    acc.push(r(curr));
+    return acc;
+}, []);
+
+shuffle(images);
+
+
+let imageIndex = 0;
 const About = () => (
     <div id="About">
         <h2>About Spare</h2>
-        <p>Spare is a project team with 
-            <a href={hackforlaUrl}> Hack For La. </a> 
-            We connect people in need with people who have spare stuff. 
+        <p>
+            Spare is a project team with <a href={hackforlaUrl}>Hack For LA</a>.
+            We connect people in need with people who have spare stuff.
         </p>
         <p>
             Our goal is to help those in housing connect and offer help to those
@@ -28,17 +40,17 @@ const About = () => (
         </p>
         <p>
             You can contribute to our <a href={githubUrl}>Github project</a> or
-            find us on <a href={slackUrl}>Slack.</a> You can
+            find us on <a href={slackUrl}>Slack</a>. You can
             also email us at team@whatcanyouspare.org but keep in mind that we're
-            volunteers and may be slower to respond.  
+            volunteers and may be slower to respond.
         </p>
         <div id="team-thumbnails">
-            <Image src={HenaoThumbnail} thumbnail/>
-            <Image src={AlexaThumbnail} thumbnail/>
-            <Image src={JeffThumbnail} thumbnail/>
-            <Image src={AlliThumbnail} thumbnail/>
-            <Image src={JordanThumbnail} thumbnail/>
-            <Image src={ShawnThumbnail} thumbnail/>
+            {images.map(image => (
+                <Image
+                    src={image}
+                    key={imageIndex++}
+                />
+            ))}
         </div>
     </div>
 );
