@@ -11,6 +11,7 @@ class RequestForm extends Component {
     super(props, context);
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.sendForm = this.sendForm.bind(this);
 
@@ -20,8 +21,7 @@ class RequestForm extends Component {
       { "key": "phone", "name": "Your Phone Number", "type": "text", "placeholder": "Phone number" },
     ];
 
-    //this.itemOptions = ["hygiene","essentials","clothing"];
-    this.itemOptions = ["Shoes", "Socks", "Dresses and Skirts"];
+    this.sizes = ["xs", "sm", "md", "lg", "xl", "xxl"];
 
     //initialize state with keys from fields array
     this.state = {};
@@ -34,6 +34,8 @@ class RequestForm extends Component {
       this.state[field.key] = '';
       this.inputs[field.key] = '';
     });
+
+    this.state.selectValue = this.sizes ? this.sizes[0] : "";
 
     this.inputs.item = '';
 
@@ -54,6 +56,10 @@ class RequestForm extends Component {
     this.setState(newState);
   }
 
+  handleSelect(e) {
+    this.setState({selectValue:e.target.value});
+  }
+
   // Display message and run callback on form submission
   handleSubmit(e) {
     e.preventDefault();
@@ -70,7 +76,9 @@ class RequestForm extends Component {
       data[field.key] = this.inputs[field.key].value;
     });
     data.item = this.inputs.item.value;
+    data.size = this.state.selectValue;
     console.log(data);
+    debugger;
 
     // localhost shouldn't be hard-coded. how do we
     // handle this in development if the API endpoint
@@ -102,8 +110,8 @@ class RequestForm extends Component {
     </FormGroup>)
   }
 
-  getItemOptions(items){
-    return items.map((item, index) => <option key={index} value={index+1}>{item}</option>)
+  getSizes(sizes){
+    return sizes.map((size, index) => <option key={index} value={size}>{size}</option>)
   }
 
   render() {
@@ -140,13 +148,15 @@ class RequestForm extends Component {
           <form onSubmit={this.handleSubmit} className="col-sm-6 col-sm-offset-3">
             {this.getBasicFields(this.fields)}
             <FormGroup>
-              <ControlLabel>Select an Item</ControlLabel>
+              <ControlLabel>What Size?</ControlLabel>
               <FormControl
                 componentClass="select"
                 placeholder="select"
+                onChange={this.handleSelect}
+                value={this.state.selectValue}
                 inputRef={(ref) => {this.inputs.item = ref}}
               >
-                {this.getItemOptions(this.itemOptions)}
+                {this.getSizes(this.sizes)}
               </FormControl>
             </FormGroup>
             <div className="text-center">
