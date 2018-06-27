@@ -8,17 +8,19 @@ export default class CategoryNav extends Component {
     const { paths } = this.props;
 
     return (
-      <Nav bsStyle="pills" justified>
-        <LinkContainer to={ paths.clothing }>
-          <NavItem eventKey={'clothing'}>Clothing</NavItem>
-        </LinkContainer>
-        <LinkContainer to={ paths.essentials }>
-          <NavItem eventKey={'essentials'}>Essentials</NavItem>
-        </LinkContainer>
-        <LinkContainer to={ paths.hygiene }>
-          <NavItem eventKey={'hygiene'}>Hygiene</NavItem>
-        </LinkContainer>
-      </Nav>
+      <div className="nav-container">
+        <Nav bsStyle="pills" justified>
+          <LinkContainer to={ paths.clothing }>
+            <NavItem eventKey={'clothing'}>Clothing</NavItem>
+          </LinkContainer>
+          <LinkContainer to={ paths.essentials }>
+            <NavItem eventKey={'essentials'}>Essentials</NavItem>
+          </LinkContainer>
+          <LinkContainer to={ paths.hygiene }>
+            <NavItem eventKey={'hygiene'}>Hygiene</NavItem>
+          </LinkContainer>
+        </Nav>
+      </div>
     )
   }
 };
