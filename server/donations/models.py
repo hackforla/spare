@@ -97,10 +97,14 @@ class Location(models.Model):
     phone = models.CharField(max_length=10)
     website = models.URLField(max_length=100)
 
+    def __str__(self):
+        return self.organization_name
+
 class PickupTime(models.Model):
     time_start = models.TimeField()
     time_end = models.TimeField()
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='dropoff_times')
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
 
 class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)

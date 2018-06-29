@@ -20,7 +20,9 @@ class FullfillmentForm extends Component {
     ];
 
     //initialize state with keys from fields array
-    this.state = {};
+    this.state = {
+        dropoffs: []
+    };
 
     //initialize form inputs for submission
     this.inputs = {};
@@ -101,6 +103,23 @@ class FullfillmentForm extends Component {
     return items.map((item, index) => <option key={index} value={index+1}>{item}</option>)
   }
 
+  getDropoffs() {
+    return this.state.dropoffs.map((dropoff, index) => <Radio key={index} name="pickUp" value={index+1}>{dropoff.location.organization_name} - {dropoff.time_start}</Radio>);
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:8000/api/pickup_times/', {
+        params: {
+            neighborhood: this.props.request.neighborhood.id
+        }
+    })
+      .then((res) => {
+          this.setState((oldState) => ({
+              dropoffs: res.data
+          }));
+      });
+  }
+
   render() {
     const { request } = this.props;
 
@@ -122,12 +141,7 @@ class FullfillmentForm extends Component {
             {this.getBasicFields(this.fields)}
             <FormGroup>
               <ControlLabel>Choose a drop off</ControlLabel>
-              <Radio name="pickUp">
-                Sunday, April 29th at 10am
-              </Radio>
-              <Radio name="pickUp">
-                Sunday, May 14th at 10am
-              </Radio>
+              {this.getDropoffs()}
             </FormGroup>
             <div className="text-center">
               <Button type="submit">Confirm Donation</Button>

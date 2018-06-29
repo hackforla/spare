@@ -14,8 +14,12 @@ from donations.serializers import (
 
 class DonationRequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     # Limit to unfulfilled requests made within last 10 days
-    def get_queryset(self):
-        return DonationRequest.objects.filter(
+    def get_queryset(self): 
+        queryset = DonationRequest.objects.all()
+        neighborhood = self.request.query_params.get('neighborhood', None)
+        if neighborhood is not None:
+            queryset = queryset.filter(neighborhood=neighborhood)
+        return queryset.filter(
             created__gte=timezone.now() - timedelta(days=10),
             fulfillments__isnull=True
         )
@@ -45,11 +49,26 @@ class NeighborhoodViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewse
     serializer_class = NeighborhoodSerializer
 
 class LocationViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = Location.objects.all()
+    def get_queryset(self):
+        queryset = Location.objects.all()
+        neighborhood = self.request.query_params.get('neighborhood', None)
+
+        if neighborhood is not None:
+            queryset = queryset.filter(neighborhood=neighborhood)
+        return queryset
+
     serializer_class = LocationSerializer
     
 class PickupTimeViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = PickupTime.objects.all()
+    
+    def get_queryset(self):
+        
+        queryset = PickupTime.objects.all()
+        neighborhood = self.request.query_params.get('neighborhood', None)
+        if neighborhood is not None:
+            queryset = queryset.filter(neighborhood=neighborhood);
+        return queryset
+
     serializer_class = PickupTimeSerializer
 
 

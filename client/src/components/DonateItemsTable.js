@@ -55,8 +55,8 @@ class DonateItemsTypeTable extends Component {
               if (category === request.item.category_tag){
                 return (
                   <tr key={request.id}>
-                    <td>{ request.size }</td>
-                    <td>{ request.city }</td>
+                    <td>{ request.size || 'N/A' }</td>
+                    <td>{ request.neighborhood.name }</td>
                     <td>
                       <LinkContainer to={`/donate/${ request.id }`}>
                         <Button>Donate</Button>

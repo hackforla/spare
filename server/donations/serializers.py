@@ -47,19 +47,9 @@ class DonationRequestSerializer(serializers.ModelSerializer):
             'created'
         )
         read_only_fields = (
-            'id', 'neighborhood', 'created', 'code'
+            'id', 'created', 'code'
         )
         validators = [ContactInfoValidator()]
-
-
-class DonationRequestPublicSerializer(serializers.ModelSerializer):
-    item = ItemRequestSerializer()
-
-    class Meta:
-        model = DonationRequest
-        fields = (
-            'id', 'item', 'size', 'neighborhood', 'created', 
-        )
 
 class NeighborhoodSerializer(serializers.ModelSerializer):
     class Meta:
@@ -67,6 +57,17 @@ class NeighborhoodSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'name',
         )
+
+class DonationRequestPublicSerializer(serializers.ModelSerializer):
+    item = ItemRequestSerializer()
+    neighborhood = NeighborhoodSerializer()
+
+    class Meta:
+        model = DonationRequest
+        fields = (
+            'id', 'item', 'size', 'neighborhood', 'created', 
+        )
+
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,10 +77,25 @@ class LocationSerializer(serializers.ModelSerializer):
         )
 
 class PickupTimeSerializer(serializers.ModelSerializer):
+
+    def create(self, data):
+        return PickupTime.objects.create(
+            time_start = data.get('time_start'),
+            time_end = data.get('time_end'),
+            location = data.get('location'),
+            neighborhood = data.get('location').neighborhood
+        )
+
+    location = LocationSerializer()
+    neighborhood = NeighborhoodSerializer()
+
     class Meta:
         model = PickupTime
         fields = (
-            'time_start', 'time_end', 'location'
+            'time_start', 'time_end', 'location', 'neighborhood'
+        )
+        read_only_fields = (
+            'id', 'neighborhood'
         )
 
 
