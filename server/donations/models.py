@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MaxValueValidator
 from django.db import models
 
 # Defaults for initial items and categories (used in migrations)
@@ -79,10 +79,33 @@ class Category(TaggedModelMixin, models.Model):
 class Item(TaggedModelMixin, models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+class Neighborhood(models.Model):
+    name = models.CharField(max_length=50);
+
+    def __str__(self):
+        return self.name
+
+class Location(models.Model):
+    organization_name = models.CharField(max_length=100, blank=True)
+    location_name = models.CharField(max_length=100, blank=True)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='neighborhood')
+    street_address_1 = models.CharField(max_length=150)
+    street_address_2 = models.CharField(max_length=150, blank=True)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=2)
+    zipcode = models.IntegerField(validators=[MaxValueValidator(99999)])
+    phone = models.CharField(max_length=10)
+    website = models.URLField(max_length=100)
+
+class PickupTime(models.Model):
+    time_start = models.TimeField()
+    time_end = models.TimeField()
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='dropoff_times')
 
 class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     size = models.CharField(max_length=16, blank=True)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
     code = models.CharField(max_length=50)
 
     def __str__(self):
@@ -94,3 +117,4 @@ class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model
 
     def __str__(self):
         return '{} - {}'.format(self.request.item, self.created)
+

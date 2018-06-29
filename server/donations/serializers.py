@@ -1,7 +1,7 @@
 from collections import defaultdict
 from rest_framework import serializers
 
-from donations.models import DonationFulfillment, DonationRequest, Item
+from donations.models import DonationFulfillment, DonationRequest, Item, Neighborhood, Location, PickupTime
 
 
 class ContactInfoValidator(object):
@@ -43,11 +43,11 @@ class DonationRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationRequest
         fields = (
-            'id', 'name', 'phone', 'email', 'item', 'size', 'code',
+            'id', 'name', 'phone', 'email', 'item', 'size', 'neighborhood', 'code',
             'created'
         )
         read_only_fields = (
-            'id', 'created', 'code'
+            'id', 'neighborhood', 'created', 'code'
         )
         validators = [ContactInfoValidator()]
 
@@ -58,5 +58,28 @@ class DonationRequestPublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationRequest
         fields = (
-            'id', 'item', 'size', 'created', 'city'
+            'id', 'item', 'size', 'neighborhood', 'created', 
         )
+
+class NeighborhoodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Neighborhood
+        fields = (
+            'id', 'name',
+        )
+
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = (
+            'organization_name', 'location_name', 'neighborhood', 'street_address_1', 'street_address_2', 'city', 'state', 'zipcode', 'phone', 'website'
+        )
+
+class PickupTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PickupTime
+        fields = (
+            'time_start', 'time_end', 'location'
+        )
+
+
