@@ -22,7 +22,9 @@ class RequestForm extends Component {
     this.itemOptions = ["Shoes", "Socks", "Dresses and Skirts"];
 
     //initialize state with keys from fields array
-    this.state = {};
+    this.state = {
+        neighborhoods: []
+    };
 
     //initialize form inputs for submission
     this.inputs = {};
@@ -34,6 +36,7 @@ class RequestForm extends Component {
     });
 
     this.inputs.item = '';
+    this.inputs.neighborhood = '';
 
   }
 
@@ -68,6 +71,7 @@ class RequestForm extends Component {
       data[field.key] = this.inputs[field.key].value;
     });
     data.item = this.inputs.item.value;
+    data.neighborhood = this.inputs.neighborhood.value;
     console.log(data);
 
     // localhost shouldn't be hard-coded. how do we 
@@ -104,6 +108,19 @@ class RequestForm extends Component {
     return items.map((item, index) => <option key={index} value={index+1}>{item}</option>)
   }
 
+  getNeighborhoods() {
+    return this.state.neighborhoods.map((hood, index) => <option key={index} value={hood.id}>{hood.name}</option>)
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:8000/api/neighborhoods/')
+      .then((res) => {
+          console.log(res.data);
+          this.setState((oldState) => ({neighborhoods: res.data}));
+      })
+      .catch((err) => console.log(err));
+  }
+
   render() {
     const { itemType } = this.props;
 
@@ -132,6 +149,16 @@ class RequestForm extends Component {
         </div>
         <Row>
           <form onSubmit={this.handleSubmit} className="col-sm-6 col-sm-offset-3">
+            <FormGroup>
+              <ControlLabel>Nearest Neighborhood</ControlLabel>
+              <FormControl
+                componentClass="select"
+                placeholder="select"
+                inputRef={(ref) => {this.inputs.neighborhood = ref}}
+              >
+                {this.getNeighborhoods()}
+              </FormControl>
+            </FormGroup>
             {this.getBasicFields(this.fields)}
             <FormGroup>
               <ControlLabel>Select an Item</ControlLabel>
