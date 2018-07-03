@@ -4,7 +4,7 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import { itemTypesByCategory } from '../constants';
 import DonateCategory from './DonateCategory';
 import DonateItemsTable from './DonateItemsTable';
-import FulllfillmentForm from './FullfillmentForm';
+import FulfillmentForm from './FulfillmentForm';
 
 class DonationDetail extends Component {
   render() {
@@ -24,7 +24,7 @@ class DonationDetail extends Component {
 
       if (request) {
         return (
-          <FulllfillmentForm request={ request } />
+          <FulfillmentForm request={ request } />
         );
       }
     }

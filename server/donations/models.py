@@ -121,6 +121,7 @@ class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
 
 class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model):
     request = models.ForeignKey(DonationRequest, on_delete=models.CASCADE, related_name='fulfillments')
+    pickup_time = models.ForeignKey(PickupTime, on_delete=models.CASCADE)
 
     def __str__(self):
         return '{} - {}'.format(self.request.item, self.created)

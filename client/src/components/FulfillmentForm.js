@@ -4,7 +4,7 @@ import axios from 'axios';
 import { itemInfo } from '../constants';
 import { Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 
-class FullfillmentForm extends Component {
+class FulfillmentForm extends Component {
   constructor(props, context) {
     // TODO: This is a pretty much a copy paste of RequestForm (we should probably fix that)
     super(props, context);
@@ -67,12 +67,13 @@ class FullfillmentForm extends Component {
     this.fields.forEach((field) => {
       data[field.key] = this.inputs[field.key].value;
     });
-    data.item = this.inputs.item.value;
-    console.log(data);
+    data.pickup_time = this.inputs.pickup_time;
+    data.request = this.props.request.id;
+    data.city = 'Los Angeles';
 
     // handle this in development if the API endpoint
     // is on a different port?
-    axios.post('http://localhost:8000/api/fullfillments/', data)
+    axios.post('http://localhost:8000/api/fulfillments/', data)
       .then((res) => {
         this.setState((oldState) => ({alert: 'success', message: 'Request fullfilled.'}));
         console.log(res);
@@ -104,7 +105,7 @@ class FullfillmentForm extends Component {
   }
 
   getDropoffs() {
-    return this.state.dropoffs.map((dropoff, index) => <Radio key={index} name="pickUp" value={index+1}>{dropoff.location.organization_name} - {dropoff.time_start}</Radio>);
+    return this.state.dropoffs.map((dropoff, index) => <Radio key={index} name="pickUp" onChange={(e) => {this.inputs.pickup_time = e.target.value}} value={index+1}>{dropoff.location.organization_name} - {dropoff.time_start}</Radio>);
   }
 
   componentDidMount() {
@@ -153,4 +154,4 @@ class FullfillmentForm extends Component {
   }
 }
 
-export default FullfillmentForm;
+export default FulfillmentForm;

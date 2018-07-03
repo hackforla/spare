@@ -31,7 +31,7 @@ class DonationFulfillmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationFulfillment
         fields = (
-            'id', 'name', 'phone', 'email', 'request', 'created'
+            'id', 'name', 'phone', 'email', 'request', 'pickup_time', 'created'
         )
         read_only_fields = (
             'id', 'created',
@@ -92,7 +92,7 @@ class PickupTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PickupTime
         fields = (
-            'time_start', 'time_end', 'location', 'neighborhood'
+            'id', 'time_start', 'time_end', 'location', 'neighborhood'
         )
         read_only_fields = (
             'id', 'neighborhood'
