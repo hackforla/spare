@@ -67,7 +67,7 @@ class FulfillmentForm extends Component {
     this.fields.forEach((field) => {
       data[field.key] = this.inputs[field.key].value;
     });
-    data.pickup_time = this.inputs.pickup_time;
+    data.dropoff_time = this.inputs.dropoff_time;
     data.request = this.props.request.id;
     data.city = 'Los Angeles';
 
@@ -105,15 +105,13 @@ class FulfillmentForm extends Component {
   }
 
   getDropoffs() {
-    return this.state.dropoffs.map((dropoff, index) => <Radio key={index} name="pickUp" onChange={(e) => {this.inputs.pickup_time = e.target.value}} value={index+1}>{dropoff.location.organization_name} - {dropoff.time_start}</Radio>);
+    return this.state.dropoffs.map((dropoff, index) => <Radio key={index} name="pickUp" onChange={(e) => {this.inputs.dropoff_time = e.target.value}} value={index+1}>{dropoff.location.organization_name} - {dropoff.time_start} - { dropoff.date }</Radio>);
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8000/api/pickup_times/', {
-        params: {
-            neighborhood: this.props.request.neighborhood.id
-        }
-    })
+    const { request } = this.props;
+
+    axios.get(`http://localhost:8000/api/requests/${request.id}/dropoff_times/`)
       .then((res) => {
           this.setState((oldState) => ({
               dropoffs: res.data

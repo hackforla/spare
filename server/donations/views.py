@@ -1,20 +1,22 @@
 from datetime import timedelta
 
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, mixins, viewsets
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-from donations.models import DonationFulfillment, DonationRequest, Neighborhood, Location, PickupTime
+from donations.models import DonationFulfillment, DonationRequest, Neighborhood, DropoffTime
 from donations.serializers import (
     DonationFulfillmentSerializer, DonationRequestPublicSerializer,
-    DonationRequestSerializer, NeighborhoodSerializer, LocationSerializer, PickupTimeSerializer
+    DonationRequestSerializer, NeighborhoodSerializer, DropoffTimeSerializer
 )
 
 
 class DonationRequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     # Limit to unfulfilled requests made within last 10 days
-    def get_queryset(self): 
+    def get_queryset(self):
         queryset = DonationRequest.objects.all()
         neighborhood = self.request.query_params.get('neighborhood', None)
         if neighborhood is not None:
@@ -44,31 +46,22 @@ class DonationRequestCodeDetailView(generics.RetrieveAPIView):
     serializer_class = DonationRequestSerializer
     lookup_field = 'code'
 
-class NeighborhoodViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+
+class NeighborhoodViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Neighborhood.objects.all()
     serializer_class = NeighborhoodSerializer
 
-class LocationViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+
+class DropoffTimeListView(generics.GenericAPIView):
     def get_queryset(self):
-        queryset = Location.objects.all()
-        neighborhood = self.request.query_params.get('neighborhood', None)
+        return DropoffTime.objects.all()
 
-        if neighborhood is not None:
-            queryset = queryset.filter(neighborhood=neighborhood)
-        return queryset
+    def get(self, request, request_id):
+        request_obj = get_object_or_404(DonationRequest, id=request_id)
 
-    serializer_class = LocationSerializer
-    
-class PickupTimeViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
-    
-    def get_queryset(self):
-        
-        queryset = PickupTime.objects.all()
-        neighborhood = self.request.query_params.get('neighborhood', None)
-        if neighborhood is not None:
-            queryset = queryset.filter(neighborhood=neighborhood);
-        return queryset
+        # TODO: Allow selection from nearby neighborhoods
+        neighborhood = request_obj.neighborhood
+        dropoff_times = DropoffTime.objects.filter(location__neighborhood=neighborhood)
 
-    serializer_class = PickupTimeSerializer
-
-
+        serializer = DropoffTimeSerializer(dropoff_times, many=True)
+        return Response(serializer.data)

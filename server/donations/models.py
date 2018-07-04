@@ -1,5 +1,10 @@
-from django.core.validators import RegexValidator, MaxValueValidator
+from datetime import datetime, timedelta
+
+from django.core.validators import RegexValidator
 from django.db import models
+from django.utils import timezone
+from enumfields import EnumIntegerField
+from enumfields import Enum
 
 # Defaults for initial items and categories (used in migrations)
 # Each category tuple is mapped to a set (not dict) of tuples containing
@@ -36,6 +41,12 @@ tag_validator = RegexValidator(
     regex='^[a-z_]*$',
     message='Only lower case letters and underscores allowed for tag',
     code='invalid_tag'
+)
+
+
+zipcode_validator = RegexValidator(
+    message='Invalid zip code format (must be 5 or 9 digits)',
+    code='invalid_zipcode',
 )
 
 
@@ -79,11 +90,13 @@ class Category(TaggedModelMixin, models.Model):
 class Item(TaggedModelMixin, models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+
 class Neighborhood(models.Model):
-    name = models.CharField(max_length=50);
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
+
 
 class Location(models.Model):
     organization_name = models.CharField(max_length=100, blank=True)
@@ -93,21 +106,55 @@ class Location(models.Model):
     street_address_2 = models.CharField(max_length=150, blank=True)
     city = models.CharField(max_length=50)
     state = models.CharField(max_length=2)
-    zipcode = models.IntegerField(validators=[MaxValueValidator(99999)])
+    zipcode = models.CharField(max_length=10, validators=[zipcode_validator])
     phone = models.CharField(max_length=10)
     website = models.URLField(max_length=100)
 
     def __str__(self):
         return self.organization_name
 
-class PickupTime(models.Model):
+
+class DaysOfWeek(Enum):
+    MONDAY = 0
+    TUESDAY = 1
+    WEDNESDAY = 2
+    THURSDAY = 3
+    FRIDAY = 4
+    SATURDAY = 5
+    SUNDAY = 6
+
+
+class DropoffTime(models.Model):
     time_start = models.TimeField()
     time_end = models.TimeField()
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='dropoff_times')
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
+    day = EnumIntegerField(DaysOfWeek, default=DaysOfWeek.SUNDAY)
+
+    VISIBLE_WEEKS = 2
+
+    def get_visible_dates(self):
+        results = []
+
+        now = timezone.now()
+
+        # Get number of days differences
+        days_ahead = (now.weekday() - self.day.value) % 6
+
+        # Get the nearest valid date, given day and start time
+        nearest_date = datetime(year=now.year, month=now.month, day=now.day, hour=self.time_start.hour)
+        nearest_date = timezone.make_aware(nearest_date + timedelta(days=days_ahead))
+        if nearest_date < now:
+            nearest_date = nearest_date + timedelta(days=7)
+
+        # Get a date for each visible week
+        for weeks in range(self.VISIBLE_WEEKS):
+            results.append(nearest_date + timedelta(days=7 * weeks))
+
+        return results
 
     def __str__(self):
         return '{} - {}'.format(self.location, self.time_start)
+
 
 class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
@@ -121,8 +168,7 @@ class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
 
 class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model):
     request = models.ForeignKey(DonationRequest, on_delete=models.CASCADE, related_name='fulfillments')
-    pickup_time = models.ForeignKey(PickupTime, on_delete=models.CASCADE)
+    dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE)
 
     def __str__(self):
         return '{} - {}'.format(self.request.item, self.created)
-
