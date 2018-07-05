@@ -4,7 +4,7 @@ import axios from 'axios';
 import { itemInfo } from '../constants';
 import { Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 
-class FullfillmentForm extends Component {
+class FulfillmentForm extends Component {
   constructor(props, context) {
     // TODO: This is a pretty much a copy paste of RequestForm (we should probably fix that)
     super(props, context);
@@ -20,7 +20,9 @@ class FullfillmentForm extends Component {
     ];
 
     //initialize state with keys from fields array
-    this.state = {};
+    this.state = {
+        dropoffs: []
+    };
 
     //initialize form inputs for submission
     this.inputs = {};
@@ -65,12 +67,13 @@ class FullfillmentForm extends Component {
     this.fields.forEach((field) => {
       data[field.key] = this.inputs[field.key].value;
     });
-    data.item = this.inputs.item.value;
-    console.log(data);
+    data.dropoff_time = this.inputs.dropoff_time;
+    data.request = this.props.request.id;
+    data.city = 'Los Angeles';
 
     // handle this in development if the API endpoint
     // is on a different port?
-    axios.post('http://localhost:8000/api/fullfillments/', data)
+    axios.post('http://localhost:8000/api/fulfillments/', data)
       .then((res) => {
         this.setState((oldState) => ({alert: 'success', message: 'Request fullfilled.'}));
         console.log(res);
@@ -101,6 +104,21 @@ class FullfillmentForm extends Component {
     return items.map((item, index) => <option key={index} value={index+1}>{item}</option>)
   }
 
+  getDropoffs() {
+    return this.state.dropoffs.map((dropoff, index) => <Radio key={index} name="pickUp" onChange={(e) => {this.inputs.dropoff_time = e.target.value}} value={index+1}>{dropoff.location.organization_name} - {dropoff.time_start} - { dropoff.date }</Radio>);
+  }
+
+  componentDidMount() {
+    const { request } = this.props;
+
+    axios.get(`http://localhost:8000/api/requests/${request.id}/dropoff_times/`)
+      .then((res) => {
+          this.setState((oldState) => ({
+              dropoffs: res.data
+          }));
+      });
+  }
+
   render() {
     const { request } = this.props;
 
@@ -122,12 +140,7 @@ class FullfillmentForm extends Component {
             {this.getBasicFields(this.fields)}
             <FormGroup>
               <ControlLabel>Choose a drop off</ControlLabel>
-              <Radio name="pickUp">
-                Sunday, April 29th at 10am
-              </Radio>
-              <Radio name="pickUp">
-                Sunday, May 14th at 10am
-              </Radio>
+              {this.getDropoffs()}
             </FormGroup>
             <div className="text-center">
               <Button type="submit">Confirm Donation</Button>
@@ -139,4 +152,4 @@ class FullfillmentForm extends Component {
   }
 }
 
-export default FullfillmentForm;
+export default FulfillmentForm;
