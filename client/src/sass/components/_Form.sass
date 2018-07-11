@@ -2,9 +2,10 @@ form
   color: $text-color
 
   .form-control
-    padding: 2em 1.5em
+    padding: 0 1.5em
+    height: 60px
     background-color: #f8f8fa
-    border: 1px solid #cecfd5;
+    border: 1px solid #cecfd5
 
   .form-group
     margin-bottom: 35px
@@ -24,3 +25,6 @@ form
     font-weight: normal
     letter-spacing: 2.54px
     text-transform: uppercase
+
+  .has-feedback label~.form-control-feedback
+    top: 47px;

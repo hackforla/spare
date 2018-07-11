@@ -54,7 +54,9 @@ a {
   color: white;
   background: #253673; }
   #donate-container form .btn:hover {
-    background: #1f2d60; }
+    background: white;
+    border-color: #253673;
+    color: #253673; }
 
 .header {
   margin-top: 0;
@@ -135,7 +137,9 @@ a {
     color: white;
     background: #A13604; }
     #request-container form .btn:hover {
-      background: #882e03; }
+      background: white;
+      border-color: #A13604;
+      color: #A13604; }
 
 .request-confirmation .container {
   width: 510px; }
@@ -186,7 +190,8 @@ a {
 form {
   color: #4f5464; }
   form .form-control {
-    padding: 2em 1.5em;
+    padding: 0 1.5em;
+    height: 60px;
     background-color: #f8f8fa;
     border: 1px solid #cecfd5; }
   form .form-group {
@@ -205,6 +210,8 @@ form {
     font-weight: normal;
     letter-spacing: 2.54px;
     text-transform: uppercase; }
+  form .has-feedback label ~ .form-control-feedback {
+    top: 47px; }
 
 #About h2 {
   text-align: center; }
