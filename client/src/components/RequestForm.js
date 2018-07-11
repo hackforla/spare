@@ -23,7 +23,9 @@ class RequestForm extends Component {
     ];
 
     //initialize state with keys from fields array
-    this.state = {};
+    this.state = {
+        neighborhoods: []
+    };
 
     //initialize form inputs for submission
     this.inputs = {};
@@ -37,6 +39,7 @@ class RequestForm extends Component {
     this.state.selectValue = this.sizes ? this.sizes[0] : "";
 
     this.inputs.item = '';
+    this.inputs.neighborhood = '';
 
   }
 
@@ -70,15 +73,13 @@ class RequestForm extends Component {
 
   // Send HTTP post request
   sendForm() {
-    debugger;
     var data = {};
     this.fields.forEach((field) => {
       data[field.key] = this.inputs[field.key].value;
     });
     data.item = this.inputs.item.value;
     data.size = this.state.selectValue;
-    console.log(data);
-    debugger;
+    data.neighborhood = this.inputs.neighborhood.value;
 
     // localhost shouldn't be hard-coded. how do we
     // handle this in development if the API endpoint
@@ -122,6 +123,19 @@ class RequestForm extends Component {
     </FormGroup>)
   }
 
+  getNeighborhoods() {
+    return this.state.neighborhoods.map((hood, index) => <option key={index} value={hood.id}>{hood.name}</option>)
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:8000/api/neighborhoods/')
+      .then((res) => {
+          console.log(res.data);
+          this.setState((oldState) => ({neighborhoods: res.data}));
+      })
+      .catch((err) => console.log(err));
+  }
+
   render() {
     if (this.state.submitSuccess) {
       return <RequestConfirmation />;
@@ -154,6 +168,16 @@ class RequestForm extends Component {
         </div>
         <Row>
           <form onSubmit={this.handleSubmit} className="col-sm-6 col-sm-offset-3">
+            <FormGroup>
+              <ControlLabel>Nearest Neighborhood</ControlLabel>
+              <FormControl
+                componentClass="select"
+                placeholder="select"
+                inputRef={(ref) => {this.inputs.neighborhood = ref}}
+              >
+                {this.getNeighborhoods()}
+              </FormControl>
+            </FormGroup>
             {this.getBasicFields(this.fields)}
             {(info.sizeMen || info.sizeWomen) ? this.getSizeForm(info) : "" }
             <div className="text-center">

@@ -1,8 +1,14 @@
+.nav-container
+  display: flex
+  justify-content: center
+
 .nav-pills
+  display: inline-block
+  width: 75%
+  margin-left: 55px
   margin-bottom: 25px
   li
     a
-      margin-left: calc(50% - (146px /2))
       height: 35px
       width: 146px
 
@@ -21,6 +27,8 @@
 =nav-styling($color)
   .nav-pills
     li
+      a
+        color: $color
       &.active a
         border: 1px solid $color
         background-color: $color
