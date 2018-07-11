@@ -138,3 +138,4 @@ Spare Team is
 * [@allicolyer](https://github.com/allicolyer)
 * [@jrkoch](https://github.com/jrkoch)
 * [@contrecc](https://github.com/contrecc)
+* [@kelseydieterich](https://github.com/kelseydieterich)
