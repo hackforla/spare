@@ -37,7 +37,9 @@ DEFAULT_CATEGORIES_AND_ITEMS = {
 }
 
 DEFAULT_NEIGHBORHOODS = [
-    'Silverlake'
+    'Boyle Heights',
+    'Silverlake',
+    'Highland Park',
 ]
 
 
