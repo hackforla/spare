@@ -135,7 +135,9 @@ if os.environ.get('EMAIL_BACKEND') == 'mailgun':
         'MAILGUN_API_KEY': os.environ['MAILGUN_API_KEY'],
         'MAILGUN_SENDER_DOMAIN': 'whatcanyouspare.org'
     }
-# Other settings, etc.
 elif os.environ.get('EMAIL_BACKEND') == 'console':
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
+# Email Addresses
+DEFAULT_FROM_EMAIL = "team@whatcanyouspare.org"
+ADMINS = [('Team', DEFAULT_FROM_EMAIL)]
