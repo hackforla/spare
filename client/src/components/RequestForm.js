@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import { itemInfo } from '../constants';
-import { Alert, Button, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
+import { Alert, Button, ControlLabel, FormControl, FormGroup, Row, Radio} from 'react-bootstrap';
 
 import RequestConfirmation from './RequestConfirmation';
 
@@ -11,17 +11,16 @@ class RequestForm extends Component {
     super(props, context);
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.sendForm = this.sendForm.bind(this);
+    this.getSizeForm = this.getSizeForm.bind(this)
 
     this.fields = [
       { "key": "name", "name": "Your Name", "type": "text", "placeholder": "Name" },
       { "key": "email", "name": "Your Email", "type": "email", "placeholder": "Email address" },
       { "key": "phone", "name": "Your Phone Number", "type": "text", "placeholder": "Phone number" },
     ];
-
-    //this.itemOptions = ["hygiene","essentials","clothing"];
-    this.itemOptions = ["Shoes", "Socks", "Dresses and Skirts"];
 
     //initialize state with keys from fields array
     this.state = {
@@ -36,6 +35,8 @@ class RequestForm extends Component {
       this.state[field.key] = '';
       this.inputs[field.key] = '';
     });
+
+    this.state.selectValue = this.sizes ? this.sizes[0] : "";
 
     this.inputs.item = '';
     this.inputs.neighborhood = '';
@@ -57,6 +58,10 @@ class RequestForm extends Component {
     this.setState(newState);
   }
 
+  handleSelect(e) {
+    this.setState({selectValue:e.target.value});
+  }
+
   // Display message and run callback on form submission
   handleSubmit(e) {
     e.preventDefault();
@@ -73,8 +78,8 @@ class RequestForm extends Component {
       data[field.key] = this.inputs[field.key].value;
     });
     data.item = this.inputs.item.value;
+    data.size = this.state.selectValue;
     data.neighborhood = this.inputs.neighborhood.value;
-    console.log(data);
 
     // localhost shouldn't be hard-coded. how do we
     // handle this in development if the API endpoint
@@ -106,8 +111,16 @@ class RequestForm extends Component {
     </FormGroup>)
   }
 
-  getItemOptions(items){
-    return items.map((item, index) => <option key={index} value={index+1}>{item}</option>)
+  getSizeForm(info){
+   return (<FormGroup>
+    <ControlLabel>What Size?</ControlLabel>
+        <FormControl componentClass="select" placeholder="select" onChange={this.handleSelect}
+              value={this.state.selectValue}
+              inputRef={(ref) => {this.inputs.item = ref}}>
+              {info.sizeMen && info.sizeMen.map((size, index) => <option key={index} value={size}>{"Mens " + size}</option>)}
+              {info.sizeWomen && info.sizeWomen.map((size, index) => <option key={index} value={size}>{"Womens " + size}</option>)}
+        </FormControl>
+    </FormGroup>)
   }
 
   getNeighborhoods() {
@@ -166,16 +179,7 @@ class RequestForm extends Component {
               </FormControl>
             </FormGroup>
             {this.getBasicFields(this.fields)}
-            <FormGroup>
-              <ControlLabel>Select an Item</ControlLabel>
-              <FormControl
-                componentClass="select"
-                placeholder="select"
-                inputRef={(ref) => {this.inputs.item = ref}}
-              >
-                {this.getItemOptions(this.itemOptions)}
-              </FormControl>
-            </FormGroup>
+            {(info.sizeMen || info.sizeWomen) ? this.getSizeForm(info) : "" }
             <div className="text-center">
               <Button type="submit">Confirm Request</Button>
             </div>
