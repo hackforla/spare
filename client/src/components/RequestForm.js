@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import { itemInfo } from '../constants';
-import { Alert, Button, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
+import { Alert, Button, ControlLabel, FormControl, FormGroup, Row, Radio} from 'react-bootstrap';
 
 import RequestConfirmation from './RequestConfirmation';
 
@@ -14,14 +14,13 @@ class RequestForm extends Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.sendForm = this.sendForm.bind(this);
+    this.getSizeForm = this.getSizeForm.bind(this)
 
     this.fields = [
       { "key": "name", "name": "Your Name", "type": "text", "placeholder": "Name" },
       { "key": "email", "name": "Your Email", "type": "email", "placeholder": "Email address" },
       { "key": "phone", "name": "Your Phone Number", "type": "text", "placeholder": "Phone number" },
     ];
-
-    this.sizes = ["xs", "sm", "md", "lg", "xl", "xxl"];
 
     //initialize state with keys from fields array
     this.state = {};
@@ -71,6 +70,7 @@ class RequestForm extends Component {
 
   // Send HTTP post request
   sendForm() {
+    debugger;
     var data = {};
     this.fields.forEach((field) => {
       data[field.key] = this.inputs[field.key].value;
@@ -110,8 +110,16 @@ class RequestForm extends Component {
     </FormGroup>)
   }
 
-  getSizes(sizes){
-    return sizes.map((size, index) => <option key={index} value={size}>{size}</option>)
+  getSizeForm(info){
+   return (<FormGroup>
+    <ControlLabel>What Size?</ControlLabel>
+        <FormControl componentClass="select" placeholder="select" onChange={this.handleSelect}
+              value={this.state.selectValue}
+              inputRef={(ref) => {this.inputs.item = ref}}>
+              {info.sizeMen && info.sizeMen.map((size, index) => <option key={index} value={size}>{"Mens " + size}</option>)}
+              {info.sizeWomen && info.sizeWomen.map((size, index) => <option key={index} value={size}>{"Womens " + size}</option>)}
+        </FormControl>
+    </FormGroup>)
   }
 
   render() {
@@ -147,18 +155,7 @@ class RequestForm extends Component {
         <Row>
           <form onSubmit={this.handleSubmit} className="col-sm-6 col-sm-offset-3">
             {this.getBasicFields(this.fields)}
-            <FormGroup>
-              <ControlLabel>What Size?</ControlLabel>
-              <FormControl
-                componentClass="select"
-                placeholder="select"
-                onChange={this.handleSelect}
-                value={this.state.selectValue}
-                inputRef={(ref) => {this.inputs.item = ref}}
-              >
-                {this.getSizes(this.sizes)}
-              </FormControl>
-            </FormGroup>
+            {(info.sizeMen || info.sizeWomen) ? this.getSizeForm(info) : "" }
             <div className="text-center">
               <Button type="submit">Confirm Request</Button>
             </div>
