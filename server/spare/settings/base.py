@@ -133,6 +133,7 @@ if os.environ.get('EMAIL_BACKEND') == 'mailgun':
     EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
     ANYMAIL = {
         'MAILGUN_API_KEY': os.environ['MAILGUN_API_KEY'],
+        'MAILGUN_SENDER_DOMAIN': 'whatcanyouspare.org'
     }
 # Other settings, etc.
 elif os.environ.get('EMAIL_BACKEND') == 'console':
