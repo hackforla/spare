@@ -159,7 +159,7 @@ class DropoffTime(models.Model):
 class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     size = models.CharField(max_length=16, blank=True)
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, null=True)
     code = models.CharField(max_length=50)
 
     def __str__(self):
@@ -168,7 +168,7 @@ class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
 
 class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model):
     request = models.ForeignKey(DonationRequest, on_delete=models.CASCADE, related_name='fulfillments')
-    dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE)
+    dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return '{} - {}'.format(self.request.item, self.created)
