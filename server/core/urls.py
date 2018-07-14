@@ -20,6 +20,9 @@ urlpatterns = [
         permission_classes=[],
     )),
 
+    # Django RQ
+    url(r'^django-rq/', include('django_rq.urls')),
+
     # Grappeli admin
     url(r'^grappelli/', include('grappelli.urls')),
 ]

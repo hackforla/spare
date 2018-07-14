@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'django_rq',
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,13 @@ elif os.environ.get('EMAIL_BACKEND') == 'console':
 # Email Addresses
 DEFAULT_FROM_EMAIL = "team@whatcanyouspare.org"
 ADMINS = [('Team', DEFAULT_FROM_EMAIL)]
+
+# RQ Settings
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'redis',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 360,
+    }
+}

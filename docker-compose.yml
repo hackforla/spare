@@ -13,6 +13,7 @@ services:
         ports:
             - "${SERVER_PORT:-8000}:${SERVER_PORT:-8000}"
         depends_on:
+            - redis
             - db
         stdin_open: true  # These two lines allow us to use pdb via stdin:
         tty: true         # docker attach <container>
@@ -37,5 +38,24 @@ services:
             - "${CLIENT_PORT:-3000}:3000"
         depends_on:
             - server
+    redis:
+        image: redis
+        build:
+            context: ./redis
+            dockerfile: Dockerfile
+    worker:
+        image: hackforla/spare:server
+        build:
+            context: ./server
+            dockerfile: Dockerfile.web
+        env_file: .env.dev
+        command: python3 manage.py rqworker default
+        volumes:
+            - ./server:/app
+        depends_on:
+            - redis
+            - db
+        stdin_open: true  # These two lines allow us to use pdb via stdin:
+        tty: true         # docker attach <container>
 volumes:
     node_modules:
