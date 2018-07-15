@@ -136,7 +136,7 @@ if os.environ.get('EMAIL_BACKEND') == 'mailgun':
         'MAILGUN_API_KEY': os.environ['MAILGUN_API_KEY'],
         'MAILGUN_SENDER_DOMAIN': 'whatcanyouspare.org'
     }
-elif os.environ.get('EMAIL_BACKEND') == 'console':
+elif os.environ.get('EMAIL_BACKEND', 'console') == 'console':
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Email Addresses
@@ -152,3 +152,10 @@ RQ_QUEUES = {
         'DEFAULT_TIMEOUT': 360,
     }
 }
+
+# SMS Settings
+SMS_BACKEND = os.environ.get('SMS_BACKEND', 'console')
+if SMS_BACKEND == 'twilio':
+    TWILIO_ACCOUNT_ID = os.environ.get('TWILIO_ACCOUNT_ID')
+    TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+    SMS_FROM_NUMBER = os.environ.get('SMS_FROM_NUMBER')
