@@ -29,9 +29,7 @@ class ItemRequestSerializer(serializers.ModelSerializer):
 class DonationFulfillmentSerializer(serializers.ModelSerializer):
     code = serializers.CharField(source='request.code', read_only=True)
     request = serializers.PrimaryKeyRelatedField(
-        queryset=DonationRequest.objects.filter(
-            fulfillments__isnull=True
-        )
+        queryset=DonationRequest.unfulfilled.all()
     )
 
     class Meta:

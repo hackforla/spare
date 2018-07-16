@@ -162,11 +162,30 @@ class DropoffTime(models.Model):
         return '{} - {}'.format(self.location, self.time_start)
 
 
+class UnfulfilledRequestManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            fulfillments__isnull=True
+        )
+
+
+class ActiveRequestManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(
+            created__gte=timezone.now() - timedelta(days=10),
+            fulfillments__isnull=True
+        )
+
+
 class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     size = models.CharField(max_length=16, blank=True)
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
     code = models.CharField(max_length=50)
+
+    objects = models.Manager()
+    unfulfilled = UnfulfilledRequestManager()
+    active = ActiveRequestManager()
 
     def __str__(self):
         return '{} - {}'.format(self.item, self.created)

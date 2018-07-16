@@ -1,13 +1,15 @@
 import random
 
 from django.conf import settings
-from django.core.mail import send_mail
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django_rq import enqueue
 from rest_framework.exceptions import ValidationError
 
 from donations.models import DonationRequest, DonationFulfillment
+from donations.tasks import (
+    send_request_confirmation_message, send_fulfillment_confirmation_messages
+)
 
 # TODO: Use better words
 NOUNS = (
@@ -45,43 +47,10 @@ def create_code(sender, instance, **kwargs):
 @receiver(post_save, sender=DonationRequest)
 def donation_created_email(sender, instance, created, **kwargs):
     if (created):
-        if instance.email:
-            enqueue(
-                send_mail,
-                'Thank you for your request!',
-                f"Thank you {instance.name}! We've received your request for {instance.item} and we'll let you know when one becomes available.",
-                settings.DEFAULT_FROM_EMAIL,
-                [instance.email],
-                fail_silently=False,
-            )
-        else:
-            pass
+        enqueue(send_request_confirmation_message, instance)
+
 
 @receiver(post_save, sender=DonationFulfillment)
 def donation_fulfilled_email(sender, instance, created, **kwargs):
     if (created):
-        requestor_email = instance.request.email
-        if requestor_email:
-            enqueue(
-                send_mail,
-                'Your request has been fulfilled!',
-                f"Great news, {instance.request.name}! Your request for {instance.request.item} has been fulfilled. We'll put you in touch with {instance.name} to pick up the item.",
-                settings.DEFAULT_FROM_EMAIL,
-                [requestor_email],
-                fail_silently=False,
-            )
-        else:
-            pass
-
-        donator_email = instance.email
-        if donator_email:
-            enqueue(
-                send_mail,
-                'Thank you for your donation!',
-                f"Thank you {instance.name}! We'll set you up to donate your {instance.request.item} to {instance.request.name}.",
-                settings.DEFAULT_FROM_EMAIL,
-                [donator_email],
-                fail_silently=False,
-            )
-        else:
-            pass
+        enqueue(send_fulfillment_confirmation_messages, instance)

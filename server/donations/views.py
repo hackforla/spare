@@ -17,14 +17,16 @@ from donations.serializers import (
 class DonationRequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     # Limit to unfulfilled requests made within last 10 days
     def get_queryset(self):
-        queryset = DonationRequest.objects.all()
-        neighborhood = self.request.query_params.get('neighborhood', None)
-        if neighborhood is not None:
-            queryset = queryset.filter(neighborhood=neighborhood)
-        return queryset.filter(
+        queryset = DonationRequest.active.all()
+        results = queryset.filter(
             created__gte=timezone.now() - timedelta(days=10),
             fulfillments__isnull=True
         )
+        neighborhood = self.request.query_params.get('neighborhood', None)
+        if neighborhood is not None:
+            queryset = queryset.filter(neighborhood=neighborhood)
+
+        return queryset
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('item__category__tag', 'item__tag',)

@@ -154,8 +154,15 @@ RQ_QUEUES = {
 }
 
 # SMS Settings
-SMS_BACKEND = os.environ.get('SMS_BACKEND', 'console')
-if SMS_BACKEND == 'twilio':
+if os.environ.get('SMS_BACKEND') == 'twilio':
+    SMS_BACKEND = 'core.sms.backends.twilio.SMSBackend'
     TWILIO_ACCOUNT_ID = os.environ.get('TWILIO_ACCOUNT_ID')
     TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
-    SMS_FROM_NUMBER = os.environ.get('SMS_FROM_NUMBER')
+elif os.environ.get('SMS_BACKEND') == 'locmem':
+    SMS_BACKEND = 'core.sms.backends.locmem.SMSBackend'
+elif os.environ.get('SMS_BACKEND', 'console') == 'console':
+    SMS_BACKEND = 'core.sms.backends.console.SMSBackend'
+else:
+    SMS_BACKEND = os.environ.get('SMS_BACKEND')
+
+SMS_FROM_NUMBER = os.environ.get('SMS_FROM_NUMBER')
