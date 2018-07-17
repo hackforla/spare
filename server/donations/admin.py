@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from donations.models import (
-    Category, DonationFulfillment, DonationRequest, Item, Location, Neighborhood, DropoffTime
+    Category, DonationFulfillment, DonationRequest, DropoffTime, Item,
+    Location, Neighborhood
 )
 
 admin.site.register(Category)

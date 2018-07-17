@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
-from donations.models import DonationFulfillment, DonationRequest, Item, Neighborhood, Location, DropoffTime
+from donations.models import (
+    DonationFulfillment, DonationRequest, DropoffTime, Item, Location,
+    Neighborhood
+)
 
 
 class ContactInfoValidator(object):

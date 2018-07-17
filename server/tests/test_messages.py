@@ -1,4 +1,5 @@
 import pytest
+
 from donations.messages import FulfillmentRequestorSMS
 from donations.tasks import send_request_confirmation_message
 

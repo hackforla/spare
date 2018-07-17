@@ -1,9 +1,11 @@
-import pytest
-from donations.models import (
-    DaysOfWeek, DonationFulfillment, DonationRequest, Item, Neighborhood,
-    DropoffTime, Location
-)
 from unittest.mock import Mock
+
+import pytest
+
+from donations.models import (
+    DaysOfWeek, DonationFulfillment, DonationRequest, DropoffTime, Item,
+    Location, Neighborhood
+)
 
 
 @pytest.fixture

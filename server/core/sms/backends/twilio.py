@@ -1,8 +1,7 @@
 from django.conf import settings
-
+from twilio.rest import Client
 
 from core.sms.backends.base import BaseSMSBackend
-from twilio.rest import Client
 
 client = Client(
     settings.TWILIO_ACCOUNT_ID,

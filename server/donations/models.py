@@ -3,8 +3,7 @@ from datetime import datetime, timedelta
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
-from enumfields import EnumIntegerField
-from enumfields import Enum
+from enumfields import Enum, EnumIntegerField
 
 # Defaults for initial items and categories (used in migrations)
 # Each category tuple is mapped to a set (not dict) of tuples containing

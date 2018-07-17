@@ -1,15 +1,14 @@
 import random
 
-from django.conf import settings
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from rest_framework.exceptions import ValidationError
 
 from core.queues import enqueue
 from donations.models import DonationFulfillment, DonationRequest
 from donations.tasks import (
     send_fulfillment_confirmation_messages, send_request_confirmation_message
 )
-from rest_framework.exceptions import ValidationError
 
 # TODO: Use better words
 NOUNS = (
@@ -21,6 +20,7 @@ NOUNS = (
     'study', 'system', 'thing', 'time', 'water', 'way', 'week', 'woman',
     'word', 'work', 'world', 'year',
 )
+
 
 @receiver(pre_save, sender=DonationRequest)
 def create_code(sender, instance, **kwargs):
@@ -43,6 +43,7 @@ def create_code(sender, instance, **kwargs):
 
     if not instance.code:
         raise ValidationError('Unable to generate unique code for this request.')
+
 
 @receiver(post_save, sender=DonationRequest)
 def donation_created_email(sender, instance, created, **kwargs):

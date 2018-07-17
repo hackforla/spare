@@ -8,7 +8,6 @@ class SMSBackend(BaseSMSBackend):
         if not hasattr(sms, 'outbox'):
             sms.outbox = []
 
-
     def send_message(self, message):
         if not hasattr(sms, 'outbox'):
             sms.outbox = []

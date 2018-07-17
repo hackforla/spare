@@ -1,5 +1,4 @@
 from django.conf import settings
-
 from django_rq import enqueue as rq_enqueue
 
 
