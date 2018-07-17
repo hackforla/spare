@@ -3,7 +3,7 @@ from rest_framework import routers
 
 from donations.views import (
     DonationFulfillmentViewSet, DonationRequestCodeDetailView,
-    DonationRequestViewSet, NeighborhoodViewSet, DropoffTimeListView
+    DonationRequestViewSet, DropoffTimeListView, NeighborhoodViewSet
 )
 
 router = routers.DefaultRouter()

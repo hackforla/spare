@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'django_rq',
 ]
 
 MIDDLEWARE = [
@@ -135,9 +136,37 @@ if os.environ.get('EMAIL_BACKEND') == 'mailgun':
         'MAILGUN_API_KEY': os.environ['MAILGUN_API_KEY'],
         'MAILGUN_SENDER_DOMAIN': 'whatcanyouspare.org'
     }
-elif os.environ.get('EMAIL_BACKEND') == 'console':
+elif os.environ.get('EMAIL_BACKEND', 'console') == 'console':
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Email Addresses
 DEFAULT_FROM_EMAIL = "team@whatcanyouspare.org"
 ADMINS = [('Team', DEFAULT_FROM_EMAIL)]
+
+# RQ Settings
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'redis',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 360,
+    }
+}
+if os.environ.get('ENQUEUE_TASKS', 'false') not in ('false', 'true'):
+    raise ValueError("ENQUEUE_TASKS must be set to either 'true' or 'false'")
+
+ENQUEUE_TASKS = os.environ.get('ENQUEUE_TASKS', 'false') == 'true'
+
+# SMS Settings
+if os.environ.get('SMS_BACKEND') == 'twilio':
+    SMS_BACKEND = 'core.sms.backends.twilio.SMSBackend'
+    TWILIO_ACCOUNT_ID = os.environ.get('TWILIO_ACCOUNT_ID')
+    TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+elif os.environ.get('SMS_BACKEND') == 'locmem':
+    SMS_BACKEND = 'core.sms.backends.locmem.SMSBackend'
+elif os.environ.get('SMS_BACKEND', 'console') == 'console':
+    SMS_BACKEND = 'core.sms.backends.console.SMSBackend'
+else:
+    raise ValueError("SMS_BACKEND must be set to either 'twilio', 'locmem', or 'console'")
+
+SMS_FROM_NUMBER = os.environ.get('SMS_FROM_NUMBER')

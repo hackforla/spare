@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
-from donations.models import DonationFulfillment, DonationRequest, Item, Neighborhood, Location, DropoffTime
+from donations.models import (
+    DonationFulfillment, DonationRequest, DropoffTime, Item, Location,
+    Neighborhood
+)
 
 
 class ContactInfoValidator(object):
@@ -29,9 +32,7 @@ class ItemRequestSerializer(serializers.ModelSerializer):
 class DonationFulfillmentSerializer(serializers.ModelSerializer):
     code = serializers.CharField(source='request.code', read_only=True)
     request = serializers.PrimaryKeyRelatedField(
-        queryset=DonationRequest.objects.filter(
-            fulfillments__isnull=True
-        )
+        queryset=DonationRequest.unfulfilled.all()
     )
 
     class Meta:

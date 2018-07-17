@@ -1,30 +1,26 @@
-from datetime import timedelta
-
-from django.utils import timezone
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, mixins, viewsets
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 
-
-from donations.models import DonationFulfillment, DonationRequest, Neighborhood, DropoffTime
+from donations.models import (
+    DonationFulfillment, DonationRequest, DropoffTime, Neighborhood
+)
 from donations.serializers import (
     DonationFulfillmentSerializer, DonationRequestPublicSerializer,
-    DonationRequestSerializer, NeighborhoodSerializer, DropoffTimeSerializer
+    DonationRequestSerializer, DropoffTimeSerializer, NeighborhoodSerializer
 )
 
 
 class DonationRequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     # Limit to unfulfilled requests made within last 10 days
     def get_queryset(self):
-        queryset = DonationRequest.objects.all()
+        queryset = DonationRequest.active.all()
         neighborhood = self.request.query_params.get('neighborhood', None)
         if neighborhood is not None:
             queryset = queryset.filter(neighborhood=neighborhood)
-        return queryset.filter(
-            created__gte=timezone.now() - timedelta(days=10),
-            fulfillments__isnull=True
-        )
+
+        return queryset
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = ('item__category__tag', 'item__tag',)
