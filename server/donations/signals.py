@@ -1,15 +1,15 @@
 import random
 
 from django.conf import settings
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-from django_rq import enqueue
-from rest_framework.exceptions import ValidationError
 
-from donations.models import DonationRequest, DonationFulfillment
+from core.queues import enqueue
+from donations.models import DonationFulfillment, DonationRequest
 from donations.tasks import (
-    send_request_confirmation_message, send_fulfillment_confirmation_messages
+    send_fulfillment_confirmation_messages, send_request_confirmation_message
 )
+from rest_framework.exceptions import ValidationError
 
 # TODO: Use better words
 NOUNS = (

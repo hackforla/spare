@@ -152,6 +152,10 @@ RQ_QUEUES = {
         'DEFAULT_TIMEOUT': 360,
     }
 }
+if os.environ.get('ENQUEUE_TASKS', 'false') not in ('false', 'true'):
+    raise ValueError("ENQUEUE_TASKS must be set to either 'true' or 'false'")
+
+ENQUEUE_TASKS = os.environ.get('ENQUEUE_TASKS', 'false') == 'true'
 
 # SMS Settings
 if os.environ.get('SMS_BACKEND') == 'twilio':
@@ -163,6 +167,6 @@ elif os.environ.get('SMS_BACKEND') == 'locmem':
 elif os.environ.get('SMS_BACKEND', 'console') == 'console':
     SMS_BACKEND = 'core.sms.backends.console.SMSBackend'
 else:
-    SMS_BACKEND = os.environ.get('SMS_BACKEND')
+    raise ValueError("SMS_BACKEND must be set to either 'twilio', 'locmem', or 'console'")
 
 SMS_FROM_NUMBER = os.environ.get('SMS_FROM_NUMBER')
