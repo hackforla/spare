@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import { itemInfo } from '../constants';
-import { Alert, Button, ControlLabel, FormControl, FormGroup, Row, Radio} from 'react-bootstrap';
+import { Alert, Button, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
 
 import RequestConfirmation from './RequestConfirmation';
 
@@ -17,12 +17,11 @@ class RequestForm extends Component {
     this.getSizeForm = this.getSizeForm.bind(this)
 
     this.fields = [
-      { "key": "name", "name": "Your Name", "type": "text", "placeholder": "Name" },
+      { "key": "name", "name": "Your First Name", "type": "text", "placeholder": "Name" },
       { "key": "email", "name": "Your Email", "type": "email", "placeholder": "Email address" },
       { "key": "phone", "name": "Your Phone Number", "type": "text", "placeholder": "Phone number" },
     ];
 
-    //initialize state with keys from fields array
     this.state = {
         neighborhoods: []
     };
@@ -77,7 +76,7 @@ class RequestForm extends Component {
     this.fields.forEach((field) => {
       data[field.key] = this.inputs[field.key].value;
     });
-    data.item = this.inputs.item.value;
+    data.item = this.props.itemType;
     data.size = this.state.selectValue;
     data.neighborhood = this.inputs.neighborhood.value;
 
@@ -116,7 +115,7 @@ class RequestForm extends Component {
     <ControlLabel>What Size?</ControlLabel>
         <FormControl componentClass="select" placeholder="select" onChange={this.handleSelect}
               value={this.state.selectValue}
-              inputRef={(ref) => {this.inputs.item = ref}}>
+        >
               {info.sizeMen && info.sizeMen.map((size, index) => <option key={index} value={size}>{"Mens " + size}</option>)}
               {info.sizeWomen && info.sizeWomen.map((size, index) => <option key={index} value={size}>{"Womens " + size}</option>)}
         </FormControl>
