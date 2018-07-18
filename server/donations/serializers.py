@@ -57,6 +57,11 @@ class NeighborhoodSerializer(serializers.ModelSerializer):
 
 
 class DonationRequestSerializer(serializers.ModelSerializer):
+    item = serializers.SlugRelatedField(
+        slug_field='tag',
+        queryset=Item.objects.all()
+    )
+
     class Meta:
         model = DonationRequest
         fields = (
