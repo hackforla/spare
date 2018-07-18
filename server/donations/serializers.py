@@ -46,6 +46,7 @@ class DonationFulfillmentSerializer(serializers.ModelSerializer):
         # TODO: Add validator to raise error when request has already been fulfilled
         #       (currently raises vague 'object does not exist' error)
         validators = [ContactInfoValidator()]
+        extra_kwargs = {'email': {'required': True}}
 
 
 class NeighborhoodSerializer(serializers.ModelSerializer):
