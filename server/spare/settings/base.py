@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'django_rq',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [

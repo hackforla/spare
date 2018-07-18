@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 from enumfields import Enum, EnumIntegerField
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Defaults for initial items and categories (used in migrations)
 # Each category tuple is mapped to a set (not dict) of tuples containing
@@ -57,7 +58,7 @@ zipcode_validator = RegexValidator(
 
 class ContactModelMixin(models.Model):
     name = models.CharField(max_length=120, blank=True)
-    phone = models.CharField(max_length=16, blank=True)
+    phone = PhoneNumberField(blank=True)
     email = models.EmailField(blank=True)
     city = models.CharField(max_length=16, blank=True)
 
