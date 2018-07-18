@@ -10,7 +10,7 @@ class SMSMessage:
     def __init__(self, instance):
         self._backend = import_string(settings.SMS_BACKEND)()
         self.instance = instance
-        self.to = self.get_to()
+        self.to = self.get_to().as_e164
 
         if not self.msg:
             raise ValueError("Missing 'msg' value")
