@@ -1,11 +1,17 @@
 from unittest.mock import Mock
 
 import pytest
+from rest_framework.test import APIClient
 
 from donations.models import (
     DaysOfWeek, DonationFulfillment, DonationRequest, DropoffTime, Item,
     Location, Neighborhood
 )
+
+
+@pytest.fixture
+def client():
+    return APIClient()
 
 
 @pytest.fixture
