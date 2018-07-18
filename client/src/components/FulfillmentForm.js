@@ -1,20 +1,36 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 
 import { itemInfo } from '../constants';
 import { Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
+
+const now = moment();
+
+// expects time to be a string formatted as HH:MM:SS
+const formatTime = (time) => {
+  const split = time.split(':');
+  const formatted = now
+    .hours(split[0])
+    .minutes(split[1])
+    .seconds(split[2])
+    .format('h:mm A');
+  return formatted;
+};
+
 
 class FulfillmentForm extends Component {
   constructor(props, context) {
     // TODO: This is a pretty much a copy paste of RequestForm (we should probably fix that)
     super(props, context);
 
+    this.onChangeDropoffs = this.onChangeDropoffs.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.sendForm = this.sendForm.bind(this);
 
     this.fields = [
-      { "key": "name", "name": "Your Name", "type": "text", "placeholder": "Name" },
+      { "key": "name", "name": "Your First Name", "type": "text", "placeholder": "Name" },
       { "key": "email", "name": "Your Email", "type": "email", "placeholder": "Email address" },
       { "key": "phone", "name": "Your Phone Number", "type": "text", "placeholder": "Phone number" },
     ];
@@ -84,28 +100,47 @@ class FulfillmentForm extends Component {
       });
   }
 
-  getBasicFields(fields){
-    return fields.map((field, index) =>
-    <FormGroup controlId={field.key} key={index}
-      validationState={this.getValidationState(field.key)}>
-      <ControlLabel>{field.name}</ControlLabel>
-      <FormControl
-        type={field.type}
-        value={this.state[field.key]}
-        placeholder={field.placeholder}
-        inputRef={(ref) => {this.inputs[field.key] = ref}}
-        onChange={event => {this.handleChange(event, field.key)}}
-      />
-      <FormControl.Feedback />
-    </FormGroup>)
+  getBasicFields(fields) {
+    return fields.map((field, index) => (
+      <FormGroup controlId={field.key} key={index}
+        validationState={this.getValidationState(field.key)}>
+        <ControlLabel>{field.name}</ControlLabel>
+        <FormControl
+          type={field.type}
+          value={this.state[field.key]}
+          placeholder={field.placeholder}
+          inputRef={(ref) => {this.inputs[field.key] = ref}}
+          onChange={event => {this.handleChange(event, field.key)}}
+        />
+        <FormControl.Feedback />
+      </FormGroup>
+    ))
   }
 
   getItemOptions(items){
     return items.map((item, index) => <option key={index} value={index+1}>{item}</option>)
   }
 
-  getDropoffs() {
-    return this.state.dropoffs.map((dropoff, index) => <Radio key={index} name="pickUp" onChange={(e) => {this.inputs.dropoff_time = e.target.value}} value={index+1}>{dropoff.location.organization_name} - {dropoff.time_start} - { dropoff.date }</Radio>);
+  onChangeDropoffs(e) {
+    this.inputs.dropoff_time = e.target.value;
+  }
+
+  renderDropOffs() {
+    const { dropoffs } = this.state;
+    return dropoffs.map((dropoff, index) => {
+      const dropoffDate = moment(dropoff.date).format('dddd, LL');
+      const dropoffTime = formatTime(dropoff.time_start);
+      return (
+        <Radio
+          key={index}
+          name="pickUp"
+          onChange={this.onChangeDropoffs}
+          value={index+1}
+        >
+          {dropoff.location.organization_name} - {dropoffDate} at {dropoffTime}
+        </Radio>
+      );
+    });
   }
 
   componentDidMount() {
@@ -113,9 +148,9 @@ class FulfillmentForm extends Component {
 
     axios.get(`http://localhost:8000/api/requests/${request.id}/dropoff_times/`)
       .then((res) => {
-          this.setState((oldState) => ({
+          this.setState({
               dropoffs: res.data
-          }));
+          });
       });
   }
 
@@ -140,7 +175,7 @@ class FulfillmentForm extends Component {
             {this.getBasicFields(this.fields)}
             <FormGroup>
               <ControlLabel>Choose a drop off</ControlLabel>
-              {this.getDropoffs()}
+              {this.renderDropOffs()}
             </FormGroup>
             <div className="text-center">
               <Button type="submit">Confirm Donation</Button>
