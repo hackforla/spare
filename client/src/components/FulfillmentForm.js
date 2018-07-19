@@ -3,6 +3,7 @@ import axios from 'axios';
 import moment from 'moment';
 
 import { itemInfo } from '../constants';
+import FulfillmentConfirmation from './FulfillmentConfirmation';
 import { Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 
 const now = moment();
@@ -98,7 +99,11 @@ class FulfillmentForm extends Component {
     // is on a different port?
     axios.post('http://localhost:8000/api/fulfillments/', data)
       .then((res) => {
-        this.setState((oldState) => ({alert: 'success', message: 'Request fullfilled.'}));
+        this.setState({
+          submitSuccess: true,
+          responseData: res.data,
+          selectedDropoff: selectedDropoff,
+        });
         console.log(res);
       })
       .catch((err) => {
@@ -156,7 +161,7 @@ class FulfillmentForm extends Component {
     axios.get(`http://localhost:8000/api/requests/${request.id}/dropoff_times/`)
       .then((res) => {
           this.setState({
-              dropoffs: res.data
+            dropoffs: res.data
           });
       });
   }
@@ -165,6 +170,12 @@ class FulfillmentForm extends Component {
     const { request } = this.props;
 
     const info = itemInfo[request.item.tag];
+
+    if (this.state.submitSuccess) {
+      const { responseData, selectedDropoff } = this.state;
+
+      return <FulfillmentConfirmation data={ responseData } info={ info } dropoff={ selectedDropoff }/>;
+    }
 
     const headerMessage = `Great! You are donating ${ info.verboseName }.`;
 
