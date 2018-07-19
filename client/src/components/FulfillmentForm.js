@@ -79,11 +79,18 @@ class FulfillmentForm extends Component {
 
   // Send HTTP post request
   sendForm() {
+    const { dropoffs } = this.state;
+
     var data = {};
+
     this.fields.forEach((field) => {
       data[field.key] = this.inputs[field.key].value;
     });
-    data.dropoff_time = this.inputs.dropoff_time;
+
+    const selectedDropoff = dropoffs[this.inputs.dropoff_time - 1];
+
+    data.dropoff_time = selectedDropoff.id;
+    data.dropoff_date = selectedDropoff.date;
     data.request = this.props.request.id;
     data.city = 'Los Angeles';
 

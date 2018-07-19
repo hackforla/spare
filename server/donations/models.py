@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from django.core.validators import RegexValidator
 from django.db import models
@@ -143,13 +143,21 @@ class DropoffTime(models.Model):
 
         now = timezone.now()
 
-        # Get number of days differences
-        days_ahead = (now.weekday() - self.day.value) % 6
+        # Get number of days differences to next date
+        days_ahead = self.day.value - now.weekday()
+        if days_ahead <= 0:
+            days_ahead += 7
 
         # Get the nearest valid date, given day and start time
-        nearest_date = datetime(year=now.year, month=now.month, day=now.day, hour=self.time_start.hour)
-        nearest_date = timezone.make_aware(nearest_date + timedelta(days=days_ahead))
-        if nearest_date < now:
+        nearest_date = now.date() + timedelta(days=days_ahead)
+
+        # We want to check the start time (plus an additional range of 2 hours)
+        nearest_date_start_time = (
+            datetime.combine(nearest_date, self.time_start) + timedelta(hours=2)
+        )
+
+        # If that datetime has passed, start with the next week's date
+        if timezone.make_aware(nearest_date_start_time) < now:
             nearest_date = nearest_date + timedelta(days=7)
 
         # Get a date for each visible week
