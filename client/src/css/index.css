@@ -267,6 +267,7 @@ body {
   flex-grow: 1; }
 
 a {
+  text-decoration: none;
   color: #4f5464; }
 
 a:hover, a:active {
