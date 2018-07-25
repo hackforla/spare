@@ -20,7 +20,7 @@ class Tile extends Component {
 
     //<Link to={ '/donate/' + category + '/' + subcategory + '/' } >
     const href = `/${side}/${category}/${subcategory}/`;
-    const src = `/assets/tiles/${side}/${icon}`;
+    const src = `/static/tiles/${side}/${icon}`;
 
     const hover = hoverText ? (
       <div className="tile-hover-text">{ hoverText }</div>
