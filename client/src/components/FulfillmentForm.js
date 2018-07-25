@@ -97,7 +97,7 @@ class FulfillmentForm extends Component {
 
     // handle this in development if the API endpoint
     // is on a different port?
-    axios.post('http://localhost:8000/api/fulfillments/', data)
+    axios.post('/api/fulfillments/', data)
       .then((res) => {
         this.setState({
           submitSuccess: true,
@@ -158,7 +158,7 @@ class FulfillmentForm extends Component {
   componentDidMount() {
     const { request } = this.props;
 
-    axios.get(`http://localhost:8000/api/requests/${request.id}/dropoff_times/`)
+    axios.get(`/api/requests/${request.id}/dropoff_times/`)
       .then((res) => {
           this.setState({
             dropoffs: res.data

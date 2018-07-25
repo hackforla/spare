@@ -80,10 +80,7 @@ class RequestForm extends Component {
     data.size = this.state.selectValue;
     data.neighborhood = this.inputs.neighborhood.value;
 
-    // localhost shouldn't be hard-coded. how do we
-    // handle this in development if the API endpoint
-    // is on a different port?
-    axios.post('http://localhost:8000/api/requests/', data)
+    axios.post('/api/requests/', data)
       .then((res) => {
         this.setState({ submitSuccess: true });
         console.log(res);
@@ -127,7 +124,7 @@ class RequestForm extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8000/api/neighborhoods/')
+    axios.get('/api/neighborhoods/')
       .then((res) => {
           console.log(res.data);
           this.setState((oldState) => ({neighborhoods: res.data}));

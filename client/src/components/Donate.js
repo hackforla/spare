@@ -41,7 +41,7 @@ export default class Donate extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8000/api/requests/')
+    axios.get('/api/requests/')
       .then((res) => {
         this.setState((oldState) => ({
           requests: res.data
