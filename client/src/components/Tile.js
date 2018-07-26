@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Tile extends Component {
   /* props:
@@ -8,11 +9,32 @@ class Tile extends Component {
    */
 
   render() {
-    var src = `/assets/tiles/${this.props.side}/${this.props.icon}`;
+    const {
+      category,
+      displayName,
+      side,
+      subcategory,
+      icon,
+      hoverText
+    } = this.props;
+
+    //<Link to={ '/donate/' + category + '/' + subcategory + '/' } >
+    const href = `/${side}/${category}/${subcategory}/`;
+    const src = `/assets/tiles/${side}/${icon}`;
+
+    const hover = hoverText ? (
+      <div className="tile-hover-text">{ hoverText }</div>
+    ) : null
+
     return (
-      <div className='tile'>
-        <img alt={this.props.alt} src={src} />
-        { this.children }
+      <div className="tile-container">
+        <Link to={ href }>
+          <div className='tile'>
+            <img alt={displayName} src={src} />
+            { hover }
+          </div>
+          <div className='text-label'>{ displayName }</div>
+        </Link>
       </div>
     )
   }

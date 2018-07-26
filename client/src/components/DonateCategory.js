@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { itemTypesByCategory, itemInfo } from '../constants';
-import { Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Col, Row } from 'react-bootstrap';
 import CategoryNav from './CategoryNav';
 import Tile from './Tile';
 
@@ -11,18 +10,19 @@ class DonateSubcategoryLink extends Component {
     const { count, category, subcategory } = this.props;
     const { displayName, icon } = this.props.info;
 
-    // TODO: Put these styles in CSS/SASS
+    const neededText = `${ count } requests`;
+
     return (
-      <div className="col-sm-3 col-xs-12" style={{
-        minWidth: '150px',
-        minHeight: '150px',
-      }}>
-        <Link to={ '/donate/' + category + '/' + subcategory + '/' } >
-          <Tile side='donate' alt={displayName} icon={ icon } />
-          <span className="text-center tile-label">{ count } needed</span>
-          <div className='text-label'>{ displayName }</div>
-        </Link>
-      </div>
+      <Col sm={3} xs={12}>
+        <Tile
+          side='donate'
+          displayName={displayName}
+          icon={ icon }
+          hoverText={ neededText }
+          category={ category }
+          subcategory={ subcategory }
+        />
+      </Col>
     )
   }
 }
