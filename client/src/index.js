@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
+// Import bootstrap styles
+import 'bootstrap/dist/css/bootstrap.css';
+
 //style sheets
 import './css/index.css';
 
