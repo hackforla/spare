@@ -84,9 +84,17 @@ a {
     .header .flip-button.to-request {
       border-color: #253673;
       color: #253673; }
+      .header .flip-button.to-request:hover {
+        background-color: #253673;
+        color: white;
+        box-shadow: 0 0 10px rgba(10, 10, 10, 0.25); }
     .header .flip-button.to-donate {
       border-color: #A13604;
       color: #A13604; }
+      .header .flip-button.to-donate:hover {
+        background-color: #A13604;
+        color: white;
+        box-shadow: 0 0 10px rgba(10, 10, 10, 0.25); }
 
 .nav-container {
   display: flex;
