@@ -236,20 +236,14 @@ form {
   form .has-feedback label ~ .form-control-feedback {
     top: 47px; }
 
-#About h2 {
+h2 {
   text-align: center; }
 
-#About p {
+p {
   margin-bottom: 1.5em; }
 
-#About div#team-thumbnails {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center; }
-  #About div#team-thumbnails img {
-    border: none; }
-  #About div#team-thumbnails img + img {
-    margin-left: 20px; }
+.team-thumbnail {
+  margin-bottom: 2em; }
 
 #Footer {
   width: 100%;
