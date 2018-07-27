@@ -10,7 +10,7 @@ class DonateSubcategoryLink extends Component {
     const { count, category, subcategory } = this.props;
     const { displayName, icon } = this.props.info;
 
-    const neededText = `${ count } requests`;
+    const neededText = (count == 1) ? `${ count } request` : `${ count } requests`;
 
     return (
       <Col sm={3} xs={12}>

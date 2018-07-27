@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Table, Row } from 'react-bootstrap';
 import { itemTypesByCategory } from '../constants';
 import { Route, Switch } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
+import { itemInfo } from '../constants';
+
 
 
 class DonateItemsTypeTable extends Component {
@@ -42,36 +44,41 @@ class DonateItemsTypeTable extends Component {
     }
 
     return (
-      <Table>
-        <thead>
-          <tr>
-            <th>Size</th>
-            <th colSpan='2'>Location</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            requestsForItemType ? requestsForItemType.map((request) => {
-              if (category === request.item.category_tag){
-                return (
-                  <tr key={request.id}>
-                    <td>{ request.size || 'N/A' }</td>
-                    <td>{ request.neighborhood.name }</td>
-                    <td>
-                      <LinkContainer to={`/donate/${ request.id }`}>
-                        <Button>Donate</Button>
-                      </LinkContainer>
-                    </td>
-                  </tr>
-                )
-              }
-              else {
-                return null;
-              }
-            }) : null
-          }
-        </tbody>
-      </Table>
+      <div>
+        <Row className="hero text-center">
+          <h2>Here are all of the requests for { itemInfo[itemType].verboseName }</h2>
+        </Row>
+        <Table>
+          <thead>
+            <tr>
+              <th className="col-md-5">Size</th>
+              <th colSpan='2' className="col-md-7">Location</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              requestsForItemType ? requestsForItemType.map((request) => {
+                if (category === request.item.category_tag){
+                  return (
+                    <tr key={request.id}>
+                      <td className="col-md-5">{ request.size || 'N/A' }</td>
+                      <td className="col-md-4">{ request.neighborhood.name }</td>
+                      <td className="col-md-3 text-right">
+                        <LinkContainer to={`/donate/${ request.id }`}>
+                          <Button>Donate</Button>
+                        </LinkContainer>
+                      </td>
+                    </tr>
+                  )
+                }
+                else {
+                  return null;
+                }
+              }) : null
+            }
+          </tbody>
+        </Table>
+      </div>
     )
   }
 }
@@ -87,9 +94,7 @@ export default class DonateItemsTable extends Component {
       const itemType = itemTypesByCategory[category][item]
       items.push(
         <Route exact path={ paths[category] + '/' + itemType + '/' } key={ item }>
-          <h2>
-            <DonateItemsTypeTable { ...this.props } />
-          </h2>
+          <DonateItemsTypeTable { ...this.props } />
         </Route>
       );
     }
