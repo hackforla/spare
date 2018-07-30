@@ -44,11 +44,20 @@ class RequestForm extends Component {
 
   // Example validation of the inputs
   getValidationState(key) {
-    const length = this.state[key].length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
-    return null;
+    var input = this.state[key];
+    if (!input) return;
+    if (key === 'phone') {
+        var phone_num = /^\+(\d+)\d{10}/.exec(input); 
+        var all_num = /^(\d{10})$/.exec(input);
+        if (phone_num || all_num) return 'success';
+        else return 'error';
+    } else {
+        const length = this.state[key].length;
+        if (length > 10) return 'success';
+        else if (length > 5) return 'warning';
+        else if (length > 0) return 'error';
+        return null;
+    }
   }
 
   handleChange(e, key) {
@@ -78,7 +87,20 @@ class RequestForm extends Component {
     });
     data.item = this.props.itemType;
     data.size = this.state.selectValue;
+    console.log(data.phone);
+
     data.neighborhood = this.inputs.neighborhood.value;
+    var phone_num = /^\+(\d+)\d{10}/.exec(data.phone); 
+    var all_num = /^(\d{10})$/.exec(data.phone);
+    if (!phone_num) {
+      if (!all_num) {
+          this.setState({alert: '', message: ''});
+          return;
+      }
+      data.phone = '+1' + data.phone;
+    }
+
+    console.log(data);
 
     // localhost shouldn't be hard-coded. how do we
     // handle this in development if the API endpoint
