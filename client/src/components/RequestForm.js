@@ -44,11 +44,19 @@ class RequestForm extends Component {
 
   // Example validation of the inputs
   getValidationState(key) {
-    const length = this.state[key].length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
-    return null;
+    var input = this.state[key];
+    if (!input) return null;
+    if (key === 'phone') {
+        var phone_num = /^\+(\d+)\d{10}/.exec(input); 
+        var all_num = /^(\d{10})$/.exec(input);
+        if (phone_num || all_num) return 'success';
+        else return 'error';
+    }
+    if (key === 'email') {
+        var email_rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
+        return (email_rx.test(input) ? 'success' : 'error');
+    }
+    if (key === 'name') return (/^[A-Za-z\s]+$/.test(input) ? 'success' : 'error');
   }
 
   handleChange(e, key) {
@@ -76,9 +84,32 @@ class RequestForm extends Component {
     this.fields.forEach((field) => {
       data[field.key] = this.inputs[field.key].value;
     });
+
+    if (!(data.phone || data.email)) {
+        this.setState({alert: 'warning', message: 'Please provide either a phone or email address.'});
+        return;
+    }
+
+    if (!(/^[A-Za-z\s]+$/.test(data.name))) {
+        this.setState({alert: 'warning', message: 'Please enter a valid first name.'});
+        return;
+    }
     data.item = this.props.itemType;
     data.size = this.state.selectValue;
+    console.log(data.phone);
+
     data.neighborhood = this.inputs.neighborhood.value;
+    var phone_num = /^\+(\d+)\d{10}/.exec(data.phone); 
+    var all_num = /^(\d{10})$/.exec(data.phone);
+    if (!phone_num) {
+      if (!all_num) {
+          this.setState({alert: '', message: ''});
+          return;
+      }
+      data.phone = '+1' + data.phone;
+    }
+
+    console.log(data);
 
     axios.post('/api/requests/', data)
       .then((res) => {
