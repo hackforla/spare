@@ -56,6 +56,7 @@ class RequestForm extends Component {
         var email_rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
         return (email_rx.test(input) ? 'success' : 'error');
     }
+    if (key === 'name') return (/^[A-Za-z\s]+$/.test(input) ? 'success' : 'error');
   }
 
   handleChange(e, key) {
@@ -86,6 +87,11 @@ class RequestForm extends Component {
 
     if (!(data.phone || data.email)) {
         this.setState({alert: 'warning', message: 'Please provide either a phone or email address.'});
+        return;
+    }
+
+    if (!(/^[A-Za-z\s]+$/.test(data.name))) {
+        this.setState({alert: 'warning', message: 'Please enter a valid first name.'});
         return;
     }
     data.item = this.props.itemType;
