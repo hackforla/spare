@@ -45,18 +45,16 @@ class RequestForm extends Component {
   // Example validation of the inputs
   getValidationState(key) {
     var input = this.state[key];
-    if (!input) return;
+    if (!input) return null;
     if (key === 'phone') {
         var phone_num = /^\+(\d+)\d{10}/.exec(input); 
         var all_num = /^(\d{10})$/.exec(input);
         if (phone_num || all_num) return 'success';
         else return 'error';
-    } else {
-        const length = this.state[key].length;
-        if (length > 10) return 'success';
-        else if (length > 5) return 'warning';
-        else if (length > 0) return 'error';
-        return null;
+    }
+    if (key === 'email') {
+        var email_rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
+        return (email_rx.test(input) ? 'success' : 'error');
     }
   }
 
@@ -85,6 +83,11 @@ class RequestForm extends Component {
     this.fields.forEach((field) => {
       data[field.key] = this.inputs[field.key].value;
     });
+
+    if (!(data.phone || data.email)) {
+        this.setState({alert: 'warning', message: 'Please provide either a phone or email address.'});
+        return;
+    }
     data.item = this.props.itemType;
     data.size = this.state.selectValue;
     console.log(data.phone);
