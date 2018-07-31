@@ -90,20 +90,26 @@ class RequestForm extends Component {
         return;
     }
 
+    var email_rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
+
+    if (data.email && !(email_rx.test(data.email))) {
+        this.setState({alert: 'warning', message: 'Please enter a valid email.'});
+        return;
+    }
+
     if (!(/^[A-Za-z\s]+$/.test(data.name))) {
         this.setState({alert: 'warning', message: 'Please enter a valid first name.'});
         return;
     }
     data.item = this.props.itemType;
     data.size = this.state.selectValue;
-    console.log(data.phone);
 
     data.neighborhood = this.inputs.neighborhood.value;
     var phone_num = /^\+(\d+)\d{10}/.exec(data.phone); 
     var all_num = /^(\d{10})$/.exec(data.phone);
     if (!phone_num) {
       if (!all_num) {
-          this.setState({alert: '', message: ''});
+          this.setState({alert: 'warning', message: 'Please enter a valid phone number.'});
           return;
       }
       data.phone = '+1' + data.phone;
