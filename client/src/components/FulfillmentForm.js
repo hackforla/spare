@@ -4,7 +4,7 @@ import moment from 'moment';
 
 import { itemInfo } from '../constants';
 import FulfillmentConfirmation from './FulfillmentConfirmation';
-import { Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
+import { Alert, Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 
 const now = moment();
 
@@ -56,11 +56,20 @@ class FulfillmentForm extends Component {
 
   // Example validation of the inputs
   getValidationState(key) {
-    const length = this.state[key].length;
-    if (length > 10) return 'success';
-    else if (length > 5) return 'warning';
-    else if (length > 0) return 'error';
-    return null;
+    var input = this.state[key];
+    if (!input) return null;
+    if (key === 'phone') {
+        var phone_num = /^\+(\d+)\d{10}/.exec(input); 
+        var all_num = /^(\d{10})$/.exec(input);
+        if (phone_num || all_num) return 'success';
+        else return 'error';
+    }
+    if (key === 'email') {
+        var email_rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
+        return (email_rx.test(input) ? 'success' : 'error');
+    }
+    if (key === 'name') return (/^[A-Za-z\s]+$/.test(input) ? 'success' : 'error');
+
   }
 
   handleChange(e, key) {
@@ -90,10 +99,47 @@ class FulfillmentForm extends Component {
 
     const selectedDropoff = dropoffs[this.inputs.dropoff_time - 1];
 
+    if (!this.inputs.dropoff_time) {
+        this.setState({alert: 'warning', message: 'Please select a dropoff location and time.'});
+        return;
+    }   
+
     data.dropoff_time = selectedDropoff.id;
     data.dropoff_date = selectedDropoff.date;
     data.request = this.props.request.id;
     data.city = 'Los Angeles';
+
+
+    if (!(data.phone || data.email)) {
+        this.setState({alert: 'warning', message: 'Please provide either a phone or email address.'});
+        return;
+    }
+
+    var email_rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
+
+    if (data.email && !(email_rx.test(data.email))) {
+        this.setState({alert: 'warning', message: 'Please enter a valid email.'});
+        return;
+    }
+
+    if (!(/^[A-Za-z\s]+$/.test(data.name))) {
+        this.setState({alert: 'warning', message: 'Please enter a valid first name.'});
+        return;
+    }
+
+
+    var phone_num = /^\+(\d+)\d{10}/.exec(data.phone); 
+    var all_num = /^(\d{10})$/.exec(data.phone);
+    if (!phone_num) {
+      if (!all_num) {
+          this.setState({alert: 'warning', message: 'Please enter a valid phone number.'});
+          return;
+      }
+      data.phone = '+1' + data.phone;
+    }
+
+    console.log(data);
+
 
     // handle this in development if the API endpoint
     // is on a different port?
@@ -177,6 +223,14 @@ class FulfillmentForm extends Component {
       return <FulfillmentConfirmation data={ responseData } info={ info } dropoff={ selectedDropoff }/>;
     }
 
+    if (this.state.alert && this.state.message) {
+      var formStatus = (
+        <Alert bsStyle={this.state.alert}>
+          {this.state.message}
+        </Alert>
+      );
+    }
+
     const headerMessage = `Great! You are donating ${ info.verboseName }.`;
 
     return (
@@ -198,6 +252,7 @@ class FulfillmentForm extends Component {
             <div className="text-center">
               <Button type="submit">Confirm Donation</Button>
             </div>
+            {formStatus}
           </form>
         </Row>
       </div>
