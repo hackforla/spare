@@ -18,3 +18,5 @@ bower_components/
 /app/server/media/
 
 .DS_Store
+
+*/migrations/
