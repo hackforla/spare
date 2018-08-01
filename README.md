@@ -1,6 +1,6 @@
 # Spare App [![Build Status](https://travis-ci.org/hackforla/spare.svg?branch=master)](https://travis-ci.org/hackforla/spare)
 
-A project that connects people in need of clothing and other essentials with people in the community who have things to spare. It's kind of like one on one Goodwill. The main objective is to foster interactions between the housed and unhoused. The donation is the mechanism for building these connections throughout our community.
+A project that connects people in need of clothing and other essentials with people in the community who have things to spare. It's kind of like one on one Goodwill. The main objective is to foster interactions between the housed and unhoused. The donation is the mechanism for building these connections throughout our community. \o/
 
 ## Project Status
 Currently, we’re working on [building this prototype](https://projects.invisionapp.com/share/YKH1L8TAB56#/291938149_Home). The first objective is to provide a way to request items, share those requests with potential donors and then connect them through an outreach coalition or a nonprofit. While, we’re building this app, we’re also working on a lightweight solution (using Google Forms and email) to gather requests and ask for donations in just a few neighborhoods. You can see that at [whatcanyouspare.org](http://whatcanyouspare.org)
