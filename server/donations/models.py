@@ -191,6 +191,9 @@ class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
     code = models.CharField(max_length=50)
 
+    is_self_request = models.BooleanField(default=False)
+    recipient = models.CharField(max_length=120, null=True)
+
     objects = models.Manager()
     unfulfilled = UnfulfilledRequestManager()
     active = ActiveRequestManager()
