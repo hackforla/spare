@@ -37,7 +37,9 @@ class DonationDetail extends Component {
 export default class Donate extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      requests: null
+    };
   }
 
   componentDidMount() {
