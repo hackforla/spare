@@ -106,9 +106,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/public')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static/dist')
-]
 
 
 # Django Custom User model

@@ -2,7 +2,9 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+
 from rest_framework.documentation import include_docs_urls
+from core.views import AppView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,6 +27,10 @@ urlpatterns = [
 
     # Grappeli admin
     url(r'^grappelli/', include('grappelli.urls')),
+
+    # Pages admin
+    url(r'^(?!api/).*$', AppView.as_view(), name='app_home'),
+
 ]
 urlpatterns.extend(static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
 urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))

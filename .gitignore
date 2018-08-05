@@ -14,7 +14,8 @@ bower_components/
 .tox
 .cache
 
-/app/server/static/public/
-/app/server/media/
+server/static/
+server/core/templates/index.html
+server/core/static/
 
 .DS_Store
