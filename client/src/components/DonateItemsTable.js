@@ -10,7 +10,7 @@ import { itemInfo } from '../constants';
 class DonateItemsTypeTableSmall extends Component {
   render() {
 
-    const { request, category, requestsForItemType } = this.props;
+    const { category, requestsForItemType } = this.props;
 
     return (
       <Table responsive>
@@ -18,17 +18,17 @@ class DonateItemsTypeTableSmall extends Component {
           requestsForItemType ? requestsForItemType.map((request) => {
             if (category === request.item.category_tag){
               return (
-                <tbody>
-                  <tr key={`${request.id}_size`}>
+                <tbody key={request.id}>
+                  <tr>
                     <th>Size:</th>
                     <td>{ request.size || 'N/A' }</td>
                   </tr>
-                  <tr key={`${request.id}_location`}>
+                  <tr>
                     <th>Location:</th>
                     <td>{ request.neighborhood.name }</td>
                   </tr>
-                  <tr key={`${request.id}_donate`}>
-                    <td colspan="2">
+                  <tr>
+                    <td colSpan="2">
                       <LinkContainer to={`/donate/${ request.id }`}>
                         <Button>Donate</Button>
                       </LinkContainer>
@@ -51,7 +51,7 @@ class DonateItemsTypeTableSmall extends Component {
 class DonateItemsTypeTableLarge extends Component {
   render() {
 
-    const { request, category, requestsForItemType } = this.props;
+    const { category, requestsForItemType } = this.props;
 
     return (
       <Table responsive>
@@ -133,9 +133,10 @@ class DonateItemsTypeTable extends Component {
         </Row>
         <Media>
           {({breakpoints, currentBreakpoint}) => {
-            console.log(currentBreakpoint, breakpoints.mobile);
             switch (currentBreakpoint) {
               case 'mobile':
+              case 'mobileLandscape':
+              case 'tablet':
                 return <DonateItemsTypeTableSmall requests={requests} category={category} requestsForItemType={requestsForItemType} />
               default:
                 return <DonateItemsTypeTableLarge requests={requests} category={category} requestsForItemType={requestsForItemType} />
