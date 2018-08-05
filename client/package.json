@@ -10,6 +10,7 @@
     "npm-run-all": "^4.1.2",
     "react": "^16.3.1",
     "react-bootstrap": "^0.32.1",
+    "react-breakpoints": "^3.0.0",
     "react-dom": "^16.3.1",
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.2.2",

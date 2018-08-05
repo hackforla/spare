@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactBreakpoints from 'react-breakpoints';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -12,9 +13,13 @@ import './css/index.css';
 import App from './components/App.js';
 import registerServiceWorker from './registerServiceWorker';
 
+import { breakpoints } from './constants';
+
 ReactDOM.render((
   <BrowserRouter>
-    <App />
+    <ReactBreakpoints breakpoints={breakpoints}>
+      <App />
+    </ReactBreakpoints>
   </BrowserRouter>
 ), document.getElementById('root')
 );

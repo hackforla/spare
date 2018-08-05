@@ -1,9 +1,92 @@
 import React, { Component } from 'react';
 import { Button, Table, Row } from 'react-bootstrap';
+import { Media } from 'react-breakpoints';
 import { itemTypesByCategory } from '../constants';
 import { Route, Switch } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { itemInfo } from '../constants';
+
+
+class DonateItemsTypeTableSmall extends Component {
+  render() {
+
+    const { request, category, requestsForItemType } = this.props;
+
+    return (
+      <Table responsive>
+        {
+          requestsForItemType ? requestsForItemType.map((request) => {
+            if (category === request.item.category_tag){
+              return (
+                <tbody>
+                  <tr key={`${request.id}_size`}>
+                    <th>Size:</th>
+                    <td>{ request.size || 'N/A' }</td>
+                  </tr>
+                  <tr key={`${request.id}_location`}>
+                    <th>Location:</th>
+                    <td>{ request.neighborhood.name }</td>
+                  </tr>
+                  <tr key={`${request.id}_donate`}>
+                    <td colspan="2">
+                      <LinkContainer to={`/donate/${ request.id }`}>
+                        <Button>Donate</Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                </tbody>
+              )
+            }
+            else {
+              return null;
+            }
+          }) : null
+        }
+      </Table>
+    )
+  }
+}
+
+
+class DonateItemsTypeTableLarge extends Component {
+  render() {
+
+    const { request, category, requestsForItemType } = this.props;
+
+    return (
+      <Table responsive>
+        <thead>
+          <tr>
+            <th className="col-md-5">Size</th>
+            <th colSpan='2' className="col-md-7">Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            requestsForItemType ? requestsForItemType.map((request) => {
+              if (category === request.item.category_tag){
+                return (
+                  <tr key={request.id}>
+                    <td className="col-md-5">{ request.size || 'N/A' }</td>
+                    <td className="col-md-4">{ request.neighborhood.name }</td>
+                    <td className="col-md-3 text-right">
+                      <LinkContainer to={`/donate/${ request.id }`}>
+                        <Button>Donate</Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                )
+              }
+              else {
+                return null;
+              }
+            }) : null
+          }
+        </tbody>
+      </Table>
+    )
+  }
+}
 
 
 
@@ -48,36 +131,17 @@ class DonateItemsTypeTable extends Component {
         <Row className="hero text-center">
           <h2>Here are all of the requests for { itemInfo[itemType].verboseName }</h2>
         </Row>
-        <Table>
-          <thead>
-            <tr>
-              <th className="col-md-5">Size</th>
-              <th colSpan='2' className="col-md-7">Location</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              requestsForItemType ? requestsForItemType.map((request) => {
-                if (category === request.item.category_tag){
-                  return (
-                    <tr key={request.id}>
-                      <td className="col-md-5">{ request.size || 'N/A' }</td>
-                      <td className="col-md-4">{ request.neighborhood.name }</td>
-                      <td className="col-md-3 text-right">
-                        <LinkContainer to={`/donate/${ request.id }`}>
-                          <Button>Donate</Button>
-                        </LinkContainer>
-                      </td>
-                    </tr>
-                  )
-                }
-                else {
-                  return null;
-                }
-              }) : null
+        <Media>
+          {({breakpoints, currentBreakpoint}) => {
+            console.log(currentBreakpoint, breakpoints.mobile);
+            switch (currentBreakpoint) {
+              case 'mobile':
+                return <DonateItemsTypeTableSmall requests={requests} category={category} requestsForItemType={requestsForItemType} />
+              default:
+                return <DonateItemsTypeTableLarge requests={requests} category={category} requestsForItemType={requestsForItemType} />
             }
-          </tbody>
-        </Table>
+          }}
+        </Media>
       </div>
     )
   }
