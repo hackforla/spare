@@ -20,7 +20,10 @@ class Tile extends Component {
 
     //<Link to={ '/donate/' + category + '/' + subcategory + '/' } >
     const href = `/${side}/${category}/${subcategory}/`;
-    const src = `/static/tiles/${side}/${icon}`;
+
+    // If production environment, prefix asset URL with `/static`
+    // TODO: Find a better way to do this (PUBLIC_URL doesn't quite fit our use case)
+    const src = `${process.env.NODE_ENV === 'production' ? '/static' : ''}/assets/tiles/${side}/${icon}`;
 
     const hover = hoverText ? (
       <div className="tile-hover-text">{ hoverText }</div>
