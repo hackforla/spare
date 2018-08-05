@@ -12,10 +12,15 @@ html {
 
 body {
   min-height: 100%;
-  margin: 0px 50px 0px;
   padding: 0px;
   color: $text-color;
   display: flex;
+  margin: 0 10px 0;
+
+  /* Extra Small Devices, Phones */
+  @media only screen and (min-width : 480px) {
+    margin: 0px 50px 0px;
+  }
 }
 
 #root {
