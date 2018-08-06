@@ -14,6 +14,8 @@ bower_components/
 .tox
 .cache
 
+client/src/css
+
 server/static/
 server/core/templates/index.html
 server/core/static/
