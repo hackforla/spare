@@ -13,22 +13,26 @@ class DonateItemsTypeTableSmall extends Component {
     const { category, requestsForItemType } = this.props;
 
     return (
-      <Table responsive>
+      <Table responsive className='table-requests-mobile'>
         {
           requestsForItemType ? requestsForItemType.map((request) => {
             if (category === request.item.category_tag){
               return (
                 <tbody key={request.id}>
                   <tr>
-                    <th>Size:</th>
-                    <td>{ request.size || 'N/A' }</td>
+                    <td>
+                      <strong>Size:</strong><br />
+                      { request.size || 'N/A' }
+                    </td>
                   </tr>
                   <tr>
-                    <th>Location:</th>
-                    <td>{ request.neighborhood.name }</td>
+                    <td>
+                      <strong>Location:</strong><br />
+                      { request.neighborhood.name }
+                    </td>
                   </tr>
                   <tr>
-                    <td colSpan="2">
+                    <td>
                       <LinkContainer to={`/donate/${ request.id }`}>
                         <Button>Donate</Button>
                       </LinkContainer>
