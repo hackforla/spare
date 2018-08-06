@@ -15,6 +15,9 @@ export default class Logo extends Component {
           <Route path="/request">
             <img src={requestLogo} alt="Spare" className="logo" />
           </Route>
+          <Route>
+            <img src={donateLogo} alt="Spare" className="logo" />
+          </Route>
         </Switch>
       </Link>
     )

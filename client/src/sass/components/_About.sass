@@ -1,10 +1,26 @@
-#About
+.about-page
+  h2
+    text-align: center
 
-h2
-  text-align: center
+  p
+    margin-bottom: 1.5em
 
-p
-  margin-bottom: 1.5em
+  .team-images
+    display: flex
+    flex-flow: row wrap
+    justify-content: center
+    @media (min-width: 768px)
+      display: flex
 
-.team-thumbnail
-  margin-bottom: 2em
+  .team-thumbnail
+    flex: 0 1 auto
+    margin: 5px
+    width: 125px
+    max-width: 100%
+
+    @media (min-width: 768px)
+      flex: 1 1 0
+      width: auto
+
+    img
+      width: 100%

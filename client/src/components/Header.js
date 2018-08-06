@@ -24,12 +24,11 @@ const header = () => (
     <BreadcrumbNav />
     <Switch>
         <Route
-          path="/donate"
-          render={renderFlipButton('donate')}
-        />
-        <Route
           path="/request"
           render={renderFlipButton('request')}
+        />
+        <Route
+          render={renderFlipButton('donate')}
         />
     </Switch>
   </PageHeader>

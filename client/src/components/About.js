@@ -24,37 +24,39 @@ shuffle(images);
 
 
 const About = () => (
-  <div>
-    <h2>About Spare</h2>
-    <p>
-      Spare is a project team with <a href={hackforlaUrl}>Hack For LA</a>.
-      We connect people in need with people who have spare stuff.
-    </p>
-    <p>
-      Our goal is to help those in housing connect and offer help to those
-      without housing. During this homelessness crisis, we believe every
-      gesture of human kindness makes a difference. A jacket not only brings
-      comfort physically but also, it can build a tiny connection that turns
-      a stranger into a friend.
-    </p>
-    <p>
-      You can contribute to our <a href={githubUrl}>Github project</a> or
-      find us on <a href={slackUrl}>Slack</a>. You can
-      also email us at team@whatcanyouspare.org but keep in mind that we're
-      volunteers and may be slower to respond.
-    </p>
-    <Row>
-      {images.map((image, index) => (
-        <Col sm={4}>
-          <Image
-            src={image}
-            key={index}
-            className="team-thumbnail"
-          />
-        </Col>
+  <div className="about-page">
+    <div className="hero">
+      <h2>About Spare</h2>
+    </div>
+    <div>
+      <p>
+        Spare is a project team with <a href={hackforlaUrl}>Hack For LA</a>.
+        We connect people in need with people who have spare stuff.
+      </p>
+      <p>
+        Our goal is to help those in housing connect and offer help to those
+        without housing. During this homelessness crisis, we believe every
+        gesture of human kindness makes a difference. A jacket not only brings
+        comfort physically but also, it can build a tiny connection that turns
+        a stranger into a friend.
+      </p>
+      <p>
+        You can contribute to our <a href={githubUrl}>Github project</a> or
+        find us on <a href={slackUrl}>Slack</a>. You can
+        also email us at team@whatcanyouspare.org but keep in mind that we're
+        volunteers and may be slower to respond.
+      </p>
+      <div className="team-images">
+        {images.map((image, index) => (
+          <div className='team-thumbnail' key={index}>
+            <Image
+              src={image}
+            />
+          </div>
         ))}
-      </Row>
-  </div>
+        </div>
+      </div>
+    </div>
 );
 
 export default About;
