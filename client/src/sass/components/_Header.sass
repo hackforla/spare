@@ -1,16 +1,33 @@
 .header
-  margin-top: 0
   border-bottom: none
+  margin: 10px 0 0 0
 
-  img
+  @media (min-width : 768px)
+    margin: 10px 0 20px 40px
+
+  .logo
     vertical-align: baseline
+    width: 200px
+    display: block
+    margin: 5px auto
+
+    @media (min-width : 768px)
+      width: 160px
+      display: inline-block
+      margin: 5px
 
   .flip-button
-    float: right
     height: 52px
     width: 255px
-    position: relative
-    top: 7px
+    display: block
+    margin: 25px auto 0
+
+    @media (min-width : 768px)
+      float: right
+      display: inline-block
+      position: relative
+      top: 7px
+      margin: 0
 
     background-image: none
     border: 2px solid

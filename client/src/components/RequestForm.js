@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { itemInfo } from '../constants';
+import { emailRegex, itemInfo } from '../constants';
 import { Alert, Button, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
+import { withBreakpoints } from 'react-breakpoints';
 
 import RequestConfirmation from './RequestConfirmation';
 
@@ -53,8 +54,7 @@ class RequestForm extends Component {
         else return 'error';
     }
     if (key === 'email') {
-        var email_rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
-        return (email_rx.test(input) ? 'success' : 'error');
+        return (emailRegex.test(input) ? 'success' : 'error');
     }
     if (key === 'name') return (/^[A-Za-z\s]+$/.test(input) ? 'success' : 'error');
   }
@@ -90,7 +90,7 @@ class RequestForm extends Component {
         return;
     }
 
-    var email_rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
+    var email_rx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
 
     if (data.email && !(email_rx.test(data.email))) {
         this.setState({alert: 'warning', message: 'Please enter a valid email.'});
@@ -174,7 +174,7 @@ class RequestForm extends Component {
       return <RequestConfirmation />;
     }
 
-    const { itemType } = this.props;
+    const { breakpoints, currentBreakpoint, itemType } = this.props;
 
     if (this.state.alert && this.state.message) {
       var formStatus = (
@@ -188,6 +188,10 @@ class RequestForm extends Component {
     const pronoun = info.pluralPronoun ? 'those' : 'that'
 
     const headerMessage = `Cool, let's get you ${pronoun} ${info.verboseName}.`;
+
+    const confirmButtonText = (
+      breakpoints[currentBreakpoint] >= breakpoints.tablet ? 'Confirm Request' : 'Confirm'
+    );
 
     return (
       <div>
@@ -214,7 +218,7 @@ class RequestForm extends Component {
             {this.getBasicFields(this.fields)}
             {(info.sizeMen || info.sizeWomen) ? this.getSizeForm(info) : "" }
             <div className="text-center">
-              <Button type="submit">Confirm Request</Button>
+              <Button type="submit">{ confirmButtonText }</Button>
             </div>
             {formStatus}
           </form>
@@ -224,4 +228,4 @@ class RequestForm extends Component {
   }
 }
 
-export default RequestForm;
+export default withBreakpoints(RequestForm);

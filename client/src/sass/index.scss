@@ -17,8 +17,8 @@ body {
   display: flex;
   margin: 0 10px 0;
 
-  /* Extra Small Devices, Phones */
-  @media only screen and (min-width : 480px) {
+  // Larger than small/mobile device
+  @media (min-width : 768px) {
     margin: 0px 50px 0px;
   }
 }

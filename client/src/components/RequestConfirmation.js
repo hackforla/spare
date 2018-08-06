@@ -2,9 +2,9 @@ import React from 'react';
 import { Image } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
-import RequestIcon from '../assets/icons/requests.svg';
-import EmailIcon from '../assets/icons/email.svg';
-import DonationIcon from '../assets/icons/donation.svg';
+import RequestIcon from '../assets/icons/requestors/requests.svg';
+import EmailIcon from '../assets/icons/requestors/email.svg';
+import DonationIcon from '../assets/icons/requestors/donation.svg';
 
 const RequestConfirmation = () => (
   <div className="request-confirmation">
