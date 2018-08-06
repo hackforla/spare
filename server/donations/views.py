@@ -44,7 +44,10 @@ class DonationRequestCodeDetailView(generics.RetrieveAPIView):
 
 
 class NeighborhoodViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = Neighborhood.objects.all()
+    # Only show neighborhoods with at least one dropoff time
+    queryset = Neighborhood.objects.filter(
+        locations__dropoff_times__isnull=False
+    )
     serializer_class = NeighborhoodSerializer
 
 

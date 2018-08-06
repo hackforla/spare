@@ -107,7 +107,7 @@ class Neighborhood(models.Model):
 class Location(models.Model):
     organization_name = models.CharField(max_length=100, blank=True)
     location_name = models.CharField(max_length=100, blank=True)
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='neighborhood')
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='locations')
     street_address_1 = models.CharField(max_length=150)
     street_address_2 = models.CharField(max_length=150, blank=True)
     city = models.CharField(max_length=50)
