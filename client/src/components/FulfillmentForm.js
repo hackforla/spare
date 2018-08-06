@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
-import { itemInfo } from '../constants';
+import { emailRegex, itemInfo } from '../constants';
 import FulfillmentConfirmation from './FulfillmentConfirmation';
 import { Alert, Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 
@@ -65,8 +65,7 @@ class FulfillmentForm extends Component {
         else return 'error';
     }
     if (key === 'email') {
-        var email_rx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
-        return (email_rx.test(input) ? 'success' : 'error');
+        return (emailRegex.test(input) ? 'success' : 'error');
     }
     if (key === 'name') return (/^[A-Za-z\s]+$/.test(input) ? 'success' : 'error');
 
@@ -115,9 +114,7 @@ class FulfillmentForm extends Component {
         return;
     }
 
-    var email_rx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ ;
-
-    if (data.email && !(email_rx.test(data.email))) {
+    if (data.email && !(emailRegex.test(data.email))) {
         this.setState({alert: 'warning', message: 'Please enter a valid email.'});
         return;
     }
