@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, PageHeader } from 'react-bootstrap';
+import { Breadcrumb, Button, PageHeader } from 'react-bootstrap';
 import { Route, Switch } from "react-router-dom";
 import Logo from './Logo';
+import BreadcrumbNav from './BreadcrumbNav';
 import { LinkContainer } from 'react-router-bootstrap';
 
 const renderFlipButton = (currentSide) => {
@@ -9,15 +10,18 @@ const renderFlipButton = (currentSide) => {
   const next = isFromDonate ? 'request' : 'donate';
   const className = `flip-button to-${next}`;
   return () => (
-    <LinkContainer to={`/${next}`}>
-      <Button className={className}>{next} an item</Button>
-    </LinkContainer>
+    <span>
+      <LinkContainer to={`/${next}`}>
+        <Button className={className}>{next} an item</Button>
+      </LinkContainer>
+    </span>
   );
 }
 
 const header = () => (
   <PageHeader className="header">
     <Logo />
+    <BreadcrumbNav />
     <Switch>
         <Route
           path="/donate"

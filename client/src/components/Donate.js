@@ -89,7 +89,7 @@ export default class Donate extends Component {
       itemTypesByCategory[category].forEach(renderItemType);
     }
 
-    const requestPath = "/donate/:id";
+    const requestPath = "/donate/:category/:item/:id";
 
     routes.push(
       <Route exact path={ requestPath } key={ requestPath } render={ props => <DonationDetail {...props} requests={ requests } /> }/ >

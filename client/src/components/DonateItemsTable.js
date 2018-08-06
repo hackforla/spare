@@ -33,7 +33,7 @@ class DonateItemsTypeTableSmall extends Component {
                   </tr>
                   <tr>
                     <td>
-                      <LinkContainer to={`/donate/${ request.id }`}>
+                      <LinkContainer to={`/donate/${ category }/${ request.item.tag }/${ request.id }`}>
                         <Button>Donate</Button>
                       </LinkContainer>
                     </td>
@@ -74,7 +74,7 @@ class DonateItemsTypeTableLarge extends Component {
                     <td className="col-md-5">{ request.size || 'N/A' }</td>
                     <td className="col-md-4">{ request.neighborhood.name }</td>
                     <td className="col-md-3 text-right">
-                      <LinkContainer to={`/donate/${ request.id }`}>
+                      <LinkContainer to={`/donate/${ category }/${ request.item.tag }/${ request.id }`}>
                         <Button>Donate</Button>
                       </LinkContainer>
                     </td>
