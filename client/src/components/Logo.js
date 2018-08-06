@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
-import logo from "./../assets/logo/logo_spare.png";
+import donateLogo from "./../assets/logos/logo_spare.svg";
+import requestLogo from "./../assets/logos/logo_spare_alt.svg";
 import { Link, Route, Switch } from "react-router-dom";
 
 
 export default class Logo extends Component {
   render() {
     return (
-      <Switch>
-        <Route path="/donate">
-          <img src={logo} alt="Spare" />
-        </Route>
-        <Route path="/request">
-          <img src={logo} alt="Spare" />
-        </Route>
-      </Switch>
+      <Link to="/">
+        <Switch>
+          <Route path="/donate">
+            <img src={donateLogo} alt="Spare" className="logo"/>
+          </Route>
+          <Route path="/request">
+            <img src={requestLogo} alt="Spare" className="logo" />
+          </Route>
+        </Switch>
+      </Link>
     )
   }
 }

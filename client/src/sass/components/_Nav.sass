@@ -5,12 +5,21 @@
 .nav-pills
   display: inline-block
   width: 75%
-  margin-left: 55px
   margin-bottom: 25px
+
+  @media (min-width : 768px)
+    margin-left: 55px
+
   li
     a
       height: 35px
       width: 146px
+      margin-right: auto
+      margin-left: auto
+
+      @media (min-width : 768px)
+        margin-left: initial
+        margin-right: initial
 
       border-radius: 17.5px
 
