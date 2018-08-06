@@ -5,6 +5,7 @@ import moment from 'moment';
 import { emailRegex, itemInfo } from '../constants';
 import FulfillmentConfirmation from './FulfillmentConfirmation';
 import { Alert, Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
+import { withBreakpoints } from 'react-breakpoints';
 
 const now = moment();
 
@@ -210,7 +211,7 @@ class FulfillmentForm extends Component {
   }
 
   render() {
-    const { request } = this.props;
+    const { breakpoints, currentBreakpoint, request } = this.props;
 
     const info = itemInfo[request.item.tag];
 
@@ -230,6 +231,10 @@ class FulfillmentForm extends Component {
 
     const headerMessage = `Great! You are donating ${ info.verboseName }.`;
 
+    const confirmButtonText = (
+      breakpoints[currentBreakpoint] >= breakpoints.tablet ? 'Confirm Donation' : 'Confirm'
+    );
+
     return (
       <div>
         <div className="hero text-center">
@@ -247,7 +252,7 @@ class FulfillmentForm extends Component {
               {this.renderDropOffs()}
             </FormGroup>
             <div className="text-center">
-              <Button type="submit">Confirm Donation</Button>
+              <Button type="submit">{ confirmButtonText }</Button>
             </div>
             {formStatus}
           </form>
@@ -257,4 +262,4 @@ class FulfillmentForm extends Component {
   }
 }
 
-export default FulfillmentForm;
+export default withBreakpoints(FulfillmentForm);

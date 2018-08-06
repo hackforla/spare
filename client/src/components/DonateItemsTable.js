@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Table, Row } from 'react-bootstrap';
-import { Media } from 'react-breakpoints';
+import { withBreakpoints } from 'react-breakpoints';
 import { itemTypesByCategory } from '../constants';
 import { Route, Switch } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -118,7 +118,7 @@ class DonateItemsTypeTable extends Component {
   }
 
   render() {
-    const { category, itemType, requests } = this.props;
+    const { breakpoints, currentBreakpoint, category, itemType, requests } = this.props;
 
     const requestsByItemType = this.getRequestsByType(requests);
     let requestsForItemType = [];
@@ -126,30 +126,31 @@ class DonateItemsTypeTable extends Component {
       requestsForItemType = requestsByItemType[itemType];
     }
 
+    let itemsTable = null;
+    if (breakpoints[currentBreakpoint] >= breakpoints.tablet) {
+      itemsTable = (
+        <DonateItemsTypeTableLarge requests={requests} category={category} requestsForItemType={requestsForItemType} />
+      )
+    }
+    else {
+      itemsTable = (
+        <DonateItemsTypeTableSmall requests={requests} category={category} requestsForItemType={requestsForItemType} />
+      )
+    }
+
     return (
       <div>
         <Row className="hero text-center">
           <h2>Here are all of the requests for { itemInfo[itemType].verboseName }</h2>
         </Row>
-        <Media>
-          {({breakpoints, currentBreakpoint}) => {
-            switch (currentBreakpoint) {
-              case 'mobile':
-              case 'mobileLandscape':
-              case 'tablet':
-                return <DonateItemsTypeTableSmall requests={requests} category={category} requestsForItemType={requestsForItemType} />
-              default:
-                return <DonateItemsTypeTableLarge requests={requests} category={category} requestsForItemType={requestsForItemType} />
-            }
-          }}
-        </Media>
+        { itemsTable }
       </div>
     )
   }
 }
 
 
-export default class DonateItemsTable extends Component {
+class DonateItemsTable extends Component {
   render() {
 
     const { category, paths } = this.props;
@@ -174,3 +175,6 @@ export default class DonateItemsTable extends Component {
     )
   }
 }
+
+
+export default withBreakpoints(DonateItemsTable);
