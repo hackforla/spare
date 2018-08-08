@@ -1,0 +1,71 @@
+{% block subject %}We found a donor for your item!{% endblock %}
+
+{% block plain %}
+Hi there,
+
+We found a donor for the item you asked for! Here's how to get it.
+
+You asked for:
+
+  - Item: {{ item_type }}
+  - Size: {{ item_size }}
+
+Here's what happens next:
+
+  1. Meet the donor on {{ dropoff_date }} and {{ dropoff_time }} at:
+
+     {{ location_name }}
+     {{ location_address_1 }}
+     {{ location_address_2 }}
+     {{ location_city }}, {{ location_state }} {{ location_zipcode }}
+
+  2. We ask that you wait 15 minutes for them and we asked them to wait 15 minutes for you.
+
+  3. You can also get a shower while you're there. We'll let The Shower of Hope team know you're coming.
+
+If you have any questions or if you no longer need this item, please email us or text us at 310-554-8852. We're an all-volunteer team but we'll try to get back to you as soon as possible.
+
+Thank you,
+The Spare Team
+team@whatcanyouspare.org
+
+Spare connects people in need with people who have spare stuff. Find us at whatcanyouspare.org and on Twitter @WhatCanYouSpare.
+{% endblock %}
+
+{% block html %}
+  <p>Hi there,</p>
+
+  <p>We found a donor for the item you asked for! Here's how to get it.</p>
+
+  <p>You asked for:</p>
+
+  <ul>
+    <li>Item: {{ item_type }}</li>
+    <li>Size: {{ item_size }}</li>
+  </ul>
+
+  <p>Here's what happens next:</p>
+
+
+  <ol>
+    <li>Meet the donor on {{ dropoff_date }} and {{ dropoff_time }} at:</li>
+
+    <blockquote>
+      {{ location_name }}<br />
+      {{ location_address_1 }}<br />
+      {{ location_address_2 }}<br />
+      {{ location_city }}, {{ location_state }} {{ location_zipcode }}
+    </blockquote>
+
+    <li>We ask that you wait 15 minutes for them and we asked them to wait 15 minutes for you.</li>
+
+    <li>You can also get a shower while you're there. We'll let The Shower of Hope team know you're coming.</li>
+  </ol>
+
+  <p>If you have any questions or if you no longer need this item, please email us or text us at 310-554-8852. We're an all-volunteer team but we'll try to get back to you as soon as possible.</p>
+
+  <p>Thank you,</p>
+  <p>The Spare Team<br /><a href="mailto:team@whatcanyouspare.org">team@whatcanyouspare.org</a></p>
+
+  <p><i>Spare connects people in need with people who have spare stuff. Find us at <a href="http://www.whatcanyouspare.org">whatcanyouspare.org</a> and on Twitter <a href="https://twitter.com/WhatCanYouSpare">@WhatCanYouSpare</a>.</i></p>
+{% endblock %}

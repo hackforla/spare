@@ -127,3 +127,9 @@ class FulfillmentDonatorConfirmationEmail(FulfillmentDonatorEmailBase):
         "Thank you {{ donator_name }}! We'll set you up to donate your {{ item }} "
         "to {{ requestor_name }}."
     )
+
+EMAIL_MESSAGE_TEMPLATES = {
+    'requestor_request_received': 'requestors/request_received.html',
+    'requestor_request_fulfilled': 'requestors/request_fulfilled.html',
+    'donator_fulfillment_received': 'donators/fulfillment_received.html'
+}

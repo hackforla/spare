@@ -105,7 +105,7 @@ class RequestForm extends Component {
     data.size = this.state.selectValue;
 
     data.neighborhood = this.inputs.neighborhood.value;
-    var phone_num = /^\d{10}/.exec(data.phone);
+    var phone_num = /^\d{10}/.exec(data.phone); 
     var all_num = /^(\d{10})$/.exec(data.phone);
     if (phone_num) {
       if (!all_num) {

@@ -1,0 +1,54 @@
+{% block subject %}We've received your request!{% endblock %}
+
+{% block plain %}
+Hi there,
+
+Thank you for using Spare. You asked for:
+
+  - Item: {{ item_type }}
+  - Size: {{ item_size }}
+
+Here's what happens next:
+
+  1. We'll look for someone to donate this item.
+
+  2. When we find someone, we'll email and text you letting you know when and where to meet the donor to get the item.
+
+  3. You'll meet the donor at a dropoff location in {{ neighborhood }} at that date and time.
+
+If you have any questions or if you no longer need this item, please email us or text us at 310-554-8852. We're an all-volunteer team but we'll try to get back to you as soon as possible.
+
+Thank you,
+The Spare Team
+team@whatcanyouspare.org
+
+Spare connects people in need with people who have spare stuff. Find us at whatcanyouspare.org and on Twitter @WhatCanYouSpare.
+{% endblock %}
+
+{% block html %}
+  <p>Hi there,</p>
+
+  <p>Thank you for using Spare. You asked for:</p>
+
+  <ul>
+    <li>Item: {{ item_type }}</li>
+    <li>Size: {{ item_size }}</li>
+  </ul>
+
+  <p>Here's what happens next:</p>
+
+  <ol>
+    <li>We'll look for someone to donate this item.</li>
+
+    <li>When we find someone, we'll email and text you letting you know when and where to meet the donor to get the item.</li>
+
+    <li>You'll meet the donor at a dropoff location in {{ neighborhood }} at that date and time.</li>
+  </ol>
+
+  <p>If you have any questions or if you no longer need this item, please email us or text us at 310-554-8852. We're an all-volunteer team but we'll try to get back to you as soon as possible.</p>
+
+  <p>Thank you,</p>
+  <p>The Spare Team<br /><a href="mailto:team@whatcanyouspare.org">team@whatcanyouspare.org</a></p>
+
+  <p><i>Spare connects people in need with people who have spare stuff. Find us at <a href="http://www.whatcanyouspare.org">whatcanyouspare.org</a> and on Twitter <a href="https://twitter.com/WhatCanYouSpare">@WhatCanYouSpare</a>.</i></p>
+{% endblock %}
