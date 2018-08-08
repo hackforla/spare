@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
-import { emailRegex, itemInfo } from '../constants';
+import { emailRegex, itemInfo } from '../utils/constants';
 import FulfillmentConfirmation from './FulfillmentConfirmation';
 import { Alert, Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 import { withBreakpoints } from 'react-breakpoints';

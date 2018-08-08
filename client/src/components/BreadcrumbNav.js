@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Button, PageHeader } from 'react-bootstrap';
 import { Route, Switch } from "react-router-dom";
-import { itemInfo } from '../constants';
+import { itemInfo } from '../utils/constants';
 
 
 class CategoryBreadcrumb extends Component {

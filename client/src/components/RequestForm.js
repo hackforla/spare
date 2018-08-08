@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import { emailRegex, itemInfo } from '../constants';
+import { emailRegex, itemInfo } from '../utils/constants';
 import { Alert, Button, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
 import { withBreakpoints } from 'react-breakpoints';
 

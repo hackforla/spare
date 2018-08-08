@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
-import { itemTypesByCategory } from '../constants';
+import { itemTypesByCategory } from '../utils/constants';
 import DonateCategory from './DonateCategory';
 import DonateItemsTable from './DonateItemsTable';
 import FulfillmentForm from './FulfillmentForm';

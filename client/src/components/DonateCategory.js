@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { itemTypesByCategory, itemInfo } from '../constants';
+import { itemTypesByCategory, itemInfo } from '../utils/constants';
 import { Col, Row } from 'react-bootstrap';
 import CategoryNav from './CategoryNav';
 import Tile from './Tile';

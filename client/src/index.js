@@ -11,9 +11,9 @@ import './css/index.css';
 
 //components dir
 import App from './components/App.js';
-import registerServiceWorker from './registerServiceWorker';
+import registerServiceWorker from './utils/registerServiceWorker';
 
-import { breakpoints } from './constants';
+import { breakpoints } from './utils/constants';
 
 ReactDOM.render((
   <BrowserRouter>

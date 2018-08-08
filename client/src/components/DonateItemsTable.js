@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Table, Row } from 'react-bootstrap';
 import { withBreakpoints } from 'react-breakpoints';
-import { itemTypesByCategory } from '../constants';
+import { itemTypesByCategory, itemInfo } from '../utils/constants';
 import { Route, Switch } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
-import { itemInfo } from '../constants';
 
 
 class DonateItemsTypeTableSmall extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
-import { itemTypesByCategory } from '../constants';
+import { itemTypesByCategory } from '../utils/constants';
 
 import RequestForm from './RequestForm';
 import RequestCategory from './RequestCategory';
