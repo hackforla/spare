@@ -12,6 +12,7 @@ class RequestForm extends Component {
     super(props, context);
 
     this.handleChange = this.handleChange.bind(this);
+    this.dismissAlert = this.dismissAlert.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.sendForm = this.sendForm.bind(this);
@@ -170,6 +171,13 @@ class RequestForm extends Component {
       .catch((err) => console.log(err));
   }
 
+  dismissAlert() {
+    this.setState({
+      alert: null,
+      message: '',
+    })
+  }
+
   render() {
     if (this.state.submitSuccess) {
       return <RequestConfirmation />;
@@ -179,7 +187,7 @@ class RequestForm extends Component {
 
     if (this.state.alert && this.state.message) {
       var formStatus = (
-        <Alert bsStyle={this.state.alert}>
+        <Alert bsStyle={this.state.alert} onDismiss={this.dismissAlert}>
           {this.state.message}
         </Alert>
       );

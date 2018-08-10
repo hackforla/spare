@@ -27,6 +27,7 @@ class FulfillmentForm extends Component {
     super(props, context);
 
     this.onChangeDropoffs = this.onChangeDropoffs.bind(this);
+    this.dismissAlert = this.dismissAlert.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.sendForm = this.sendForm.bind(this);
@@ -110,8 +111,8 @@ class FulfillmentForm extends Component {
     data.city = 'Los Angeles';
 
 
-    if (!(data.phone || data.email)) {
-        this.setState({alert: 'warning', message: 'Please provide either a phone or email address.'});
+    if (!data.email) {
+        this.setState({alert: 'warning', message: 'A valid email is required to donate.'});
         return;
     }
 
@@ -215,6 +216,13 @@ class FulfillmentForm extends Component {
       });
   }
 
+  dismissAlert() {
+    this.setState({
+      alert: null,
+      message: '',
+    })
+  }
+
   render() {
     const { breakpoints, currentBreakpoint, request } = this.props;
 
@@ -228,7 +236,7 @@ class FulfillmentForm extends Component {
 
     if (this.state.alert && this.state.message) {
       var formStatus = (
-        <Alert bsStyle={this.state.alert}>
+        <Alert bsStyle={this.state.alert} onDismiss={this.dismissAlert}>
           {this.state.message}
         </Alert>
       );
