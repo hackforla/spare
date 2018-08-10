@@ -60,7 +60,7 @@ class FulfillmentForm extends Component {
     var input = this.state[key];
     if (!input) return null;
     if (key === 'phone') {
-        var phone_num = /^\+(\d+)\d{10}/.exec(input); 
+        var phone_num = /^\+(\d+)\d{10}/.exec(input);
         var all_num = /^(\d{10})$/.exec(input);
         if (phone_num || all_num) return 'success';
         else return 'error';
@@ -102,7 +102,7 @@ class FulfillmentForm extends Component {
     if (!this.inputs.dropoff_time) {
         this.setState({alert: 'warning', message: 'Please select a dropoff location and time.'});
         return;
-    }   
+    }
 
     data.dropoff_time = selectedDropoff.id;
     data.dropoff_date = selectedDropoff.date;
@@ -126,7 +126,7 @@ class FulfillmentForm extends Component {
     }
 
 
-    var phone_num = /^\+(\d+)\d{10}/.exec(data.phone); 
+    var phone_num = /^\+(\d+)\d{10}/.exec(data.phone);
     var all_num = /^(\d{10})$/.exec(data.phone);
     if (!phone_num) {
       if (!all_num) {
@@ -164,6 +164,7 @@ class FulfillmentForm extends Component {
         <FormControl
           type={field.type}
           value={this.state[field.key]}
+          autoFocus={field.key === 'name'}
           placeholder={field.placeholder}
           inputRef={(ref) => {this.inputs[field.key] = ref}}
           onChange={event => {this.handleChange(event, field.key)}}

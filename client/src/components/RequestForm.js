@@ -48,7 +48,7 @@ class RequestForm extends Component {
     var input = this.state[key];
     if (!input) return null;
     if (key === 'phone') {
-        var phone_num = /^\+(\d+)\d{10}/.exec(input); 
+        var phone_num = /^\+(\d+)\d{10}/.exec(input);
         var all_num = /^(\d{10})$/.exec(input);
         if (phone_num || all_num) return 'success';
         else return 'error';
@@ -105,7 +105,7 @@ class RequestForm extends Component {
     data.size = this.state.selectValue;
 
     data.neighborhood = this.inputs.neighborhood.value;
-    var phone_num = /^\+(\d+)\d{10}/.exec(data.phone); 
+    var phone_num = /^\d{10}/.exec(data.phone);
     var all_num = /^(\d{10})$/.exec(data.phone);
     if (phone_num) {
       if (!all_num) {
@@ -136,6 +136,7 @@ class RequestForm extends Component {
       <FormControl
         type={field.type}
         value={this.state[field.key]}
+        autoFocus={field.key === 'name'}
         placeholder={field.placeholder}
         inputRef={(ref) => {this.inputs[field.key] = ref}}
         onChange={event => {this.handleChange(event, field.key)}}
