@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Button, PageHeader } from 'react-bootstrap';
+import { Breadcrumb } from 'react-bootstrap';
 import { Route, Switch } from "react-router-dom";
 import { itemInfo } from '../utils/constants';
 
 
 class CategoryBreadcrumb extends Component {
   render() {
-    const {mode, category, item} = this.props.match.params;
+    const {mode, item} = this.props.match.params;
 
     const modeName = mode === 'request' ? 'Request' : 'Donate';
 

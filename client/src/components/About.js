@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, Image } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 
 const hackforlaUrl = 'http://www.hackforla.org/';
 const githubUrl = 'https://github.com/hackforla/spare';

@@ -187,6 +187,7 @@ class FulfillmentForm extends Component {
     return dropoffs.map((dropoff, index) => {
       const dropoffDate = moment(dropoff.date).format('dddd, LL');
       const dropoffTime = formatTime(dropoff.time_start);
+      const location = dropoff.location;
       return (
         <Radio
           key={index}
@@ -194,7 +195,10 @@ class FulfillmentForm extends Component {
           onChange={this.onChangeDropoffs}
           value={index+1}
         >
-          {dropoff.location.organization_name} - {dropoffDate} at {dropoffTime}
+          <strong>{dropoffDate} at {dropoffTime}</strong>
+          <br />{location.organization_name} <em>({location.neighborhood.name})</em>
+          <br />{location.street_address_1}
+          <br />{location.city}, {location.state} {location.zipcode}
         </Radio>
       );
     });
