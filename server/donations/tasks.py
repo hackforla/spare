@@ -1,8 +1,8 @@
 from django.conf import settings
+
 from donations.messages import (
-    DonationRequestReceivedEmail, DonationRequestReceivedSMS,
-    FulfillmentDonatorConfirmationEmail, FulfillmentRequestorEmail,
-    FulfillmentRequestorSMS, EMAIL_MESSAGE_TEMPLATES
+    DonationRequestReceivedSMS, EMAIL_MESSAGE_TEMPLATES,
+    FulfillmentRequestorSMS
 )
 from templated_email import send_templated_mail
 
