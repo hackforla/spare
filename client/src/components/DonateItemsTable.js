@@ -12,32 +12,34 @@ class DonateItemsTypeTableSmall extends Component {
     const { category, requestsForItemType } = this.props;
 
     return (
-      <Table responsive className='table-requests-mobile'>
+      <div>
         {
           requestsForItemType ? requestsForItemType.map((request) => {
             if (category === request.item.category_tag){
               return (
-                <tbody key={request.id}>
-                  <tr>
-                    <td>
-                      <strong>Size:</strong><br />
-                      { request.size || 'N/A' }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <strong>Location:</strong><br />
-                      { request.neighborhood.name }
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <LinkContainer to={`/donate/${ category }/${ request.item.tag }/${ request.id }`}>
-                        <Button>Donate</Button>
-                      </LinkContainer>
-                    </td>
-                  </tr>
-                </tbody>
+                <Table responsive className='table-requests-mobile'>
+                  <tbody key={request.id}>
+                    <tr>
+                      <td>
+                        <span class="table-requests-mobile-header">Size</span><br />
+                        { request.size || 'N/A' }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <span class="table-requests-mobile-header">Location</span><br />
+                        { request.neighborhood.name }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <LinkContainer to={`/donate/${ category }/${ request.item.tag }/${ request.id }`}>
+                          <Button>Donate</Button>
+                        </LinkContainer>
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
               )
             }
             else {
@@ -45,7 +47,7 @@ class DonateItemsTypeTableSmall extends Component {
             }
           }) : null
         }
-      </Table>
+      </div>
     )
   }
 }
