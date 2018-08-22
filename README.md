@@ -107,11 +107,18 @@ Execute the following command to create a superuser for the project:
 
 This will be the main superuser admin for your app.
 
+### Shortcut SetUp Management Command
+
+To run initial migrations and create a superuser, run this command:
+
+`docker-compose run server python manage.py get_started`
+
 ### 9. Login to Django Admin
 
 You can now login to the Django Admin for your user at:
 
 http://localhost:8000/admin/
+
 
 ## Important URLs
 
