@@ -12,20 +12,16 @@ Thank you for being a Spare donor! Please meet your recipient on {{ dropoff_date
 
 As a reminder, you're donating:
 
-  - Item: {{ item_type }}
-  - Size: {{ item_size }}
+  - Item: {{ item_type }}{% if item_size %}
+  - Size: {{ item_size }}{% endif %}
 
 Here's who you'll be meeting:
 
   - Name: {{ requestor_name }}
-  - Phone: {{ requestor_phone }}
-  - Email: {{ requestor_email }}
 
-    Please keep this information confidential and don't post it anywhere online
+Please keep any information confidential and don't post it anywhere online.
 
 If you can no longer make it, PLEASE EMAIL US AS SOON AS POSSIBLE: team@whatcanyouspare.org. Someone is counting on you.
-
-If you are running late, PLEASE CALL the recipient (if there is a contact number above in this email).
 
 If the recipient does not come within 15 minutes, you can leave the item with The Shower of Hope staff, you can give it to another person receiving shower services or you can take it home with you and try to find another match.
 
@@ -52,22 +48,18 @@ Spare connects people in need with people who have spare stuff. Find us at whatc
 
   <ul>
     <li>Item: {{ item_type }}</li>
-    <li>Size: {{ item_size }}</li>
+    {% if item_size %}<li>Size: {{ item_size }}</li>{% endif %}
   </ul>
 
   <p>Here's who you'll be meeting:</p>
 
   <ul>
     <li>Name: {{ requestor_name }}</li>
-    <li>Phone: {{ requestor_phone }}</li>
-    <li>Email: {{ requestor_email }}</li>
   </ul>
 
-  <p><i>Please keep this information confidential and don't post it anywhere online.</i></p>
+  <p><i>Please keep any information confidential and don't post it anywhere online.</i></p>
 
   <p>If you can no longer make it, PLEASE EMAIL US AS SOON AS POSSIBLE: team@whatcanyouspare.org. Someone is counting on you.</p>
-
-  <p>If you are running late, PLEASE CALL the recipient (if there is a contact number above in this email).</p>
 
   <p>If the recipient does not come within 15 minutes, you can leave the item with The Shower of Hope staff, you can give it to another person receiving shower services or you can take it home with you and try to find another match.</p>
 

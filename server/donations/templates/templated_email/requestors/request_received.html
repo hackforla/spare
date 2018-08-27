@@ -5,8 +5,8 @@ Hi there,
 
 Thank you for using Spare. You asked for:
 
-  - Item: {{ item_type }}
-  - Size: {{ item_size }}
+  - Item: {{ item_type }}{% if item_size %}
+  - Size: {{ item_size }}{% endif %}
 
 Here's what happens next:
 
@@ -32,7 +32,7 @@ Spare connects people in need with people who have spare stuff. Find us at whatc
 
   <ul>
     <li>Item: {{ item_type }}</li>
-    <li>Size: {{ item_size }}</li>
+    {% if item_size %}<li>Size: {{ item_size }}</li>{% endif %}
   </ul>
 
   <p>Here's what happens next:</p>

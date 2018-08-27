@@ -23,7 +23,7 @@ def send_request_confirmation_message(instance):
             instance.email,
             context={
                 'item_type': instance.item.display_name,
-                'item_size': instance.size or 'N/A',
+                'item_size': instance.size,
 
                 'location_name': 'The Shower of Hope',
                 'neighborhood': instance.neighborhood.name,
@@ -44,7 +44,7 @@ def send_fulfillment_confirmation_messages(instance):
             fulfillment.email,
             context={
                 'item_type': request.item.display_name,
-                'item_size': request.size or 'N/A',
+                'item_size': request.size,
 
                 'location_name': 'The Shower of Hope',
                 'location_address_1': location.street_address_1,
@@ -55,8 +55,6 @@ def send_fulfillment_confirmation_messages(instance):
                 'neighborhood': request.neighborhood.name,
 
                 'requestor_name': request.name,
-                'requestor_email': request.email,
-                'requestor_phone': request.phone,
 
                 'dropoff_date': fulfillment.dropoff_date,
                 'dropoff_time': fulfillment.dropoff_time.time_start,
@@ -73,7 +71,7 @@ def send_fulfillment_confirmation_messages(instance):
             request.email,
             context={
                 'item_type': request.item.display_name,
-                'item_size': request.size or 'N/A',
+                'item_size': request.size,
 
                 'location_name': 'The Shower of Hope',
                 'location_address_1': location.street_address_1,
@@ -82,6 +80,8 @@ def send_fulfillment_confirmation_messages(instance):
                 'location_state': location.state,
                 'location_zipcode': location.zipcode,
                 'neighborhood': request.neighborhood.name,
+
+                'donator_name': fulfillment.name,
 
                 'dropoff_date': fulfillment.dropoff_date,
                 'dropoff_time': fulfillment.dropoff_time.time_start,

@@ -13,8 +13,6 @@ TEST_CONTEXT = {
     'item_type': 'Shirt',
     'item_size': 'XL',
     'requestor_name': 'Jimbo',
-    'requestor_email': 'jimbojones@example.com',
-    'requestor_phone': '+15556667777',
 
     # Dropoff info
     'location_name': 'The Shower of Hope',
@@ -26,6 +24,7 @@ TEST_CONTEXT = {
     'neighborhood': 'Highland Park',
     'dropoff_date': 'Saturday, August 25th, 2018',
     'dropoff_time': '11AM',
+    'donator_name': 'Ned',
 }
 
 
@@ -42,7 +41,9 @@ class Command(BaseCommand):
         parser.add_argument(
             'message_name',
             type=str,
-            help='Name of email message to send',
+            help="""Name of email message to send. Options are: '{}'""".format(
+                "', '".join(EMAIL_MESSAGE_TEMPLATES.keys())
+            )
         )
 
     def handle(self, *args, **options):

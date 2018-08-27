@@ -7,8 +7,14 @@ We found a donor for the item you asked for! Here's how to get it.
 
 You asked for:
 
-  - Item: {{ item_type }}
-  - Size: {{ item_size }}
+  - Item: {{ item_type }}{% if item_size %}
+  - Size: {{ item_size }}{% endif %}
+
+Here is who you'll be meeting:
+
+  Name: {{ donator_name }}
+
+Please keep any information confidential and don't post it anywhere online.
 
 Here's what happens next:
 
@@ -41,11 +47,18 @@ Spare connects people in need with people who have spare stuff. Find us at whatc
 
   <ul>
     <li>Item: {{ item_type }}</li>
-    <li>Size: {{ item_size }}</li>
+    {% if item_size %}<li>Size: {{ item_size }}</li>{% endif %}
   </ul>
 
-  <p>Here's what happens next:</p>
+  <p>Here is who you'll be meeting:</p>
 
+  <ul>
+    <li>Name: {{ donator_name }}</li>
+  </ul>
+
+  <p><i>Please keep any information confidential and don't post it anywhere online.</i></p>
+
+  <p>Here's what happens next:</p>
 
   <ol>
     <li>Meet the donor on {{ dropoff_date }} and {{ dropoff_time }} at:</li>
