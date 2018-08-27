@@ -4,14 +4,74 @@ import pytest
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
+from rest_framework.test import APIClient
 
-from donations.models import DonationFulfillment
+from donations.models import DonationFulfillment, DonationRequest
 
 
 def get_closest_matching_dropoff_date(date, dropoff_time):
     days_difference = date.weekday() - dropoff_time.day.value
 
     return date - timedelta(days=days_difference)
+
+
+@pytest.mark.django_db
+def test_throttling(client, donation_request):
+    CLIENT_IP = '10.10.10.10'
+    OTHER_CLIENT_IP = '15.15.15.15'
+
+    # We're going to get some info from donation request fixture (won't affect
+    # throttling results)
+    data = {
+        'email': 'realuser@gmail.com',
+        'name': donation_request.name,
+        'city': donation_request.city,
+        'item': donation_request.item.tag,
+        'size': donation_request.size,
+        'neighborhood': donation_request.neighborhood.id
+    }
+
+    assert DonationRequest.objects.count() == 1
+
+    MAX_ALLOWED = 12
+
+    # First 12 attempts work fine
+    for i in range(MAX_ALLOWED):
+        response = client.post(
+            reverse('request-list'),
+            data,
+            REMOTE_ADDR=CLIENT_IP
+        )
+        assert response.status_code == status.HTTP_201_CREATED
+    assert DonationRequest.objects.count() == 13
+
+    # Final attempt is throttled
+    response = client.post(
+        reverse('request-list'),
+        data,
+        REMOTE_ADDR=CLIENT_IP
+    )
+    assert response.status_code == status.HTTP_429_TOO_MANY_REQUESTS
+    assert DonationRequest.objects.count() == 13
+
+    # But not for another client
+    response = client.post(
+        reverse('request-list'),
+        data,
+        REMOTE_ADDR=OTHER_CLIENT_IP
+    )
+    assert response.status_code == status.HTTP_201_CREATED
+    assert DonationRequest.objects.count() == 14
+
+    # Or for a test user with same IP
+    data['email'] = 'user@example.com'
+    response = client.post(
+        reverse('request-list'),
+        data,
+        REMOTE_ADDR=CLIENT_IP
+    )
+    assert response.status_code == status.HTTP_201_CREATED
+    assert DonationRequest.objects.count() == 15
 
 
 @pytest.mark.django_db

@@ -2,7 +2,9 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, mixins, viewsets
 from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle
 
+from core.utils import is_test_email, is_test_phone
 from donations.models import (
     DonationFulfillment, DonationRequest, DropoffTime, Neighborhood
 )
@@ -10,6 +12,25 @@ from donations.serializers import (
     DonationFulfillmentSerializer, DonationRequestPublicSerializer,
     DonationRequestSerializer, DropoffTimeSerializer, NeighborhoodSerializer
 )
+
+
+class DonationRequestThrottle(UserRateThrottle):
+    rate = '12/day'
+
+    def get_cache_key(self, request, view):
+        # Ignore test emails/phone when throttling
+        email = request.data.get('email')
+        phone = request.data.get('phone')
+
+        if email and is_test_email(email):
+            return None
+
+        if phone and is_test_phone(phone):
+            return None
+
+        # Otherwise, regular throttling
+        else:
+            return super().get_cache_key(request, view)
 
 
 class DonationRequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -31,10 +52,22 @@ class DonationRequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, vie
         else:
             return DonationRequestPublicSerializer
 
+    def get_throttles(self):
+        if self.request.method == 'GET':
+            return []
+        else:
+            return [DonationRequestThrottle()]
+
 
 class DonationFulfillmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = DonationFulfillment.objects.all()
     serializer_class = DonationFulfillmentSerializer
+
+    def get_throttles(self):
+        if self.request.method == 'GET':
+            return []
+        else:
+            return [DonationRequestThrottle()]
 
 
 class DonationRequestCodeDetailView(generics.RetrieveAPIView):
