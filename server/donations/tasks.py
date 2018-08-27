@@ -1,5 +1,6 @@
 from django.conf import settings
 
+from core.utils import is_test_email
 from donations.messages import (
     DonationRequestReceivedSMS, EMAIL_MESSAGE_TEMPLATES,
     FulfillmentRequestorSMS
@@ -8,12 +9,18 @@ from templated_email import send_templated_mail
 
 
 def send_email_message(message_name, to_email, context=None):
-    send_templated_mail(
-        template_name=EMAIL_MESSAGE_TEMPLATES[message_name],
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[to_email],
-        context=context or {}
-    )
+    DEV_BACKENDS = [
+        'django.core.mail.backends.console.EmailBackend',
+        'django.core.mail.backends.locmem.EmailBackend'
+    ]
+
+    if (settings.EMAIL_BACKEND in DEV_BACKENDS) or (not is_test_email(to_email)):
+        send_templated_mail(
+            template_name=EMAIL_MESSAGE_TEMPLATES[message_name],
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[to_email],
+            context=context or {}
+        )
 
 
 def send_request_confirmation_message(instance):
