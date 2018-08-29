@@ -4,6 +4,7 @@ import axios from 'axios';
 import { emailRegex, itemInfo } from '../utils/constants';
 import { Alert, Button, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
 import { withBreakpoints } from 'react-breakpoints';
+import MaskedInput from 'react-maskedinput';
 
 import RequestConfirmation from './RequestConfirmation';
 
@@ -49,8 +50,8 @@ class RequestForm extends Component {
     var input = this.state[key];
     if (!input) return null;
     if (key === 'phone') {
-        var phone_num = /^\+(\d+)\d{10}/.exec(input);
-        var all_num = /^(\d{10})$/.exec(input);
+        var phone_num = /^\+(\d+)\d{10}/.exec(input.replace(/\D/g,''));
+        var all_num = /^(\d{10})$/.exec(input.replace(/\D/g,''));
         if (phone_num || all_num) return 'success';
         else return 'error';
     }
@@ -63,6 +64,7 @@ class RequestForm extends Component {
   handleChange(e, key) {
     let newState = {};
     newState[key] = e.target.value
+    console.log(newState);
     this.setState(newState);
   }
 
@@ -113,10 +115,8 @@ class RequestForm extends Component {
           this.setState({alert: 'warning', message: 'Please enter a valid phone number.'});
           return;
       }
-      data.phone = '+1' + data.phone;
+      data.phone = '+1' + data.phone.replace(/\D/g,'');
     }
-
-    console.log(data);
 
     axios.post('/api/requests/', data)
       .then((res) => {
@@ -130,20 +130,41 @@ class RequestForm extends Component {
   }
 
   getBasicFields(fields){
-    return fields.map((field, index) =>
-    <FormGroup controlId={field.key} key={index}
-      validationState={this.getValidationState(field.key)}>
-      <ControlLabel>{field.name}</ControlLabel>
-      <FormControl
-        type={field.type}
-        value={this.state[field.key]}
-        autoFocus={field.key === 'name'}
-        placeholder={field.placeholder}
-        inputRef={(ref) => {this.inputs[field.key] = ref}}
-        onChange={event => {this.handleChange(event, field.key)}}
-      />
-      <FormControl.Feedback />
-    </FormGroup>)
+    return fields.map((field, index) => {
+      let formControl;
+
+      if(field.key === 'phone') {
+        formControl = (
+          <MaskedInput
+            mask='(111) 111-1111'
+            name={field.key}
+            className="form-control"
+            onChange={event => {this.handleChange(event, field.key)}}
+          />
+        );
+      }
+      else {
+        formControl = (
+          <FormControl
+            type={field.type}
+            value={this.state[field.key]}
+            autoFocus={field.key === 'name'}
+            placeholder={field.placeholder}
+            inputRef={(ref) => {this.inputs[field.key] = ref}}
+            onChange={event => {this.handleChange(event, field.key)}}
+          />
+        )
+      }
+
+      return (
+        <FormGroup controlId={field.key} key={index}
+          validationState={this.getValidationState(field.key)}>
+          <ControlLabel>{field.name}</ControlLabel>
+          {formControl}
+          <FormControl.Feedback />
+        </FormGroup>
+      )
+    })
   }
 
   getSizeForm(info){
