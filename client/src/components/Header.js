@@ -22,15 +22,6 @@ const header = () => (
   <PageHeader className="header">
     <Logo />
     <BreadcrumbNav />
-    <Switch>
-        <Route
-          path="/request"
-          render={renderFlipButton('request')}
-        />
-        <Route
-          render={renderFlipButton('donate')}
-        />
-    </Switch>
   </PageHeader>
 );
 

@@ -1,37 +1,14 @@
 .header
   border-bottom: none
-  margin: 10px 0 0 0
+  margin: 0
+  text-align: center
+
+  h1
+    margin: 15px auto
 
   a
     text-decoration: none
-
-  text-align: center
-
-  .request-text
-    color: $request-primary-color !important
-
-    a
-      color: inherit
-
-      &:hover
-        color: darken($request-primary-color, 10%)
-
-  .donate-text
-    color: $donate-primary-color
-
-    a
-      color: inherit
-
-      &:hover
-        color: darken($donate-primary-color, 10%)
-
-  @media (min-width: 768px)
-    text-align: initial
-    h1
-      display: flex
-      flex-direction: row
-      justify-content: space-between
-
+    
   .breadcrumb
     text-transform: uppercase
     font-weight: bold
@@ -54,66 +31,16 @@
       content: '>'
       color: inherit
 
-  @media (min-width: 768px)
-    margin: 10px 0 20px 40px
-
   .logo
     vertical-align: baseline
     width: 200px
     display: block
-    margin: 5px auto
+    margin: 20px auto
 
     @media (min-width: 768px)
       width: 160px
       display: inline-block
-      margin: 5px
+      margin: 20px 12px 0 0
 
   .breadcrumb
     background: none
-
-  .flip-button
-    height: 52px
-    width: 255px
-    display: block
-    margin: 25px auto 0
-
-    @media (min-width: 768px)
-      float: right
-      display: inline-block
-      position: relative
-      top: 7px
-      margin: 0
-
-    background-image: none
-    border: 2px solid
-    border-radius: 26px
-
-    font-size: 16px
-    font-weight: bold
-    letter-spacing: 2px
-    line-height: 36.75px
-    text-transform: uppercase
-
-    &:hover,
-    &:focus
-      outline: none
-      background-color: white
-      background-image: none
-
-    &.to-request
-      border-color: $donate-primary-color
-      color: $donate-primary-color
-
-      &:hover
-        background-color: $donate-primary-color
-        color: white
-        box-shadow: 0 0 10px rgba(10, 10, 10, 0.25)
-
-    &.to-donate
-      border-color: $request-primary-color
-      color: $request-primary-color
-
-      &:hover
-        background-color: $request-primary-color
-        color: white
-        box-shadow: 0 0 10px rgba(10, 10, 10, 0.25)
