@@ -64,8 +64,8 @@ class RequestForm extends Component {
   handleChange(e, key) {
     let newState = {};
     newState[key] = e.target.value
-    console.log(newState);
     this.setState(newState);
+    console.log('newState', newState);
   }
 
   handleSelect(e) {
@@ -121,11 +121,10 @@ class RequestForm extends Component {
     axios.post('/api/requests/', data)
       .then((res) => {
         this.setState({ submitSuccess: true });
-        console.log(res);
       })
       .catch((err) => {
         this.setState({ alert: 'danger', message: 'Request failed.' });
-        console.log(err)
+        console.error(err)
       });
   }
 
@@ -139,6 +138,7 @@ class RequestForm extends Component {
             mask='(111) 111-1111'
             name={field.key}
             className="form-control"
+            inputRef={(ref) => {this.inputs[field.key] = ref}}
             onChange={event => {this.handleChange(event, field.key)}}
           />
         );
@@ -186,7 +186,6 @@ class RequestForm extends Component {
   componentDidMount() {
     axios.get('/api/neighborhoods/')
       .then((res) => {
-          console.log(res.data);
           this.setState((oldState) => ({neighborhoods: res.data}));
       })
       .catch((err) => console.log(err));

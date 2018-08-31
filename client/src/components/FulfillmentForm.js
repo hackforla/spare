@@ -6,6 +6,7 @@ import { emailRegex, itemInfo } from '../utils/constants';
 import FulfillmentConfirmation from './FulfillmentConfirmation';
 import { Alert, Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 import { withBreakpoints } from 'react-breakpoints';
+import MaskedInput from 'react-maskedinput';
 
 const now = moment();
 
@@ -61,8 +62,8 @@ class FulfillmentForm extends Component {
     var input = this.state[key];
     if (!input) return null;
     if (key === 'phone') {
-        var phone_num = /^\+(\d+)\d{10}/.exec(input);
-        var all_num = /^(\d{10})$/.exec(input);
+        var phone_num = /^\+(\d+)\d{10}/.exec(input.replace(/\D/g,''));
+        var all_num = /^(\d{10})$/.exec(input.replace(/\D/g,''));
         if (phone_num || all_num) return 'success';
         else return 'error';
     }
@@ -137,11 +138,6 @@ class FulfillmentForm extends Component {
       data.phone = '+1' + data.phone;
     }
 
-    console.log(data);
-
-
-    // handle this in development if the API endpoint
-    // is on a different port?
     axios.post('/api/fulfillments/', data)
       .then((res) => {
         this.setState({
@@ -149,30 +145,49 @@ class FulfillmentForm extends Component {
           responseData: res.data,
           selectedDropoff: selectedDropoff,
         });
-        console.log(res);
       })
       .catch((err) => {
         this.setState((oldState) => ({alert: 'danger', message: 'Request fulfillment failed.'}));
-        console.log(err)
+        console.error(err)
       });
   }
 
   getBasicFields(fields) {
-    return fields.map((field, index) => (
-      <FormGroup controlId={field.key} key={index}
-        validationState={this.getValidationState(field.key)}>
-        <ControlLabel>{field.name}</ControlLabel>
-        <FormControl
-          type={field.type}
-          value={this.state[field.key]}
-          autoFocus={field.key === 'name'}
-          placeholder={field.placeholder}
-          inputRef={(ref) => {this.inputs[field.key] = ref}}
-          onChange={event => {this.handleChange(event, field.key)}}
-        />
-        <FormControl.Feedback />
-      </FormGroup>
-    ))
+    return fields.map((field, index) => {
+      let formControl;
+
+      if (field.key === 'phone') {
+        formControl = (
+          <MaskedInput
+            mask='(111) 111-1111'
+            name={field.key}
+            className="form-control"
+            onChange={event => {this.handleChange(event, field.key)}}
+          />
+        );
+      }
+      else {
+        formControl = (
+          <FormControl
+            type={field.type}
+            value={this.state[field.key]}
+            autoFocus={field.key === 'name'}
+            placeholder={field.placeholder}
+            inputRef={(ref) => {this.inputs[field.key] = ref}}
+            onChange={event => {this.handleChange(event, field.key)}}
+          />
+        )
+      }
+
+      return (
+        <FormGroup controlId={field.key} key={index}
+          validationState={this.getValidationState(field.key)}>
+          <ControlLabel>{field.name}</ControlLabel>
+          {formControl}
+          <FormControl.Feedback />
+        </FormGroup>
+      )
+    })
   }
 
   getItemOptions(items){
