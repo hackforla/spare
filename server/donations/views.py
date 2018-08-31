@@ -71,6 +71,8 @@ class DonationFulfillmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSe
 
 
 class DonationRequestCodeDetailView(generics.RetrieveAPIView):
+    # NOTE: This view is currently not being used, but potentially planned for future
+    #       use
     queryset = DonationRequest.objects.all()
     serializer_class = DonationRequestSerializer
     lookup_field = 'code'
