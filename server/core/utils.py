@@ -16,7 +16,7 @@ def get_test_email():
 
 
 def is_test_phone(phone):
-    if phone.startwith(TEST_PREFIX):
+    if phone.startswith(TEST_PREFIX):
         return True
 
 
