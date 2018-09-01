@@ -33,6 +33,7 @@ class RequestForm extends Component {
       loading: true,
       neighborhoods: [],
       dirtyFields: [],
+      errors: {},
 
       // Field state values
       neighborhood: '',
@@ -88,8 +89,54 @@ class RequestForm extends Component {
         this.setState({ submitSuccess: true });
       })
       .catch((err) => {
-        // TODO: Handle case for 'too many requests'
-        this.setState({ alert: 'danger', message: 'Request failed.' });
+        switch (err.response.status) {
+          case 400:
+            const errors = err.response.data
+            if (errors['non_field_errors']) {
+              this.setState({
+                alert: {
+                  level: 'danger',
+                  message: (<div>
+                    <p>
+                      { errors['non_field_errors'] }
+                    </p>
+                  </div>)
+                }
+              });
+            }
+            this.setState({
+              errors: err.response.data
+            })
+            break;
+          // User is being throttled
+          case 429:
+            this.setState({
+              alert: {
+                level: 'danger',
+                message: (<div>
+                  <p>
+                    <strong>Request limit reached</strong><br />
+                    Looks like you've reached the request limit! :(<br />
+                    Please try again in 24 hours
+                  </p>
+                </div>)
+              }
+            });
+            break;
+          // All other errors
+          default:
+            this.setState({
+              alert: {
+                level: 'danger',
+                message: (<div>
+                  <p>
+                    <strong>Problem submitting request</strong><br />
+                    Please contact us if problems persist.<br />
+                  </p>
+                </div>)
+              }
+            });
+        }
         console.error(err);
       });
   }
@@ -128,6 +175,7 @@ class RequestForm extends Component {
   }
 
   getValidationState(field) {
+    // TODO: Remove help message if field is valid
     const value = this.state[field];
 
     // Get early 'positive' validation for certain fields
@@ -184,6 +232,12 @@ class RequestForm extends Component {
     });
   }
 
+  dismissAlert = () => {
+    this.setState({
+      alert: null,
+    });
+  }
+
   render() {
     if (this.state.loading) {
       return null;
@@ -202,6 +256,14 @@ class RequestForm extends Component {
     const { breakpoints, currentBreakpoint } = this.props;
     const confirmButtonText = (
       breakpoints[currentBreakpoint] >= breakpoints.tablet ? 'Confirm Request' : 'Confirm'
+    );
+
+    const alert = this.state.alert;
+    const formAlert = (
+      alert && alert.message ?
+      <Alert bsStyle={ alert.level } onDismiss={ this.dismissAlert } >
+        { alert.message }
+      </Alert> : null
     );
 
     return (
@@ -249,6 +311,9 @@ class RequestForm extends Component {
                 onChange={ this.handleInput }
               />
               <FormControl.Feedback />
+              {
+                this.state.errors.name ? <div class="help-block">{ this.state.errors.name } </div> : null
+              }
             </FormGroup>
 
             <FormGroup
@@ -265,6 +330,9 @@ class RequestForm extends Component {
                 onChange={ this.handleInput }
               />
               <FormControl.Feedback />
+              {
+                this.state.errors.email ? <div class="help-block">{ this.state.errors.email } </div> : null
+              }
             </FormGroup>
 
             <FormGroup
@@ -282,10 +350,13 @@ class RequestForm extends Component {
                 onChange={ this.handleInput }
               />
               <FormControl.Feedback />
+              {
+                this.state.errors.phone ? <div class="help-block">{ this.state.errors.phone } </div> : null
+              }
             </FormGroup>
 
             {
-              sizeOptions ?
+              sizeOptions && sizeOptions.length ?
               <FormGroup
                 controlId="size"
                 validationState={ this.getValidationState('size') }
@@ -306,8 +377,8 @@ class RequestForm extends Component {
             <div className="text-center">
               <Button type="submit" className="text-center">{ confirmButtonText }</Button>
             </div>
+            { formAlert }
           </form>
-
         </Row>
       </div>
     )

@@ -1,25 +1,41 @@
-#Footer
+.footer
   height: 60px
   line-height: 50px
   margin-top: 30px
   margin-bottom: 40px
   text-align: center
 
+  a
+    padding-bottom: 4px
+    &:hover
+      color: lighten(#4f5464, 30%)
+
+    @media (min-width: 768px)
+      &.active
+        border-bottom: 3px dashed #4f5464
+      &:hover
+        border-bottom: 3px dashed lighten(#4f5464, 30%)
+
   ul
     list-style-type: none
     padding: 0
-    margin: 0
+    margin: 0 0 30px
 
     li
-      display: inline
+      display: block
       font-weight: bold
       font-size: 15px
+      margin-bottom: 10px
       letter-spacing: 2px
       text-transform: uppercase
+
+      @media (min-width: 768px)
+        display: inline
 
       a, a:active, a:focus
         outline: none
         text-decoration: none
 
-    li+li
-      margin-left: 37.5px
+    @media (min-width: 768px)
+      li+li
+        margin-left: 37.5px

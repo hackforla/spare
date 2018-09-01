@@ -1,22 +1,18 @@
 import React from 'react';
+import { LinkContainer } from 'react-router-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
-    //TODO underline the active link
-    //let linkStyle = {
-    //    borderBottom: '2px solid #CCC',
-    //    padding: '0 0 2px 1px',
-    //}
-    return (
-        <nav id="Footer">
-            <ul>
-                <li><Link to="/donate">Donate</Link></li>
-                <li><Link to="/request">Request</Link></li>
-                <li><Link to="/about">About</Link></li>
-                <li><a href="mailto:team@whatcanyouspare.com">Contact</a></li>
-            </ul>
-        </nav>
-    )
+  return (
+    <nav className="footer">
+      <ul>
+        <li><LinkContainer to="/donate"><Link to="/donate">Donate</Link></LinkContainer></li>
+        <li><LinkContainer to="/request"><Link to="/request">Request</Link></LinkContainer></li>
+        <li><LinkContainer to="/about"><Link to="/about">About</Link></LinkContainer></li>
+        <li><a href="mailto:team@whatcanyouspare.com">Contact</a></li>
+      </ul>
+    </nav>
+  )
 };
 
 export default Footer;
