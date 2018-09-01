@@ -9,10 +9,14 @@ body
   font-family: 'Lato'
 
 h1
-  +textedit(1.875em, 2.8125em, 700)
+  +textedit(1.65em, 2.8125em, 700)
+  @media (min-width: $desktop-width)
+    +textedit(1.875em, 2.8125em, 700)
 
 h2
-  +textedit(30px, 45px, 700)
+  +textedit(24px, 38px, 700)
+  @media (min-width: $desktop-width)
+    +textedit(30px, 45px, 700)
 
 p, li
   +textedit(18px, 20px, 400)

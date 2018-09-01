@@ -10,7 +10,7 @@
     &:hover
       color: lighten(#4f5464, 30%)
 
-    @media (min-width: 768px)
+    @media (min-width: $desktop-width)
       &.active
         border-bottom: 3px dashed #4f5464
       &:hover
@@ -29,13 +29,13 @@
       letter-spacing: 2px
       text-transform: uppercase
 
-      @media (min-width: 768px)
+      @media (min-width: $desktop-width)
         display: inline
 
       a, a:active, a:focus
         outline: none
         text-decoration: none
 
-    @media (min-width: 768px)
+    @media (min-width: $desktop-width)
       li+li
         margin-left: 37.5px

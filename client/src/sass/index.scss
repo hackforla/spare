@@ -18,7 +18,7 @@ body {
   margin: 0 10px 0;
 
   // Larger than small/mobile device
-  @media (min-width : 768px) {
+  @media (min-width : $desktop-width) {
     margin: 0px 50px 0px;
   }
 }

@@ -8,9 +8,10 @@
 .nav-pills
   display: inline-block
   width: 75%
-  margin-bottom: 25px
+  margin-bottom: 15px
 
-  @media (min-width : 768px)
+  @media (min-width : $desktop-width)
+    margin-bottom: 25px
     margin-left: 55px
 
   li
@@ -20,7 +21,7 @@
       margin-right: auto
       margin-left: auto
 
-      @media (min-width : 768px)
+      @media (min-width : $desktop-width)
         margin-left: initial
         margin-right: initial
 
