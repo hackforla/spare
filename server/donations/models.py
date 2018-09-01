@@ -57,7 +57,7 @@ zipcode_validator = RegexValidator(
 
 
 class ContactModelMixin(models.Model):
-    name = models.CharField(max_length=120, blank=True)
+    name = models.CharField(max_length=120)
     phone = PhoneNumberField(blank=True)
     email = models.EmailField(blank=True)
     city = models.CharField(max_length=16, blank=True)
