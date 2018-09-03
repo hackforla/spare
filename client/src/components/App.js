@@ -8,14 +8,14 @@ import Donate from "./Donate"
 import Header from "./Header";
 import About from "./About";
 import Footer from "./Footer";
-import Ribbon from "./Ribbon";
+import BetaInfo from "./BetaInfo";
 
 
 class App extends Component {
   render() {
     return (
       <Fragment>
-        <Ribbon />
+        <BetaInfo />
         <Header />
         <Grid fluid={true} className="main-container">
           <Grid>
