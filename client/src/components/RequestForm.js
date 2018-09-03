@@ -302,6 +302,24 @@ class RequestForm extends Component {
     }
   }
 
+  // Not currently used, but could be used to disable submit button
+  hasErrors = () => {
+    for (let field in this.fields) {
+      const validationState = this.state.validationStates[field];
+      if (validationState && (validationState.status === 'error')) {
+        return true;
+      }
+
+      // We also need to actually validate fields (in case not dirty yet)
+      const validationResult = this.validateField(field, this.state[field]);
+      if (validationResult.status === 'error') {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   render() {
     if (this.state.loading) {
       return null;
