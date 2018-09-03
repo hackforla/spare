@@ -441,7 +441,6 @@ class RequestForm extends Component {
                 <ControlLabel>What Size?</ControlLabel>
                 <FormControl
                   componentClass="select"
-                  placeholder="select"
                   onChange={ this.handleInput }
                   value={ this.state.size }
                 >

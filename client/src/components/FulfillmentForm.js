@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 
-import { emailRegex, itemInfo } from '../utils/constants';
+import { emailRegex, phoneRegex, itemInfo } from '../utils/constants';
 import FulfillmentConfirmation from './FulfillmentConfirmation';
 import { Alert, Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 import { withBreakpoints } from 'react-breakpoints';
@@ -21,195 +21,285 @@ const formatTime = (time) => {
   return formatted;
 };
 
-
 class FulfillmentForm extends Component {
-  constructor(props, context) {
-    // TODO: This is a pretty much a copy paste of RequestForm (we should probably fix that)
-    super(props, context);
+  constructor(props) {
+    super(props);
 
-    this.onChangeDropoffs = this.onChangeDropoffs.bind(this);
-    this.dismissAlert = this.dismissAlert.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.sendForm = this.sendForm.bind(this);
+    // Attach item info to component
+    this.info = itemInfo[props.request.item.tag];
+    this.sizes = {};
 
-    this.fields = [
-      { "key": "name", "name": "Your First Name", "type": "text", "placeholder": "Name" },
-      { "key": "email", "name": "Your Email", "type": "email", "placeholder": "Email address" },
-      { "key": "phone", "name": "Your Phone Number", "type": "text", "placeholder": "Phone number" },
-    ];
-
-    //initialize state with keys from fields array
     this.state = {
-        dropoffs: []
-    };
+      loading: true,
+      dropoffTimes: [],
+      dirtyFields: [],
+      validationStates: {},
 
-    //initialize form inputs for submission
-    this.inputs = {};
-
-    this.fields.forEach(field => {
-      // eslint-disable-next-line
-      this.state[field.key] = '';
-      this.inputs[field.key] = '';
-    });
-
-    this.inputs.item = '';
-
+      // Field state values
+      name: '',
+      email: '',
+      phone: '',
+      dropoffTime: '',
+    }
   }
 
-  // Example validation of the inputs
-  getValidationState(key) {
-    var input = this.state[key];
-    if (!input) return null;
-    if (key === 'phone') {
-        var phone_num = /^\+(\d+)\d{10}/.exec(input.replace(/\D/g,''));
-        var all_num = /^(\d{10})$/.exec(input.replace(/\D/g,''));
-        if (phone_num || all_num) return 'success';
-        else return 'error';
-    }
-    if (key === 'email') {
-        return (emailRegex.test(input) ? 'success' : 'error');
-    }
-    if (key === 'name') return (/^[A-Za-z\s]+$/.test(input) ? 'success' : 'error');
-
-  }
-
-  handleChange(e, key) {
-    let newState = {};
-    newState[key] = e.target.value
-    this.setState(newState);
-  }
-
-  // Display message and run callback on form submission
-  handleSubmit(e) {
-    e.preventDefault();
-    this.setState({
-      alert: 'info',
-      message: 'Sending...'
-    }, this.sendForm);
-  }
-
-  // Send HTTP post request
-  sendForm() {
-    const { dropoffs } = this.state;
-
-    var data = {};
-
-    this.fields.forEach((field) => {
-      data[field.key] = this.inputs[field.key].value;
-    });
-
-    const selectedDropoff = dropoffs[this.inputs.dropoff_time - 1];
-
-    if (!this.inputs.dropoff_time) {
-        this.setState({alert: 'warning', message: 'Please select a dropoff location and time.'});
-        return;
-    }
-
-    data.dropoff_time = selectedDropoff.id;
-    data.dropoff_date = selectedDropoff.date;
-    data.request = this.props.request.id;
-    data.city = 'Los Angeles';
-
-
-    if (!data.email) {
-        this.setState({alert: 'warning', message: 'A valid email is required to donate.'});
-        return;
-    }
-
-    if (data.email && !(emailRegex.test(data.email))) {
-        this.setState({alert: 'warning', message: 'Please enter a valid email.'});
-        return;
-    }
-
-    if (!(/^[A-Za-z\s]+$/.test(data.name))) {
-        this.setState({alert: 'warning', message: 'Please enter a valid first name.'});
-        return;
-    }
-
-
-    var phone_num = /^\+(\d+)\d{10}/.exec(data.phone);
-    var all_num = /^(\d{10})$/.exec(data.phone);
-    if (phone_num) {
-      if (!all_num) {
-          this.setState({alert: 'warning', message: 'Please enter a valid phone number.'});
-          return;
+  fields = {
+    name: {
+      isRequired: true,
+      validator: (value) => {
+        if (value === '') {
+          return 'Field is required'
+        }
       }
-      data.phone = '+1' + data.phone;
+    },
+    email: {
+      isRequired: true,
+      earlyPositive: true,
+      validator: (value) => {
+        if (!emailRegex.test(value)) {
+          return 'Please enter a valid email'
+        }
+      },
+    },
+    phone: {
+      isRequired: false,
+      earlyPositive: true,
+      validator: (value) => {
+        if (!phoneRegex.test(value)) {
+          return 'Please enter a valid phone number'
+        }
+      },
+      clean: (value) => { return value.replace(/\D/g,''); },
+    },
+    dropoffTime: {
+      isRequired: true,
     }
+  }
+
+  validateField = (fieldName, value) => {
+    const field = this.fields[fieldName];
+
+    // If not required, return null
+    if (!field.isRequired && (value === '')) {
+      return { status: null };
+    }
+
+    // Otherwise, return validation result
+    const validator = field.validator;
+    if (validator) {
+      const error = validator(value);
+      if (error) {
+        return { status: 'error', msg: error };
+      }
+      else {
+        return { status: 'success' };
+      }
+    }
+
+    return { status: null };
+  }
+
+  isDirty = (fieldName) => {
+    return (this.state.dirtyFields.indexOf(fieldName) >= 0);
+  }
+
+  handleInput = (event) => {
+    const fieldName = event.target.id;
+    const value = event.target.value;
+    const currValue = this.state[fieldName];
+    const field = this.fields[fieldName];
+
+    let fieldDirty = this.isDirty(fieldName);
+
+    // If user deletes from input, mark as dirty
+    if (currValue && value) {
+      const noop = (value) => { return value};
+      const clean = field.clean ? field.clean : noop;
+
+      if (clean(currValue).length > clean(value).length) {
+        this.addDirtyField(fieldName);
+
+        // Keep track locally of whether field is now dirty
+        fieldDirty = true;
+      }
+    }
+
+    const validationResult = this.validateField(fieldName, value);
+    if (fieldDirty || ((validationResult.status === 'success') && field.earlyPositive)) {
+      const validationStates = this.state.validationStates;
+      validationStates[fieldName] = validationResult
+      this.setState({
+        validationStates
+      });
+    }
+
+    // Save input value
+    this.setState({
+      [fieldName]: value
+    });
+  }
+
+  getSerializedData = () => {
+    // Process and clean data
+    const {name, phone, email, dropoffTime} = this.state;
+    const data = {
+      name, email
+    }
+
+    const phoneDigits = this.fields.phone.clean(phone);
+    if (phoneDigits) {
+      data['phone'] = '+1' + phoneDigits;
+    }
+
+    const dropoffTimeInfo = this.state.dropoffTimes[Number(dropoffTime)]
+    data['dropoff_time'] = dropoffTimeInfo ? dropoffTimeInfo.id : '';
+    data['dropoff_date'] = dropoffTimeInfo ? dropoffTimeInfo.date : '';
+    data['request'] = this.props.request.id;
+    data['city'] = 'Los Angeles';
+
+    return data;
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    const data = this.getSerializedData();
 
     axios.post('/api/fulfillments/', data)
       .then((res) => {
         this.setState({
           submitSuccess: true,
-          responseData: res.data,
-          selectedDropoff: selectedDropoff,
+          data: data,
         });
       })
       .catch((err) => {
-        this.setState((oldState) => ({alert: 'danger', message: 'Request fulfillment failed.'}));
-        console.error(err)
+        switch (err.response.status) {
+          case 400:
+            // Serializer/validation errors
+            const errors = err.response.data
+            if (errors['non_field_errors']) {
+              this.setState({
+                alert: {
+                  level: 'danger',
+                  message: (<div>
+                    <p>
+                      { errors['non_field_errors'] }
+                    </p>
+                  </div>)
+                }
+              });
+            }
+
+            const validationStates = this.state.validationStates;
+            for (let field in this.fields) {
+              if (err.response.data[field]) {
+                validationStates[field] = {
+                  status: 'error',
+                  msg: err.response.data[field][0]
+                }
+              }
+            }
+
+            // Special cases
+            if ( errors['dropoff_time'] || errors['dropoff_date'] ) {
+              validationStates['dropoffTime'] = {
+                status: 'error',
+                msg: 'Please select a valid dropoff time'
+              }
+            }
+
+            this.setState({
+              validationStates
+            })
+            break;
+          // User is being throttled
+          case 429:
+            this.setState({
+              alert: {
+                level: 'danger',
+                message: (<div>
+                  <p>
+                    <strong>Request limit reached</strong><br />
+                    Looks like you've reached the donation limit! :(<br />
+                    Please try again in 24 hours
+                  </p>
+                </div>)
+              }
+            });
+            break;
+          // All other errors
+          default:
+            this.setState({
+              alert: {
+                level: 'danger',
+                message: (<div>
+                  <p>
+                    <strong>Problem fulfilling request</strong><br />
+                    Please contact us if problems persist.<br />
+                  </p>
+                </div>)
+              }
+            });
+        }
+        console.error(err);
       });
   }
 
-  getBasicFields(fields) {
-    return fields.map((field, index) => {
-      let formControl;
+  addDirtyField = (field) => {
+    const dirtyFields = [...this.state.dirtyFields];
+    if (dirtyFields.indexOf(field) < 0) {
+      dirtyFields.push(field);
 
-      if (field.key === 'phone') {
-        formControl = (
-          <MaskedInput
-            mask='(111) 111-1111'
-            name={field.key}
-            className="form-control"
-            onChange={event => {this.handleChange(event, field.key)}}
-          />
-        );
-      }
-      else {
-        formControl = (
-          <FormControl
-            type={field.type}
-            value={this.state[field.key]}
-            autoFocus={field.key === 'name'}
-            placeholder={field.placeholder}
-            inputRef={(ref) => {this.inputs[field.key] = ref}}
-            onChange={event => {this.handleChange(event, field.key)}}
-          />
-        )
-      }
-
-      return (
-        <FormGroup controlId={field.key} key={index}
-          validationState={this.getValidationState(field.key)}>
-          <ControlLabel>{field.name}</ControlLabel>
-          {formControl}
-          <FormControl.Feedback />
-        </FormGroup>
-      )
-    })
+      this.setState({
+        dirtyFields
+      });
+    }
   }
 
-  getItemOptions(items){
-    return items.map((item, index) => <option key={index} value={index+1}>{item}</option>)
+  onBlur = (event) => {
+    // When field is blurred/deselected, mark as 'dirty'
+    const fieldName = event.target.id;
+    this.addDirtyField(fieldName);
+
+    const validationResult = this.validateField(fieldName, this.state[fieldName]);
+    const validationStates = this.state.validationStates;
+    validationStates[fieldName] = validationResult
+    this.setState({
+      validationStates
+    });
   }
 
-  onChangeDropoffs(e) {
-    this.inputs.dropoff_time = e.target.value;
+  componentDidMount() {
+    const { request } = this.props;
+
+    // Populate dropoff times
+    axios.get(`/api/requests/${request.id}/dropoff_times/`)
+      .then((res) => {
+        this.setState({
+          loading: false,
+          dropoffTimes: res.data,
+        });
+      })
+      .catch((err) => {
+        // TODO: Display error for user
+        console.log(err)
+      });
   }
 
-  renderDropOffs() {
-    const { dropoffs } = this.state;
-    return dropoffs.map((dropoff, index) => {
+  getDropoffTimes = () => {
+    const { dropoffTimes } = this.state;
+
+    return dropoffTimes.map((dropoff, index) => {
       const dropoffDate = moment(dropoff.date).format('dddd, LL');
       const dropoffTime = formatTime(dropoff.time_start);
       const location = dropoff.location;
       return (
         <Radio
           key={index}
-          name="pickUp"
-          onChange={this.onChangeDropoffs}
-          value={index+1}
+          name="dropoffTime"
+          id="dropoffTime"
+          onChange={this.handleInput}
+          value={index}
         >
           <strong>{dropoffDate} at {dropoffTime}</strong>
           <br />{location.organization_name} <em>({location.neighborhood.name})</em>
@@ -220,47 +310,65 @@ class FulfillmentForm extends Component {
     });
   }
 
-  componentDidMount() {
-    const { request } = this.props;
-
-    axios.get(`/api/requests/${request.id}/dropoff_times/`)
-      .then((res) => {
-          this.setState({
-            dropoffs: res.data
-          });
-      });
-  }
-
-  dismissAlert() {
+  dismissAlert = () => {
     this.setState({
       alert: null,
-      message: '',
-    })
+    });
+  }
+
+  getError = (fieldName) => {
+    const validationState = this.state.validationStates[fieldName];
+    if (validationState && (validationState.status === 'error')) {
+      return <div className="help-block">{ validationState.msg }</div>;
+    }
+    else {
+      return <div className="help-block"></div>;
+    }
+  }
+
+  // Not currently used, but could be used to disable submit button
+  hasErrors = () => {
+    for (let field in this.fields) {
+      const validationState = this.state.validationStates[field];
+      if (validationState && (validationState.status === 'error')) {
+        return true;
+      }
+
+      // We also need to actually validate fields (in case not dirty yet)
+      const validationResult = this.validateField(field, this.state[field]);
+      if (validationResult.status === 'error') {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   render() {
-    const { breakpoints, currentBreakpoint, request } = this.props;
+    const { breakpoints, currentBreakpoint } = this.props;
 
-    const info = itemInfo[request.item.tag];
-
-    if (this.state.submitSuccess) {
-      const { responseData, selectedDropoff } = this.state;
-
-      return <FulfillmentConfirmation data={ responseData } info={ info } dropoff={ selectedDropoff }/>;
+    if (this.state.loading) {
+      return null;
+    }
+    else if (this.state.submitSuccess) {
+      const dropoffTime = this.state.dropoffTimes[this.state.dropoffTime];
+      return <FulfillmentConfirmation info={ this.info } dropoffTime={ dropoffTime }/>;
     }
 
-    if (this.state.alert && this.state.message) {
-      var formStatus = (
-        <Alert bsStyle={this.state.alert} onDismiss={this.dismissAlert}>
-          {this.state.message}
-        </Alert>
-      );
-    }
+    const validationStates = this.state.validationStates;
+    const headerMessage = `Great! You are donating ${ this.info.verboseName }.`;
 
-    const headerMessage = `Great! You are donating ${ info.verboseName }.`;
-
+    // Vary button text depending on width
     const confirmButtonText = (
       breakpoints[currentBreakpoint] >= breakpoints.tablet ? 'Confirm Donation' : 'Confirm'
+    );
+
+    const alert = this.state.alert;
+    const formAlert = (
+      alert && alert.message ?
+      <Alert bsStyle={ alert.level } onDismiss={ this.dismissAlert } >
+        { alert.message }
+      </Alert> : null
     );
 
     return (
@@ -273,21 +381,82 @@ class FulfillmentForm extends Component {
           </h2>
         </div>
         <Row>
-          <form onSubmit={this.handleSubmit} className="col-sm-6 col-sm-offset-3">
-            {this.getBasicFields(this.fields)}
-            <FormGroup>
-              <ControlLabel>Choose a drop off</ControlLabel>
-              {this.renderDropOffs()}
+          <form onSubmit={ this.handleSubmit } className="col-sm-6 col-sm-offset-3">
+
+            <FormGroup
+              controlId="name"
+              validationState={ validationStates.name && validationStates.name.status }
+              onBlur={ this.onBlur }
+            >
+              <ControlLabel>Your First Name</ControlLabel>
+              <FormControl
+                type="text"
+                placeholder={ 'Name' }
+                required
+                autoFocus={ true }
+                value={ this.state.name }
+                onChange={ this.handleInput }
+              />
+              <FormControl.Feedback />
+              { this.getError('name') }
             </FormGroup>
+
+            <FormGroup
+              controlId="email"
+              validationState={ validationStates.email && validationStates.email.status }
+              onBlur={ this.onBlur }
+            >
+              <ControlLabel>Your Email</ControlLabel>
+              <FormControl
+                type="email"
+                placeholder={ 'Email address' }
+                required
+                value={ this.state.email }
+                onChange={ this.handleInput }
+              />
+              <FormControl.Feedback />
+              { this.getError('email') }
+            </FormGroup>
+
+            <FormGroup
+              controlId="phone"
+              validationState={ validationStates.phone && validationStates.phone.status }
+              onBlur={ this.onBlur }
+            >
+              <ControlLabel>Your Phone Number</ControlLabel>
+              <MaskedInput
+                mask='(111) 111-1111'
+                placeholder='Phone number'
+                placeholderChar=' '
+                id="phone"
+                className="form-control"
+                onChange={ this.handleInput }
+              />
+              <FormControl.Feedback />
+              { this.getError('phone') }
+            </FormGroup>
+
+            <FormGroup
+              controlId="dropoffTime"
+              validationState={ validationStates.dropoffTime && validationStates.dropoffTime.status }
+              className="dropoff-select"
+              onBlur={ this.onBlur }
+            >
+              <ControlLabel>Choose a Drop Off</ControlLabel>
+              { this.getDropoffTimes() }
+              { this.getError('dropoffTime') }
+            </FormGroup>
+
             <div className="text-center">
-              <Button type="submit">{ confirmButtonText }</Button>
+              <Button type="submit" className="text-center">{ confirmButtonText }</Button>
             </div>
-            {formStatus}
+            { formAlert }
           </form>
         </Row>
       </div>
-    );
+    )
   }
 }
+
 
 export default withBreakpoints(FulfillmentForm);

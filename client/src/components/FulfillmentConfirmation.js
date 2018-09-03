@@ -17,8 +17,8 @@ const formatTime = (time) => {
 
 class FulfillmentConfirmation extends Component {
   render() {
-    const { dropoff, info } = this.props;
-    const { date, location, time_start } = dropoff;
+    const { dropoffTime, info } = this.props;
+    const { date, location, time_start } = dropoffTime;
 
     const { pluralPronoun, verboseName } = info;
 
