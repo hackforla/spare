@@ -151,7 +151,7 @@ class FulfillmentForm extends Component {
       data['phone'] = '+1' + phoneDigits;
     }
 
-    const dropoffTimeInfo = this.state.dropoffTimes[Number(dropoffTime)]
+    const dropoffTimeInfo = this.state.dropoffTimes[parseInt(dropoffTime, 10)]
     data['dropoff_time'] = dropoffTimeInfo ? dropoffTimeInfo.id : '';
     data['dropoff_date'] = dropoffTimeInfo ? dropoffTimeInfo.date : '';
     data['request'] = this.props.request.id;
@@ -351,8 +351,8 @@ class FulfillmentForm extends Component {
       return null;
     }
     else if (this.state.submitSuccess) {
-      const dropoffTime = this.state.dropoffTimes[this.state.dropoffTime];
-      return <FulfillmentConfirmation info={ this.info } dropoffTime={ dropoffTime }/>;
+      const dropoffTimeInfo = this.state.dropoffTimes[parseInt(this.state.dropoffTime, 10)]
+      return <FulfillmentConfirmation info={ this.info } dropoffTime={ dropoffTimeInfo }/>;
     }
 
     const validationStates = this.state.validationStates;
