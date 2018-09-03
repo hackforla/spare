@@ -79,7 +79,7 @@ def send_fulfillment_confirmation_messages(instance):
                 'item_type': request.item.display_name,
                 'item_size': request.size,
 
-                'location_name': 'The Shower of Hope',
+                'location_name': location.location_name,
                 'location_address_1': location.street_address_1,
                 'location_address_2': location.street_address_2,
                 'location_city': location.city,
