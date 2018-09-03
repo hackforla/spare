@@ -3,14 +3,14 @@ import React, { Component } from 'react'
 
 class Ribbon extends Component {
   render() {
-    return <div class="beta-corner-ribbon">Demo</div>;
+    return <div className="beta-corner-ribbon">Demo</div>;
   }
 }
 
 class Banner extends Component {
   // Currently not being used (but alternative to ribbon)
   render() {
-    return <div class="beta-banner">This is just a demo</div>;
+    return <div className="beta-banner">This is just a demo</div>;
   }
 }
 

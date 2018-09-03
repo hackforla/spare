@@ -33,7 +33,7 @@ class RequestForm extends Component {
       loading: true,
       neighborhoods: [],
       dirtyFields: [],
-      errors: {},
+      validationStates: {},
 
       // Field state values
       neighborhood: '',
@@ -44,27 +44,102 @@ class RequestForm extends Component {
     }
   }
 
-  handleInput = (event) => {
-    const field = event.target.id;
-    const value = event.target.value;
-
-    // If user deletes from input, mark as dirty
-    if (this.state[field] && value) {
-
-      // Special case for phone (due to mask)
-      if (field === 'phone') {
-        if (this.state[field].replace(/\D/g,'').length > value.replace(/\D/g,'').length) {
-          this.addDirtyField(field);
+  fields = {
+    neighborhood: {
+      isRequired: true,
+    },
+    name: {
+      isRequired: true,
+      validator: (value) => {
+        if (value === '') {
+          return 'Field is required'
         }
       }
-      else if (this.state[field].length > value.length) {
-        this.addDirtyField(field);
+    },
+    email: {
+      isRequired: false,
+      earlyPositive: true,
+      validator: (value) => {
+        if (!emailRegex.test(value)) {
+          return 'Please enter a valid email'
+        }
+      },
+    },
+    phone: {
+      isRequired: false,
+      earlyPositive: true,
+      validator: (value) => {
+        if (!phoneRegex.test(value)) {
+          return 'Please enter a valid phone number'
+        }
+      },
+      clean: (value) => { return value.replace(/\D/g,''); },
+    },
+    size: {
+      isRequired: true,
+    }
+  }
+
+  validateField = (fieldName, value) => {
+    const field = this.fields[fieldName];
+
+    // If not required, return null
+    if (!field.isRequired && (value === '')) {
+      return { status: null };
+    }
+
+    // Otherwise, return validation result
+    const validator = field.validator;
+    if (validator) {
+      const error = validator(value);
+      if (error) {
+        return { status: 'error', msg: error };
+      }
+      else {
+        return { status: 'success' };
       }
     }
 
-    // Save input value to state
+    return { status: null };
+  }
+
+  isDirty = (fieldName) => {
+    return (this.state.dirtyFields.indexOf(fieldName) >= 0);
+  }
+
+  handleInput = (event) => {
+    const fieldName = event.target.id;
+    const value = event.target.value;
+    const currValue = this.state[fieldName];
+    const field = this.fields[fieldName];
+
+    let fieldDirty = this.isDirty(fieldName);
+
+    // If user deletes from input, mark as dirty
+    if (currValue && value) {
+      const noop = (value) => { return value};
+      const clean = field.clean ? field.clean : noop;
+
+      if (clean(currValue).length > clean(value).length) {
+        this.addDirtyField(fieldName);
+
+        // Keep track locally of whether field is now dirty
+        fieldDirty = true;
+      }
+    }
+
+    const validationResult = this.validateField(fieldName, value);
+    if (fieldDirty || ((validationResult.status === 'success') && field.earlyPositive)) {
+      const validationStates = this.state.validationStates;
+      validationStates[fieldName] = validationResult
+      this.setState({
+        validationStates
+      });
+    }
+
+    // Save input value
     this.setState({
-      [field]: value
+      [fieldName]: value
     });
   }
 
@@ -75,13 +150,12 @@ class RequestForm extends Component {
       name, email, size, neighborhood
     }
 
-    const phoneDigits = phone.replace(/\D/g,'');
+    const phoneDigits = this.fields.phone.clean(phone);
     if (phoneDigits) {
       data['phone'] = '+1' + phoneDigits;
     }
 
     data['item'] = this.props.itemType;
-
     return data;
   }
 
@@ -111,8 +185,18 @@ class RequestForm extends Component {
                 }
               });
             }
+
+            const validationStates = this.state.validationStates;
+            for (let field in this.fields) {
+              if (err.response.data[field]) {
+                validationStates[field] = {
+                  status: 'error',
+                  msg: err.response.data[field][0]
+                }
+              }
+            }
             this.setState({
-              errors: err.response.data
+              validationStates
             })
             break;
           // User is being throttled
@@ -161,8 +245,15 @@ class RequestForm extends Component {
 
   onBlur = (event) => {
     // When field is blurred/deselected, mark as 'dirty'
-    const field = event.target.id;
-    this.addDirtyField(field);
+    const fieldName = event.target.id;
+    this.addDirtyField(fieldName);
+
+    const validationResult = this.validateField(fieldName, this.state[fieldName]);
+    const validationStates = this.state.validationStates;
+    validationStates[fieldName] = validationResult
+    this.setState({
+      validationStates
+    });
   }
 
   componentDidMount() {
@@ -190,57 +281,6 @@ class RequestForm extends Component {
     });
   }
 
-  getValidationState(field) {
-    // Return the Bootstrap validation state
-    // 'success', 'error', 'warning', or null (if neutral)
-
-    // TODO: Remove help message if field is valid
-    const value = this.state[field];
-
-    // Get early 'positive' validation for certain fields
-    if (value) {
-      switch(field) {
-        case 'email':
-          if (emailRegex.test(value)) {
-            return 'success';
-          }
-          break;
-        case 'phone':
-          if (phoneRegex.test(value)) {
-            return 'success';
-          }
-          break;
-        default:
-          // Do nothing
-      }
-    }
-
-    // For other fields, don't try to validate unless user
-    // has touched field
-    if (this.state.dirtyFields.indexOf(field) < 0) {
-      return null;
-    }
-
-    // Finally, return an validation result if field is dirty and
-    // also invalid
-    switch(field) {
-      case 'neighborhood':
-        return (value === undefined) ? 'error' : null;
-      case 'name':
-        return (value === '') ? 'error' : 'success';
-      case 'email':
-        return emailRegex.test(value) ? 'success' : 'error';
-      case 'phone':
-        // Optional field
-        if (!value) {
-          return null;
-        }
-        return phoneRegex.test(value) ? 'success': 'error';
-      default:
-        return null;
-    }
-  }
-
   getSizeOptions = () => {
     // Return size options for select
     return this.sizes.map(size => <option key={size} value={size}>{ size }</option>);
@@ -250,6 +290,16 @@ class RequestForm extends Component {
     this.setState({
       alert: null,
     });
+  }
+
+  getError = (fieldName) => {
+    const validationState = this.state.validationStates[fieldName];
+    if (validationState && (validationState.status === 'error')) {
+      return <div className="help-block">{ validationState.msg }</div>;
+    }
+    else {
+      return <div className="help-block"></div>;
+    }
   }
 
   render() {
@@ -262,6 +312,7 @@ class RequestForm extends Component {
 
     const neighborhoods = this.getNeighborhoodOptions();
     const sizeOptions = this.getSizeOptions();
+    const validationStates = this.state.validationStates;
 
     const pronoun = this.info.pluralPronoun ? 'those' : 'that'
     const headerMessage = `Cool, let's get you ${pronoun} ${this.info.verboseName}.`;
@@ -295,7 +346,7 @@ class RequestForm extends Component {
 
             <FormGroup
               controlId="neighborhood"
-              validationState={ this.getValidationState('neighborhood') }
+              validationState={ validationStates.neighborhood && validationStates.neighborhood.status }
               onBlur={ this.onBlur }
             >
               <ControlLabel>Nearest Neighborhood</ControlLabel>
@@ -312,7 +363,7 @@ class RequestForm extends Component {
 
             <FormGroup
               controlId="name"
-              validationState={ this.getValidationState('name') }
+              validationState={ validationStates.name && validationStates.name.status }
               onBlur={ this.onBlur }
             >
               <ControlLabel>Your First Name</ControlLabel>
@@ -325,33 +376,28 @@ class RequestForm extends Component {
                 onChange={ this.handleInput }
               />
               <FormControl.Feedback />
-              {
-                this.state.errors.name ? <div class="help-block">{ this.state.errors.name } </div> : null
-              }
+              { this.getError('name') }
             </FormGroup>
 
             <FormGroup
               controlId="email"
-              validationState={ this.getValidationState('email') }
+              validationState={ validationStates.email && validationStates.email.status }
               onBlur={ this.onBlur }
             >
               <ControlLabel>Your Email</ControlLabel>
               <FormControl
                 type="email"
                 placeholder={ 'Email address' }
-                required
                 value={ this.state.email }
                 onChange={ this.handleInput }
               />
               <FormControl.Feedback />
-              {
-                this.state.errors.email ? <div class="help-block">{ this.state.errors.email } </div> : null
-              }
+              { this.getError('email') }
             </FormGroup>
 
             <FormGroup
               controlId="phone"
-              validationState={ this.getValidationState('phone') }
+              validationState={ validationStates.phone && validationStates.phone.status }
               onBlur={ this.onBlur }
             >
               <ControlLabel>Your Phone Number</ControlLabel>
@@ -364,16 +410,14 @@ class RequestForm extends Component {
                 onChange={ this.handleInput }
               />
               <FormControl.Feedback />
-              {
-                this.state.errors.phone ? <div class="help-block">{ this.state.errors.phone } </div> : null
-              }
+              { this.getError('phone') }
             </FormGroup>
 
             {
               sizeOptions && sizeOptions.length ?
               <FormGroup
                 controlId="size"
-                validationState={ this.getValidationState('size') }
+                validationState={ validationStates.size && validationStates.size.status }
                 onBlur={ this.onBlur }
               >
                 <ControlLabel>What Size?</ControlLabel>
