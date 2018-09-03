@@ -9,6 +9,7 @@ import Header from "./Header";
 import About from "./About";
 import Footer from "./Footer";
 import BetaInfo from "./BetaInfo";
+import HowItWorks from "./HowItWorks";
 
 
 class App extends Component {
@@ -37,6 +38,9 @@ class App extends Component {
               </Route>
               <Route path="/contact">
                 <h2>Contact</h2>
+              </Route>
+              <Route path="/how-it-works">
+                  <HowItWorks/>
               </Route>
               {/* TODO: 404 not working for nested routes */}
               <Route>
