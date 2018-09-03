@@ -58,6 +58,8 @@ def send_fulfillment_confirmation_messages(instance):
                 'location_city': location.city,
                 'location_state': location.state,
                 'location_zipcode': location.zipcode,
+                'location_maps_url': location.maps_url,
+                'location_notes': location.notes,
                 'neighborhood': request.neighborhood.name,
 
                 'requestor_name': request.name,
@@ -85,6 +87,8 @@ def send_fulfillment_confirmation_messages(instance):
                 'location_city': location.city,
                 'location_state': location.state,
                 'location_zipcode': location.zipcode,
+                'location_maps_url': location.maps_url,
+                'location_notes': location.notes,
                 'neighborhood': request.neighborhood.name,
 
                 'donator_name': fulfillment.name,

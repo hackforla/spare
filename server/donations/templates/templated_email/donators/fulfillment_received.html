@@ -9,6 +9,7 @@ Thank you for being a Spare donor! Please meet your recipient on {{ dropoff_date
   {{ location_address_1 }}
   {{ location_address_2 }}
   {{ location_city }}, {{ location_state }} {{ location_zipcode }}
+  {% if location_maps_url %}Google Maps link: {{ location_maps_url }}{% endif %}
 
 As a reminder, you're donating:
 
@@ -18,6 +19,9 @@ As a reminder, you're donating:
 Here's who you'll be meeting:
 
   - Name: {{ requestor_name }}
+{% if location_notes %}
+Notes about this location:
+{{ location_notes }}{% endif %}
 
 Please keep any information confidential and don't post it anywhere online.
 
@@ -42,6 +46,7 @@ Spare connects people in need with people who have spare stuff. Find us at whatc
     {{ location_address_1 }}<br />
     {{ location_address_2 }}<br />
     {{ location_city }}, {{ location_state }} {{ location_zipcode }}
+    {% if location_maps_url %}<br />Google Maps link: {{ location_maps_url }}{% endif %}
   </blockquote>
 
   <p>As a reminder, you're donating:</p>
@@ -56,6 +61,13 @@ Spare connects people in need with people who have spare stuff. Find us at whatc
   <ul>
     <li>Name: {{ requestor_name }}</li>
   </ul>
+
+  {% if location_notes %}
+  <p>
+    Notes about this location:
+    <br />{{ location_notes }}
+  </p>
+  {% endif %}
 
   <p><i>Please keep any information confidential and don't post it anywhere online.</i></p>
 

@@ -105,19 +105,21 @@ class Neighborhood(models.Model):
 
 
 class Location(models.Model):
-    organization_name = models.CharField(max_length=100, blank=True)
     location_name = models.CharField(max_length=100, blank=True)
+    organization_name = models.CharField(max_length=100, blank=True)
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='locations')
     street_address_1 = models.CharField(max_length=150)
     street_address_2 = models.CharField(max_length=150, blank=True)
-    city = models.CharField(max_length=50)
-    state = models.CharField(max_length=2)
-    zipcode = models.CharField(max_length=10, validators=[zipcode_validator])
-    phone = models.CharField(max_length=10)
-    website = models.URLField(max_length=100)
+    city = models.CharField(max_length=50, default='Los Angeles')
+    state = models.CharField(max_length=2, default='CA')
+    zipcode = models.CharField(max_length=10, validators=[zipcode_validator], default='90042')
+    phone = models.CharField(max_length=10, blank=True)
+    website = models.URLField(max_length=100, blank=True)
+    maps_url = models.URLField(max_length=160, blank=True)
+    notes = models.TextField(blank=True)
 
     def __str__(self):
-        return self.organization_name
+        return self.location_name
 
 
 class DaysOfWeek(Enum):

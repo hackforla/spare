@@ -12,7 +12,10 @@ You asked for:
 
 Here is who you'll be meeting:
 
-  Name: {{ donator_name }}
+  - Name: {{ donator_name }}
+{% if location_notes %}
+Notes about this location:
+{{ location_notes }}{% endif %}
 
 Please keep any information confidential and don't post it anywhere online.
 
@@ -24,6 +27,7 @@ Here's what happens next:
      {{ location_address_1 }}
      {{ location_address_2 }}
      {{ location_city }}, {{ location_state }} {{ location_zipcode }}
+     {% if location_maps_url %}Google Maps link: {{ location_maps_url }}{% endif %}
 
   2. We ask that you wait 15 minutes for them and we asked them to wait 15 minutes for you.
 
@@ -66,10 +70,18 @@ Spare connects people in need with people who have spare stuff. Find us at whatc
       {{ location_address_1 }}<br />
       {{ location_address_2 }}<br />
       {{ location_city }}, {{ location_state }} {{ location_zipcode }}
+      {% if location_maps_url %}<br />Google Maps link: {{ location_maps_url }}{% endif %}
     </blockquote>
 
     <li>We ask that you wait 15 minutes for them and we asked them to wait 15 minutes for you.</li>
   </ol>
+
+  {% if location_notes %}
+  <p>
+    Notes about this location:
+    <br />{{ location_notes }}
+  </p>
+  {% endif %}
 
   <p>If you have any questions or if you no longer need this item, please email us or text us at 310-554-8852. We're an all-volunteer team but we'll try to get back to you as soon as possible.</p>
 

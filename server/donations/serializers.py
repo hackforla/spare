@@ -122,7 +122,7 @@ class LocationSerializer(serializers.ModelSerializer):
         model = Location
         fields = (
             'organization_name', 'location_name', 'neighborhood', 'street_address_1',
-            'street_address_2', 'city', 'state', 'zipcode', 'phone', 'website'
+            'street_address_2', 'city', 'state', 'zipcode', 'phone', 'website', 'maps_url'
         )
 
 

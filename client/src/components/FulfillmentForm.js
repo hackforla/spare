@@ -302,7 +302,7 @@ class FulfillmentForm extends Component {
           value={index}
         >
           <strong>{dropoffDate} at {dropoffTime}</strong>
-          <br />{location.organization_name} <em>({location.neighborhood.name})</em>
+          <br />{location.location_name} <em>({location.neighborhood.name})</em>
           <br />{location.street_address_1}
           <br />{location.city}, {location.state} {location.zipcode}
         </Radio>
