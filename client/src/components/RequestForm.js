@@ -68,9 +68,7 @@ class RequestForm extends Component {
     });
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-
+  getSerializedData = () => {
     // Process and clean data
     const {name, phone, email, size, neighborhood} = this.state;
     const data = {
@@ -84,6 +82,14 @@ class RequestForm extends Component {
 
     data['item'] = this.props.itemType;
 
+    return data;
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    const data = this.getSerializedData();
+
     axios.post('/api/requests/', data)
       .then((res) => {
         this.setState({ submitSuccess: true });
@@ -91,6 +97,7 @@ class RequestForm extends Component {
       .catch((err) => {
         switch (err.response.status) {
           case 400:
+            // Serializer/validation errors
             const errors = err.response.data
             if (errors['non_field_errors']) {
               this.setState({
@@ -153,11 +160,13 @@ class RequestForm extends Component {
   }
 
   onBlur = (event) => {
+    // When field is blurred/deselected, mark as 'dirty'
     const field = event.target.id;
     this.addDirtyField(field);
   }
 
   componentDidMount() {
+    // Populate neighborhood select field
     axios.get('/api/neighborhoods/')
       .then((res) => {
         const defaultNeighborhood = res.data[0]
@@ -174,7 +183,17 @@ class RequestForm extends Component {
       });
   }
 
+  getNeighborhoodOptions = () => {
+    // Return neighborhood options for select
+    return this.state.neighborhoods.map(neighborhood => {
+      return (<option key={neighborhood.id} value={neighborhood.id}>{neighborhood.name}</option>);
+    });
+  }
+
   getValidationState(field) {
+    // Return the Bootstrap validation state
+    // 'success', 'error', 'warning', or null (if neutral)
+
     // TODO: Remove help message if field is valid
     const value = this.state[field];
 
@@ -223,13 +242,8 @@ class RequestForm extends Component {
   }
 
   getSizeOptions = () => {
+    // Return size options for select
     return this.sizes.map(size => <option key={size} value={size}>{ size }</option>);
-  }
-
-  getNeighborhoodOptions = () => {
-    return this.state.neighborhoods.map(neighborhood => {
-      return (<option key={neighborhood.id} value={neighborhood.id}>{neighborhood.name}</option>);
-    });
   }
 
   dismissAlert = () => {
