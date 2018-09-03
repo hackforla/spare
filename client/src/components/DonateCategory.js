@@ -13,7 +13,7 @@ class DonateSubcategoryLink extends Component {
     const neededText = (count === 1) ? `${ count } request` : `${ count } requests`;
 
     return (
-      <Col sm={3} xs={12}>
+      <Col sm={3} xs={6}>
         <Tile
           side='donate'
           displayName={displayName}

@@ -11,7 +11,7 @@ class RequestItem extends Component {
     const { displayName, icon } = this.props.info;
 
     return (
-      <Col sm={3} xs={12}>
+      <Col sm={3} xs={6}>
         <Tile
           side='request'
           displayName={ displayName }
