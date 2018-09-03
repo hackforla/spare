@@ -15,6 +15,10 @@
     font-weight: bold
     letter-spacing: 2px
     line-height: 2em
+    margin: 5px auto 0
+
+    @media (min-width: $desktop-width)
+      margin: 5px auto 10px
 
     .active
       color: inherit
@@ -23,14 +27,22 @@
       font-weight: none
       font-size: 16px
       color: inherit
+      display: block
+
+      @media (min-width: $desktop-width)
+        display: inline-block
 
       &:last-child
         font-weight: bold
 
     li + li:before
-      font-weight: normal
-      content: '>'
-      color: inherit
+      display: none
+
+      @media (min-width: $desktop-width)
+        display: inline
+        font-weight: normal
+        content: '>'
+        color: inherit
 
   .logo
     vertical-align: baseline
