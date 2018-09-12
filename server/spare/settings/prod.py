@@ -1,4 +1,6 @@
 from .base import *  # noqa
+
+import os
 import dj_database_url
 
 DEBUG = False
@@ -14,3 +16,7 @@ DATABASES = {
 }
 
 MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE
+
+
+# Location of root django.contrib.admin URL, use {% url 'admin:index' %}
+ADMIN_URL = os.environ.get('ADMIN_URL','admin/')
