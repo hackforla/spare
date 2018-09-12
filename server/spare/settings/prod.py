@@ -1,4 +1,6 @@
 from .base import *  # noqa
+
+import os
 import dj_database_url
 import os
 
@@ -41,3 +43,7 @@ SECURE_SSL_REDIRECT = os.environ.get('DJANGO_SECURE_SSL_REDIRECT', True)
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = 'DENY'
+
+
+# Location of root django.contrib.admin URL, use {% url 'admin:index' %}
+ADMIN_URL = os.environ.get('ADMIN_URL','admin/')

@@ -120,6 +120,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+# Location of root django.contrib.admin URL, use {% url 'admin:index' %}
+ADMIN_URL = r'^admin/'
+
 # Auth/Login Settings
 LOGIN_REDIRECT_URL = 'api-root'
 LOGIN_URL = 'login'

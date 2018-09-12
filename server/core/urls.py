@@ -7,7 +7,7 @@ from rest_framework.documentation import include_docs_urls
 from core.views import AppView
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(settings.ADMIN_URL, admin.site.urls),
 
     # API endpoints
     url(r'^api/', include('api.urls')),
