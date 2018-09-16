@@ -29,22 +29,23 @@ const About = () => (
       <h2>About Spare</h2>
     </div>
     <div>
+      <p style={{fontStyle: 'italic'}}>"During this homelessness crisis, we believe every gesture of human kindness makes a difference. A jacket not only brings comfort physically but also, it can build a tiny connection that turns a stranger into a friend."</p>
+      <p><strong>About:</strong></p>
       <p>
-        Spare is a project team with <a href={hackforlaUrl}>Hack For LA</a>.
-        We connect people in need with people who have spare stuff.
+        Spare connects people in need of clothing and other essentials with people in the community who have things to spare.
+        It is like a one-on-one Goodwill. The main objective is to foster interactions between the housed and unhoused.
+        We are hoping the donation can be a mechanism for building these connections throughout our community.
       </p>
+      <p><strong>How it works:</strong></p>
       <p>
-        Our goal is to help those in housing connect and offer help to those
-        without housing. During this homelessness crisis, we believe every
-        gesture of human kindness makes a difference. A jacket not only brings
-        comfort physically but also, it can build a tiny connection that turns
-        a stranger into a friend.
+        There are two main pages, a donation page and a request page. If you want to donate, the donation page houses each request that comes in, and you can fulfill a specific request from there.
+        If you’d like to request an item, the request page has categories you can fill out a short form to request. Once there is a match both the requester and donator will receive an email and text on when to pick-up/drop-off the item at the designated donation facility.
+        These locations are well known established donation facilities, already in use for general donations.
       </p>
+      <p><strong>The team:</strong></p>
       <p>
-        You can contribute to our <a href={githubUrl}>Github project</a> or
-        find us on <a href={slackUrl}>Slack</a>. You can
-        also email us at team@whatcanyouspare.org but keep in mind that we're
-        volunteers and may be slower to respond.
+        We are a small team of volunteers with <a href={hackforlaUrl}> Hack for LA </a>. You can contribute to our <a href={githubUrl}>Github project</a> or find us on <a href={slackUrl}>Slack</a>.
+        You can also email us at team@whatcanyouspare.org but keep in mind that we are volunteers and may be slow to respond.
       </p>
       <div className="team-images">
         {images.map((image, index) => (
