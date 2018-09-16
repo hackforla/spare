@@ -26,6 +26,10 @@ class FulfillmentRequestorSMSBase(SMSMessage):
             'requestor_name': instance.request.name,
             'donator_name': instance.name,
             'item': instance.request.item.display_name.lower(),
+            'location': instance.dropoff_time.location,
+            'start_time': instance.dropoff_time.time_start,
+            'end_time': instance.dropoff_time.time_end,
+            'date': instance.dropoff_date
         }
 
 
@@ -38,8 +42,9 @@ class DonationRequestReceivedSMS(RequestSMSBase):
 
 class FulfillmentRequestorSMS(FulfillmentRequestorSMSBase):
     msg = (
-        "Great news, {{ requestor_name }}! Your request for {{ item }} has been fulfilled. "
-        "We'll put you in touch with {{ donator_name }} to pick up the item."
+        "Your request for {{ item }} has been fulfilled. Please be at {{ location.street_address_1 }}"
+        "{% if location.street_address_2 %} {{ location.street_address_2 }}{% endif %}, {{ location.city }}, "
+        "at {{ start_time }} on {{ date }} to pick up your item."
     )
 
 

@@ -24,7 +24,7 @@ class SMSBackend(BaseSMSBackend):
             extra={
             'from_': self.from_,
             'sid': message.sid,
-            'status': message.message_status,
+            'status': message.status,
             'to':message.to,
             'dt': timezone.now()
             }
