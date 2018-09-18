@@ -139,6 +139,7 @@ class DropoffTime(models.Model):
     day = EnumIntegerField(DaysOfWeek, default=DaysOfWeek.SUNDAY)
 
     VISIBLE_WEEKS = 2
+    HOURS_AHEAD = 24
 
     def get_visible_dates(self):
         results = []
@@ -153,9 +154,9 @@ class DropoffTime(models.Model):
         # Get the nearest valid date, given day and start time
         nearest_date = now.date() + timedelta(days=days_ahead)
 
-        # We want to check the start time (plus an additional range of 2 hours)
+        # We want to check the start time (plus an additional range of 1 day/24 hours)
         nearest_date_start_time = (
-            datetime.combine(nearest_date, self.time_start) + timedelta(hours=2)
+            datetime.combine(nearest_date, self.time_start) + timedelta(hours=self.HOURS_AHEAD)
         )
 
         # If that datetime has passed, start with the next week's date
