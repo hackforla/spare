@@ -43,6 +43,10 @@ DEFAULT_NEIGHBORHOODS = [
 ]
 
 
+VISIBLE_WEEKS = 2
+HOURS_AHEAD = 24
+
+
 tag_validator = RegexValidator(
     regex='^[a-z_]*$',
     message='Only lower case letters and underscores allowed for tag',
@@ -138,9 +142,6 @@ class DropoffTime(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='dropoff_times')
     day = EnumIntegerField(DaysOfWeek, default=DaysOfWeek.SUNDAY)
 
-    VISIBLE_WEEKS = 2
-    HOURS_AHEAD = 24
-
     def get_visible_dates(self):
         results = []
 
@@ -156,7 +157,7 @@ class DropoffTime(models.Model):
 
         # We want to check the start time (plus an additional range of 1 day/24 hours)
         nearest_date_start_time = (
-            datetime.combine(nearest_date, self.time_start) + timedelta(hours=self.HOURS_AHEAD)
+            datetime.combine(nearest_date, self.time_start) + timedelta(hours=HOURS_AHEAD)
         )
 
         # If that datetime has passed, start with the next week's date
@@ -164,10 +165,34 @@ class DropoffTime(models.Model):
             nearest_date = nearest_date + timedelta(days=7)
 
         # Get a date for each visible week
-        for weeks in range(self.VISIBLE_WEEKS):
+        for weeks in range(VISIBLE_WEEKS):
             results.append(nearest_date + timedelta(days=7 * weeks))
 
         return results
+
+    def __str__(self):
+        return '{} - {}'.format(self.location, self.time_start)
+
+
+class VisibleManualDropoffDates(models.Manager):
+    def get_queryset(self):
+        visibility_start = timezone.now() + timedelta(hours=24)
+        visibility_end = timezone.now() + timedelta(days=15)
+
+        return super().get_queryset().filter(
+            dropoff_date__gte=visibility_start.date(),
+            dropoff_date__lte=visibility_end.date(),
+        )
+
+
+class ManualDropoffDate(models.Model):
+    time_start = models.TimeField()
+    time_end = models.TimeField()
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='manual_dropoff_dates')
+    dropoff_date = models.DateField(null=True)
+
+    objects = models.Manager()
+    visible = VisibleManualDropoffDates()
 
     def __str__(self):
         return '{} - {}'.format(self.location, self.time_start)

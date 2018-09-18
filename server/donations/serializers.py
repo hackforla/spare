@@ -131,23 +131,25 @@ class DropoffTimeListSerializer(serializers.ListSerializer):
         data = []
 
         for item in items:
-            for date in item.get_visible_dates():
+            if hasattr(item, 'get_visible_dates'):
+                for date in item.get_visible_dates():
+                    child_data = self.child.to_representation(item)
+                    child_data['date'] = date
+                    data.append((date, child_data))
+            else:
                 child_data = self.child.to_representation(item)
-                child_data['date'] = date
-                data.append(child_data)
+                child_data['date'] = item.dropoff_date
+                data.append((item.dropoff_date, child_data))
 
-        return data
+        return [dropoff_data for _, dropoff_data in sorted(data, key=lambda item: item[0])]
 
 
-class DropoffTimeSerializer(serializers.ModelSerializer):
+class DropoffTimeSerializer(serializers.Serializer):
+    id = serializers.IntegerField(label='ID', read_only=True)
     location = LocationSerializer()
+    date = serializers.DateField(read_only=True)
+    time_start = serializers.TimeField(read_only=True)
+    time_end = serializers.TimeField(read_only=True)
 
     class Meta:
-        model = DropoffTime
-        fields = (
-            'id', 'time_start', 'time_end', 'location',
-        )
-        read_only_fields = (
-            'id', 'time_start', 'time_end', 'location',
-        )
         list_serializer_class = DropoffTimeListSerializer
