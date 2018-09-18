@@ -83,6 +83,7 @@ def test_donation_valid_dropoff_date(client, donation_request, dropoff_time):
 
     data = {
         'email': 'demouser@example.com',
+        'name': 'Jimbo Jones',
         'request': donation_request.id,
         'dropoff_time': dropoff_time.id,
         'dropoff_date': valid_date.isoformat()
@@ -155,6 +156,7 @@ def test_donation_invalid_mismatch_dropoff_date(client, donation_request, dropof
 
     data = {
         'email': 'demouser@example.com',
+        'name': 'Jimbo Jones',
         'request': donation_request.id,
         'dropoff_time': dropoff_time.id,
         'dropoff_date': invalid_date.isoformat()
