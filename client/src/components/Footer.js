@@ -17,7 +17,7 @@ const Footer = () => {
           <li><LinkContainer to="/donate"><Link to="/donate">Donate</Link></LinkContainer></li>
           <li><LinkContainer to="/request"><Link to="/request">Request</Link></LinkContainer></li>
           <li><LinkContainer to="/about"><Link to="/about">About</Link></LinkContainer></li>
-          <li><a href="mailto:team@whatcanyouspare.com">Contact</a></li>
+          <li><a href="mailto:team@whatcanyouspare.org">Contact</a></li>
         </ul>
       </nav>
     </div>

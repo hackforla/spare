@@ -45,7 +45,7 @@ const About = () => (
       <p><strong>The team:</strong></p>
       <p>
         We are a small team of volunteers with <a href={hackforlaUrl}> Hack for LA </a>. You can contribute to our <a href={githubUrl}>Github project</a> or find us on <a href={slackUrl}>Slack</a>.
-        You can also email us at team@whatcanyouspare.org but keep in mind that we are volunteers and may be slow to respond.
+        You can also email us at <a href="mailto:team@whatcanyouspare.org">team@whatcanyouspare.org</a> but keep in mind that we are volunteers and may be slow to respond.
       </p>
       <div className="team-images">
         {images.map((image, index) => (

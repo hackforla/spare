@@ -354,9 +354,9 @@ class RequestForm extends Component {
         <div className="hero text-center">
           <h2>{ headerMessage }</h2>
           <p>
-            We send your name and contact info to the person who wants to donate.
+            All donation requests are listed anonymously on our site.
             <br />
-            We don't post it on our site.
+            Your contact info is used to send updates about your request.
           </p>
         </div>
         <Row>
