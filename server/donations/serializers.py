@@ -18,23 +18,31 @@ class ContactInfoValidator(object):
         self.instance = getattr(serializer, 'instance', None)
 
 
-class DropoffDateValidator(object):
+class DropoffValidator(object):
     def __call__(self, value):
         dropoff_time = value.get('dropoff_time')
         dropoff_date = value.get('dropoff_date')
+        manual_dropoff_date = value.get('manual_dropoff_date')
 
-        if dropoff_time.day.value != dropoff_date.weekday():
-            raise serializers.ValidationError('Date provided does not match dropoff time date')
+        if dropoff_time:
+            if not dropoff_date:
+                raise serializers.ValidationError('Drop off date require')
+            elif dropoff_time.day.value != dropoff_date.weekday():
+                raise serializers.ValidationError('Date provided does not match dropoff time date')
 
-        start_datetime = timezone.make_aware(
-            datetime.combine(dropoff_date, dropoff_time.time_start)
-        )
+            start_datetime = timezone.make_aware(
+                datetime.combine(dropoff_date, dropoff_time.time_start)
+            )
 
-        if start_datetime < timezone.now():
-            raise serializers.ValidationError('Cannot schedule dropoff for past date')
+            if start_datetime < timezone.now():
+                raise serializers.ValidationError('Cannot schedule dropoff for past date')
 
-        if (start_datetime - timezone.now()) > timedelta(weeks=12):
-            raise serializers.ValidationError('Cannot schedule dropoff more than 12 weeks in future')
+            if (start_datetime - timezone.now()) > timedelta(weeks=12):
+                raise serializers.ValidationError('Cannot schedule dropoff more than 12 weeks in future')
+
+        elif manual_dropoff_date:
+            if dropoff_date:
+                raise serializers.ValidationError('Cannot provide both manual dropoff date and dropoff date')
 
     def set_context(self, serializer):
         self.instance = getattr(serializer, 'instance', None)
@@ -64,17 +72,16 @@ class DonationFulfillmentSerializer(serializers.ModelSerializer):
         model = DonationFulfillment
         fields = (
             'id', 'name', 'phone', 'email', 'request', 'dropoff_time', 'dropoff_date',
-            'created', 'code'
+            'manual_dropoff_date', 'created', 'code'
         )
         read_only_fields = (
             'id', 'created',
         )
         # TODO: Add validator to raise error when request has already been fulfilled
         #       (currently raises vague 'object does not exist' error)
-        validators = [ContactInfoValidator(), DropoffDateValidator()]
+        validators = [ContactInfoValidator(), DropoffValidator()]
         extra_kwargs = {
             'email': {'required': True},
-            'dropoff_date': {'required': True}
         }
 
 
@@ -135,10 +142,12 @@ class DropoffTimeListSerializer(serializers.ListSerializer):
                 for date in item.get_visible_dates():
                     child_data = self.child.to_representation(item)
                     child_data['date'] = date
+                    child_data['type'] = 'recurring'
                     data.append((date, child_data))
             else:
                 child_data = self.child.to_representation(item)
                 child_data['date'] = item.dropoff_date
+                child_data['type'] = 'manual'
                 data.append((item.dropoff_date, child_data))
 
         return [dropoff_data for _, dropoff_data in sorted(data, key=lambda item: item[0])]

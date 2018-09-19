@@ -26,10 +26,10 @@ class FulfillmentRequestorSMSBase(SMSMessage):
             'requestor_name': instance.request.name,
             'donator_name': instance.name,
             'item': instance.request.item.display_name.lower(),
-            'location': instance.dropoff_time.location,
-            'start_time': instance.dropoff_time.time_start,
-            'end_time': instance.dropoff_time.time_end,
-            'date': instance.dropoff_date
+            'location': instance.location,
+            'start_time': instance.time_start,
+            'end_time': instance.time_end,
+            'date': instance.date
         }
 
 

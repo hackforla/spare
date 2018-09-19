@@ -195,7 +195,7 @@ class ManualDropoffDate(models.Model):
     visible = VisibleManualDropoffDates()
 
     def __str__(self):
-        return '{} - {}'.format(self.location, self.time_start)
+        return '{} - {}: {}'.format(self.location, self.dropoff_date, self.time_start)
 
 
 class UnfulfilledRequestManager(models.Manager):
@@ -229,8 +229,34 @@ class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
 
 class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model):
     request = models.ForeignKey(DonationRequest, on_delete=models.CASCADE, related_name='fulfillments')
-    dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE)
+    dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE, null=True, blank=True)
+    manual_dropoff_date = models.ForeignKey(ManualDropoffDate, on_delete=models.CASCADE, null=True, blank=True)
     dropoff_date = models.DateField(null=True)
 
     def __str__(self):
         return '{} - {}'.format(self.request.item, self.created)
+
+    def get_attribute(self, attr):
+        if self.dropoff_time:
+            return getattr(self.dropoff_time, attr)
+        elif self.manual_dropoff_date:
+            return getattr(self.manual_dropoff_date, attr)
+
+    @property
+    def location(self):
+        return self.get_attribute('location')
+
+    @property
+    def time_start(self):
+        return self.get_attribute('time_start')
+
+    @property
+    def time_end(self):
+        return self.get_attribute('time_end')
+
+    @property
+    def date(self):
+        if self.dropoff_time:
+            return self.dropoff_date
+        elif self.manual_dropoff_date:
+            return self.manual_dropoff_date.dropoff_date
