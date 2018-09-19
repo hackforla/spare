@@ -187,11 +187,11 @@ in *addition* to the Heroku login above.
 Navigate to the project root, and run the following to push the server container
 to the Heroku container registry:
 
-`heroku container:push web --recursive -a spare-staging`
+`heroku container:push web --recursive -a spare-production`
 
 ### 9. Release server container
 
-`heroku container:release web -a spare-staging`
+`heroku container:release web -a spare-production`
 
 ## Product and Design Contributors
 

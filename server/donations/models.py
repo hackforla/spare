@@ -43,6 +43,10 @@ DEFAULT_NEIGHBORHOODS = [
 ]
 
 
+VISIBLE_WEEKS = 2
+HOURS_AHEAD = 24
+
+
 tag_validator = RegexValidator(
     regex='^[a-z_]*$',
     message='Only lower case letters and underscores allowed for tag',
@@ -138,8 +142,6 @@ class DropoffTime(models.Model):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='dropoff_times')
     day = EnumIntegerField(DaysOfWeek, default=DaysOfWeek.SUNDAY)
 
-    VISIBLE_WEEKS = 2
-
     def get_visible_dates(self):
         results = []
 
@@ -153,9 +155,9 @@ class DropoffTime(models.Model):
         # Get the nearest valid date, given day and start time
         nearest_date = now.date() + timedelta(days=days_ahead)
 
-        # We want to check the start time (plus an additional range of 2 hours)
+        # We want to check the start time (plus an additional range of 1 day/24 hours)
         nearest_date_start_time = (
-            datetime.combine(nearest_date, self.time_start) + timedelta(hours=2)
+            datetime.combine(nearest_date, self.time_start) + timedelta(hours=HOURS_AHEAD)
         )
 
         # If that datetime has passed, start with the next week's date
@@ -163,13 +165,37 @@ class DropoffTime(models.Model):
             nearest_date = nearest_date + timedelta(days=7)
 
         # Get a date for each visible week
-        for weeks in range(self.VISIBLE_WEEKS):
+        for weeks in range(VISIBLE_WEEKS):
             results.append(nearest_date + timedelta(days=7 * weeks))
 
         return results
 
     def __str__(self):
         return '{} - {}'.format(self.location, self.time_start)
+
+
+class VisibleManualDropoffDates(models.Manager):
+    def get_queryset(self):
+        visibility_start = timezone.now() + timedelta(hours=24)
+        visibility_end = timezone.now() + timedelta(days=15)
+
+        return super().get_queryset().filter(
+            dropoff_date__gte=visibility_start.date(),
+            dropoff_date__lte=visibility_end.date(),
+        )
+
+
+class ManualDropoffDate(models.Model):
+    time_start = models.TimeField()
+    time_end = models.TimeField()
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='manual_dropoff_dates')
+    dropoff_date = models.DateField(null=True)
+
+    objects = models.Manager()
+    visible = VisibleManualDropoffDates()
+
+    def __str__(self):
+        return '{} - {}: {}'.format(self.location, self.dropoff_date, self.time_start)
 
 
 class UnfulfilledRequestManager(models.Manager):
@@ -203,8 +229,34 @@ class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
 
 class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model):
     request = models.ForeignKey(DonationRequest, on_delete=models.CASCADE, related_name='fulfillments')
-    dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE)
+    dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE, null=True, blank=True)
+    manual_dropoff_date = models.ForeignKey(ManualDropoffDate, on_delete=models.CASCADE, null=True, blank=True)
     dropoff_date = models.DateField(null=True)
 
     def __str__(self):
         return '{} - {}'.format(self.request.item, self.created)
+
+    def get_attribute(self, attr):
+        if self.dropoff_time:
+            return getattr(self.dropoff_time, attr)
+        elif self.manual_dropoff_date:
+            return getattr(self.manual_dropoff_date, attr)
+
+    @property
+    def location(self):
+        return self.get_attribute('location')
+
+    @property
+    def time_start(self):
+        return self.get_attribute('time_start')
+
+    @property
+    def time_end(self):
+        return self.get_attribute('time_end')
+
+    @property
+    def date(self):
+        if self.dropoff_time:
+            return self.dropoff_date
+        elif self.manual_dropoff_date:
+            return self.manual_dropoff_date.dropoff_date

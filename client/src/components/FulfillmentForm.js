@@ -151,9 +151,17 @@ class FulfillmentForm extends Component {
       data['phone'] = '+1' + phoneDigits;
     }
 
-    const dropoffTimeInfo = this.state.dropoffTimes[parseInt(dropoffTime, 10)]
-    data['dropoff_time'] = dropoffTimeInfo ? dropoffTimeInfo.id : '';
-    data['dropoff_date'] = dropoffTimeInfo ? dropoffTimeInfo.date : '';
+    const dropoffTimeInfo = this.state.dropoffTimes[parseInt(dropoffTime, 10)];
+
+    if (dropoffTimeInfo.type === 'recurring') {
+      data['dropoff_time'] = dropoffTimeInfo ? dropoffTimeInfo.id : '';
+      data['dropoff_date'] = dropoffTimeInfo ? dropoffTimeInfo.date : '';
+    }
+
+    else if (dropoffTimeInfo.type === 'manual') {
+      data['manual_dropoff_date'] = dropoffTimeInfo ? dropoffTimeInfo.id : '';
+    }
+
     data['request'] = this.props.request.id;
     data['city'] = 'Los Angeles';
 

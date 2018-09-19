@@ -6,7 +6,8 @@ from rest_framework.throttling import UserRateThrottle
 
 from core.utils import is_test_email, is_test_phone
 from donations.models import (
-    DonationFulfillment, DonationRequest, DropoffTime, Neighborhood
+    DonationFulfillment, DonationRequest, DropoffTime, ManualDropoffDate,
+    Neighborhood
 )
 from donations.serializers import (
     DonationFulfillmentSerializer, DonationRequestPublicSerializer,
@@ -96,6 +97,7 @@ class DropoffTimeListView(generics.GenericAPIView):
         # TODO: Allow selection from nearby neighborhoods
         neighborhood = request_obj.neighborhood
         dropoff_times = DropoffTime.objects.filter(location__neighborhood=neighborhood)
+        manual_dropoff_dates = ManualDropoffDate.visible.filter(location__neighborhood=neighborhood)
 
-        serializer = DropoffTimeSerializer(dropoff_times, many=True)
+        serializer = DropoffTimeSerializer(list(dropoff_times) + list(manual_dropoff_dates), many=True)
         return Response(serializer.data)

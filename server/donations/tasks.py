@@ -42,7 +42,7 @@ def send_request_confirmation_message(instance):
 def send_fulfillment_confirmation_messages(instance):
     fulfillment = instance
     request = fulfillment.request
-    location = fulfillment.dropoff_time.location
+    location = fulfillment.location
 
     if fulfillment.email:
         send_email_message(
@@ -64,8 +64,8 @@ def send_fulfillment_confirmation_messages(instance):
 
                 'requestor_name': request.name,
 
-                'dropoff_date': fulfillment.dropoff_date,
-                'dropoff_time': fulfillment.dropoff_time.time_start,
+                'dropoff_date': fulfillment.date,
+                'dropoff_time': fulfillment.time_start,
             },
         )
     else:
@@ -93,8 +93,8 @@ def send_fulfillment_confirmation_messages(instance):
 
                 'donator_name': fulfillment.name,
 
-                'dropoff_date': fulfillment.dropoff_date,
-                'dropoff_time': fulfillment.dropoff_time.time_start,
+                'dropoff_date': fulfillment.date,
+                'dropoff_time': fulfillment.time_start,
             },
         )
     elif instance.request.phone:
