@@ -30,14 +30,8 @@ class App extends Component {
                 path="/request"
                 render={props => <Request {...props} />}
               />
-              <Route path="/code">
-                <h2>Code</h2>
-              </Route>
               <Route path="/about">
                   <About/>
-              </Route>
-              <Route path="/contact">
-                <h2>Contact</h2>
               </Route>
               <Route path="/how-it-works">
                   <HowItWorks/>
