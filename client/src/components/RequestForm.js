@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import { emailRegex, phoneRegex, itemInfo } from '../utils/constants';
-import { Alert, Button, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
-import { withRouter } from "react-router-dom";
+import { Alert, Button, Checkbox, ControlLabel, FormControl, FormGroup, Row } from 'react-bootstrap';
+import { Link, withRouter } from "react-router-dom";
 import { withBreakpoints } from 'react-breakpoints';
 import MaskedInput from 'react-maskedinput';
 
@@ -40,7 +40,8 @@ class RequestForm extends Component {
       name: '',
       email: '',
       phone: '',
-      size: this.sizes ? this.sizes[0] : ''
+      size: this.sizes ? this.sizes[0] : '',
+      accepted: true,
     }
   }
 
@@ -77,11 +78,21 @@ class RequestForm extends Component {
     },
     size: {
       isRequired: true,
+    },
+    accepted: {
+      isRequired: true,
+      getValue: (target) => {
+        return target.checked
+      }
     }
   }
 
   validateField = (fieldName, value) => {
     const field = this.fields[fieldName];
+
+    if (!field) {
+      return null;
+    }
 
     // If not required, return null
     if (!field.isRequired && (value === '')) {
@@ -109,9 +120,16 @@ class RequestForm extends Component {
 
   handleInput = (event) => {
     const fieldName = event.target.id;
-    const value = event.target.value;
     const currValue = this.state[fieldName];
     const field = this.fields[fieldName];
+
+    let value;
+    if (field.getValue) {
+      value = field.getValue(event.target);
+    }
+    else {
+      value = event.target.value;
+    }
 
     let fieldDirty = this.isDirty(fieldName);
 
@@ -145,9 +163,9 @@ class RequestForm extends Component {
 
   getSerializedData = () => {
     // Process and clean data
-    const {name, phone, email, size, neighborhood} = this.state;
+    const {name, phone, email, size, neighborhood, accepted} = this.state;
     const data = {
-      name, email, size, neighborhood
+      name, email, size, neighborhood, accepted
     }
 
     const phoneDigits = this.fields.phone.clean(phone);
@@ -448,7 +466,19 @@ class RequestForm extends Component {
                 </FormControl>
               </FormGroup> : null
             }
-
+            <FormGroup
+              controlId="accepted"
+              className="disclaimer-group"
+              validationState={ validationStates.accepted && validationStates.accepted.status }
+              onBlur={ this.onBlur }
+            >
+              <Checkbox
+                id="accepted"
+                onChange={ this.handleInput }
+                checked={ this.state.accepted }
+              >I agree not to share contact info with Spare users and accept the site's <Link to="/terms-of-service">terms of service</Link> and <Link to="/privacy-policy">privacy policy</Link>.</Checkbox>
+              { this.getError('accepted') }
+            </FormGroup>
             <div className="text-center">
               <Button type="submit" className="text-center">{ confirmButtonText }</Button>
             </div>

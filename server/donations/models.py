@@ -218,6 +218,7 @@ class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
     size = models.CharField(max_length=16, blank=True)
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
     code = models.CharField(max_length=50)
+    accepted = models.BooleanField(default=False)
 
     objects = models.Manager()
     unfulfilled = UnfulfilledRequestManager()
@@ -231,6 +232,7 @@ class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model
     request = models.ForeignKey(DonationRequest, on_delete=models.CASCADE, related_name='fulfillments')
     dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE, null=True, blank=True)
     manual_dropoff_date = models.ForeignKey(ManualDropoffDate, on_delete=models.CASCADE, null=True, blank=True)
+    accepted = models.BooleanField(default=False)
     dropoff_date = models.DateField(null=True)
 
     def __str__(self):

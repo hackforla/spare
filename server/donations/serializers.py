@@ -68,11 +68,16 @@ class DonationFulfillmentSerializer(serializers.ModelSerializer):
         queryset=DonationRequest.unfulfilled.all()
     )
 
+    def validate_accepted(self, value):
+        if not value:
+            raise serializers.ValidationError('You must accept the terms in order to fulfill a request.')
+        return value
+
     class Meta:
         model = DonationFulfillment
         fields = (
             'id', 'name', 'phone', 'email', 'request', 'dropoff_time', 'dropoff_date',
-            'manual_dropoff_date', 'created', 'code'
+            'manual_dropoff_date', 'created', 'code', 'accepted'
         )
         read_only_fields = (
             'id', 'created',
@@ -81,6 +86,7 @@ class DonationFulfillmentSerializer(serializers.ModelSerializer):
         #       (currently raises vague 'object does not exist' error)
         validators = [ContactInfoValidator(), DropoffValidator()]
         extra_kwargs = {
+            'accepted': {'required': True},
             'email': {'required': True},
         }
 
@@ -99,12 +105,20 @@ class DonationRequestSerializer(serializers.ModelSerializer):
         queryset=Item.objects.all()
     )
 
+    def validate_accepted(self, value):
+        if not value:
+            raise serializers.ValidationError('You must accept the terms in order to submit a request.')
+        return value
+
     class Meta:
         model = DonationRequest
         fields = (
             'id', 'name', 'phone', 'email', 'item', 'size', 'neighborhood', 'code',
-            'created'
+            'created', 'accepted'
         )
+        extra_kwargs = {
+            'accepted': {'required': True},
+        }
         read_only_fields = (
             'id', 'created', 'code'
         )

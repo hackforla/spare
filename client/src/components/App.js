@@ -10,6 +10,8 @@ import About from "./About";
 import Footer from "./Footer";
 import BetaInfo from "./BetaInfo";
 import HowItWorks from "./HowItWorks";
+import PrivacyPolicy from './PrivacyPolicy';
+import TermsOfService from './TermsOfService';
 
 
 class App extends Component {
@@ -31,10 +33,16 @@ class App extends Component {
                 render={props => <Request {...props} />}
               />
               <Route path="/about">
-                  <About/>
+                <About/>
+              </Route>
+              <Route path='/privacy-policy'>
+                <PrivacyPolicy />
+              </Route>
+              <Route path='/terms-of-service'>
+                <TermsOfService />
               </Route>
               <Route path="/how-it-works">
-                  <HowItWorks/>
+                <HowItWorks/>
               </Route>
               {/* TODO: 404 not working for nested routes */}
               <Route>

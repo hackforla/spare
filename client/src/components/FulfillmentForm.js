@@ -4,7 +4,8 @@ import moment from 'moment';
 
 import { emailRegex, phoneRegex, itemInfo } from '../utils/constants';
 import FulfillmentConfirmation from './FulfillmentConfirmation';
-import { Alert, Button, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
+import { Alert, Button, Checkbox, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 import { withBreakpoints } from 'react-breakpoints';
 import MaskedInput from 'react-maskedinput';
 
@@ -40,6 +41,7 @@ class FulfillmentForm extends Component {
       email: '',
       phone: '',
       dropoffTime: '',
+      accepted: true,
     }
   }
 
@@ -73,6 +75,12 @@ class FulfillmentForm extends Component {
     },
     dropoffTime: {
       isRequired: true,
+    },
+    accepted: {
+      isRequired: true,
+      getValue: (target) => {
+        return target.checked
+      }
     }
   }
 
@@ -105,9 +113,16 @@ class FulfillmentForm extends Component {
 
   handleInput = (event) => {
     const fieldName = event.target.id;
-    const value = event.target.value;
     const currValue = this.state[fieldName];
     const field = this.fields[fieldName];
+
+    let value;
+    if (field.getValue) {
+      value = field.getValue(event.target);
+    }
+    else {
+      value = event.target.value;
+    }
 
     let fieldDirty = this.isDirty(fieldName);
 
@@ -141,9 +156,9 @@ class FulfillmentForm extends Component {
 
   getSerializedData = () => {
     // Process and clean data
-    const {name, phone, email, dropoffTime} = this.state;
+    const {name, phone, email, dropoffTime, accepted} = this.state;
     const data = {
-      name, email
+      name, email, accepted
     }
 
     const phoneDigits = this.fields.phone.clean(phone);
@@ -453,6 +468,19 @@ class FulfillmentForm extends Component {
               <ControlLabel>Choose a Drop Off</ControlLabel>
               { this.getDropoffTimes() }
               { this.getError('dropoffTime') }
+            </FormGroup>
+            <FormGroup
+              controlId="accepted"
+              className="disclaimer-group"
+              validationState={ validationStates.accepted && validationStates.accepted.status }
+              onBlur={ this.onBlur }
+            >
+              <Checkbox
+                id="accepted"
+                onChange={ this.handleInput }
+                checked={ this.state.accepted }
+              >I agree not to share contact info with Spare users and accept the site's <Link to="/terms-of-service">terms of service</Link> and <Link to="/privacy-policy">privacy policy</Link>.</Checkbox>
+              { this.getError('accepted') }
             </FormGroup>
 
             <div className="text-center">
