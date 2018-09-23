@@ -233,7 +233,7 @@ class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model
     dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE, null=True, blank=True)
     manual_dropoff_date = models.ForeignKey(ManualDropoffDate, on_delete=models.CASCADE, null=True, blank=True)
     accepted = models.BooleanField(default=False)
-    dropoff_date = models.DateField(null=True)
+    dropoff_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return '{} - {}'.format(self.request.item, self.created)
