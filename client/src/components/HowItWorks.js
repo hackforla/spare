@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image } from "react-bootstrap";
-import { Link } from 'react-router-dom';
 import { Col, Row } from 'react-bootstrap';
 
 import RequestIcon from '../assets/icons/donors/requests.svg';

@@ -17,17 +17,17 @@ class DonateItemsTypeTableSmall extends Component {
           requestsForItemType ? requestsForItemType.map((request) => {
             if (category === request.item.category_tag){
               return (
-                <Table responsive className='table-requests-mobile'>
+                <Table responsive className='table-requests-mobile' key={request.id}>
                   <tbody key={request.id}>
                     <tr>
                       <td>
-                        <span class="table-requests-mobile-header">Size</span><br />
+                        <span className="table-requests-mobile-header">Size</span><br />
                         { request.size || 'N/A' }
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <span class="table-requests-mobile-header">Location</span><br />
+                        <span className="table-requests-mobile-header">Location</span><br />
                         { request.neighborhood.name }
                       </td>
                     </tr>

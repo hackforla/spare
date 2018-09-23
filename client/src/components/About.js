@@ -29,7 +29,7 @@ const About = () => (
       <h2>About Spare</h2>
     </div>
     <div>
-      <p class="about-quote">"During this homelessness crisis, we believe every gesture of human kindness makes a difference. A jacket not only brings comfort physically but also, it can build a tiny connection that turns a stranger into a friend."</p>
+      <p className="about-quote">"During this homelessness crisis, we believe every gesture of human kindness makes a difference. A jacket not only brings comfort physically but also, it can build a tiny connection that turns a stranger into a friend."</p>
       <h3>About</h3>
       <p>
         Spare connects people in need of clothing and other essentials with people in the community who have things to spare.
