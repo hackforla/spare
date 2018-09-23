@@ -44,6 +44,9 @@ class DropoffValidator(object):
             if dropoff_date:
                 raise serializers.ValidationError('Cannot provide both manual dropoff date and dropoff date')
 
+        else:
+            raise serializers.ValidationError('You must select a valid dropoff time')
+
     def set_context(self, serializer):
         self.instance = getattr(serializer, 'instance', None)
 
