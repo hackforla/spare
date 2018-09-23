@@ -8,7 +8,6 @@ django-extensions==1.9.1
 django-filter==1.1.0
 django-model-utils==3.1.1
 django-phonenumber-field==2.0.0
-django-grappelli==2.10.1
 django-rq==1.1.0
 django-templated-email==2.2.0
 djangorestframework==3.7.7

@@ -236,7 +236,7 @@ class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model
     dropoff_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
-        return '{} - {}'.format(self.request.item, self.created)
+        return '{} ({}) - {}'.format(self.request.item, self.location, self.dropoff_date)
 
     def get_attribute(self, attr):
         if self.dropoff_time:

@@ -54,4 +54,11 @@ def donation_created_email(sender, instance, created, **kwargs):
 @receiver(post_save, sender=DonationFulfillment)
 def donation_fulfilled_email(sender, instance, created, **kwargs):
     if (created):
+
+        # This is kind of hacky, but we want to be able to query by dropoff date
+        if instance.manual_dropoff_date:
+            DonationFulfillment.objects.filter(pk=instance.pk).update(
+                dropoff_date=instance.manual_dropoff_date.dropoff_date
+            )
+
         enqueue(send_fulfillment_confirmation_messages, instance)

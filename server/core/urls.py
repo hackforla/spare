@@ -25,9 +25,6 @@ urlpatterns = [
     # Django RQ
     url(r'^django-rq/', include('django_rq.urls')),
 
-    # Grappeli admin
-    url(r'^grappelli/', include('grappelli.urls')),
-
     # Pages admin
     url(r'^(?!api/).*$', AppView.as_view(), name='app_home'),
 

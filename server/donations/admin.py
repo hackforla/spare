@@ -5,8 +5,16 @@ from donations.models import (
     Location, ManualDropoffDate, Neighborhood
 )
 
+from rangefilter.filter import DateRangeFilter
+
+class DonationFulfillmentAdmin(admin.ModelAdmin):
+    #list_filter = (DropoffDateFilter,)
+    list_filter = (
+        ('dropoff_date', DateRangeFilter),
+    )
+
 admin.site.register(Category)
-admin.site.register(DonationFulfillment)
+admin.site.register(DonationFulfillment, DonationFulfillmentAdmin)
 admin.site.register(DonationRequest)
 admin.site.register(Item)
 admin.site.register(Location)
