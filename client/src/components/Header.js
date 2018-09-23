@@ -6,7 +6,7 @@ import BreadcrumbNav from './BreadcrumbNav';
 const header = () => (
   <PageHeader className="header">
     <div className="notification">
-      <p className="text">Now serving Hollywood and Highland Park!</p>
+      <p className="text">Now serving Van Nuys!</p>
     </div>
     <Logo />
     <BreadcrumbNav />
