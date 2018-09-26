@@ -32,8 +32,8 @@ export const itemInfo = {
     icon_lg: 'shirts@2x.png',
     pluralPronoun: false,
     verboseName: 'shirt',
-    sizeMen: ["XXS", "XS", "S", "M", "L", "XL", "XXL"],
-    sizeWomen: ["XXS", "XS", "S", "M", "L", "XL", "XXL"]
+    sizeMen: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"],
+    sizeWomen: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"]
   },
   dresses_skirts: {
     displayName: 'Dresses + Skirts',
@@ -41,7 +41,7 @@ export const itemInfo = {
     icon_lg: 'dressesandskirts@2x.png',
     pluralPronoun: false,
     verboseName: 'dress/skirt',
-    sizeWomen: ["XXS", "XS", "S", "M", "L", "XL", "XXL"]
+    sizeWomen: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"]
   },
   hats: {
     displayName: 'Hats',
@@ -56,8 +56,8 @@ export const itemInfo = {
     icon_lg: 'pants@2x.png',
     pluralPronoun: true,
     verboseName: 'pants',
-    sizeMen: ["26-28", "28-30", "30-32", "32-34","34-36", "36-38", "38-40"],
-    sizeWomen: ["2", "4", "6", "8", "10", "12", "14"]
+    sizeMen: ["26-28", "28-30", "30-32", "32-34","34-36", "36-38", "38-40", "40-42", "40-44"],
+    sizeWomen: ["0", "2", "4", "6", "8", "10", "12", "14", "16", "18"]
   },
   shorts: {
     displayName: 'Shorts',
@@ -65,8 +65,8 @@ export const itemInfo = {
     icon_lg: 'shorts@2x.png',
     pluralPronoun: true,
     verboseName: 'shorts',
-    sizeMen: ["26-28", "28-30", "30-32", "32-34","34-36", "36-38", "38-40"],
-    sizeWomen: ["2", "4", "6", "8", "10", "12", "14"]
+    sizeMen: ["26-28", "28-30", "30-32", "32-34","34-36", "36-38", "38-40", "40-42", "40-44"],
+    sizeWomen: ["0", "2", "4", "6", "8", "10", "12", "14", "16", "18"]
   },
   jacket_sweaters: {
     displayName: 'Jackets + Sweaters',
@@ -74,8 +74,8 @@ export const itemInfo = {
     icon_lg: 'jacketsandsweaters@2x.png',
     pluralPronoun: false,
     verboseName: 'jacket/sweater',
-    sizeMen: ["XXS", "XS", "S", "M", "L", "XL", "XXL"],
-    sizeWomen: ["XXS", "XS", "S", "M", "L", "XL", "XXL"]
+    sizeMen: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"],
+    sizeWomen: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL"]
   },
   socks: {
     displayName: 'Socks',
@@ -90,8 +90,8 @@ export const itemInfo = {
     icon_lg: 'shoes@2x.png',
     pluralPronoun: true,
     verboseName: 'shoes',
-    sizeMen: ["4", "5", "6", "7", "8", "9", "10", "11"],
-    sizeWomen: ["4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
+    sizeMen: ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13", "13.5", "14", "14.5", "15"],
+    sizeWomen: ["4", "4.5", "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13","13.5", "14", "14.5", "15"]
   },
   toothbrush: {
     displayName: 'Toothbrush',
