@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import ReactSVG from 'react-svg'
 
 class Tile extends Component {
   /* props:
@@ -33,7 +34,7 @@ class Tile extends Component {
       <div className="tile-container">
         <Link to={ href }>
           <div className='tile'>
-            <img alt={displayName} src={src} />
+            <ReactSVG alt={displayName} src={src} />
             { hover }
           </div>
           <div className='text-label'>{ displayName }</div>
