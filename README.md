@@ -66,6 +66,18 @@ Docker-Compose
 
 http://docs.docker.com/compose/install/
 
+Create the docker group and add your user
+
+https://docs.docker.com/install/linux/linux-postinstall/
+
+Add the docker group 
+
+`sudo groupadd docker`
+
+Add your user to the docker group
+
+`sudo usermod -aG docker $USER`
+
 ### 4. Build Docker images
 
 `docker-compose build`
