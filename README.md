@@ -48,7 +48,7 @@ cd spare
 ### 2. Create local env variable file
 
 Copy `.env` to `.env.dev`, then edit dev file
-to change SECRET_KEY value.
+to change SECRET_KEY value. (The SECRET_KEY value, used by django, can be any string you choose)
 
 ```
 cp .env .env.dev
