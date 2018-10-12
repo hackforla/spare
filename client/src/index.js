@@ -10,7 +10,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './css/index.css';
 
 //components dir
-import App from './components/App.js';
+import App from './components/App';
+import ScrollToTop from './components/ScrollToTop';
 import registerServiceWorker from './utils/registerServiceWorker';
 
 import { breakpoints } from './utils/constants';
@@ -19,6 +20,7 @@ ReactDOM.render((
   <BrowserRouter>
     <ReactBreakpoints breakpoints={breakpoints}>
       <App />
+      <ScrollToTop />
     </ReactBreakpoints>
   </BrowserRouter>
 ), document.getElementById('root')
