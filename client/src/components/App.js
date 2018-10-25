@@ -8,7 +8,6 @@ import Donate from "./Donate"
 import Header from "./Header";
 import About from "./About";
 import Footer from "./Footer";
-import BetaInfo from "./BetaInfo";
 import HowItWorks from "./HowItWorks";
 import PrivacyPolicy from './PrivacyPolicy';
 import TermsOfService from './TermsOfService';
@@ -18,7 +17,6 @@ class App extends Component {
   render() {
     return (
       <Fragment>
-        <BetaInfo />
         <Header />
         <Grid fluid={true} className="main-container">
           <Grid>
