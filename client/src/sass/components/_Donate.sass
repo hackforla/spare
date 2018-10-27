@@ -9,3 +9,24 @@
       background: white
       border-color: $donate-primary-color
       color: $donate-primary-color
+
+  #no-items
+    p
+      +textedit(16px, 38px, 700)
+      margin-top: 15px
+      text-align: center
+
+    .intro
+      +textedit(22px, 28px, 700)
+      display: block
+
+    .background
+      opacity: 0.2
+      .tile
+        border: 2px solid $donate-primary-color
+        padding: 20px
+        height: auto
+        width: auto
+        border-radius: 7px
+        @media screen and (max-width: 770px)
+          border: 0
