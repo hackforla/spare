@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { itemTypesByCategory, itemInfo } from '../utils/constants';
 import { Col, Row } from 'react-bootstrap';
 import CategoryNav from './CategoryNav';
@@ -7,7 +8,7 @@ import Tile from './Tile';
 
 class DonateSubcategoryLink extends Component {
   render() {
-    const { count, category, subcategory } = this.props;
+    const { disabled, count, category, subcategory } = this.props;
     const { displayName, icon } = this.props.info;
 
     const neededText = (count === 1) ? `${ count } request` : `${ count } requests`;
@@ -15,6 +16,7 @@ class DonateSubcategoryLink extends Component {
     return (
       <Col sm={3} xs={6}>
         <Tile
+          disabled={disabled}
           side='donate'
           displayName={displayName}
           icon={ icon }
@@ -27,6 +29,15 @@ class DonateSubcategoryLink extends Component {
   }
 }
 
+const renderHeader = () => (
+  <Row className='hero text-center'>
+    <h2>
+      Give spare items directly to people in need.
+      <br />
+      What could you spare?
+    </h2>
+  </Row>
+);
 
 export default class DonateCategory extends Component {
   getRequestsByType(requests) {
@@ -55,8 +66,46 @@ export default class DonateCategory extends Component {
     }
   }
 
+
+
+  renderNoRequests () {
+    const clothingTiles = itemTypesByCategory.clothing;
+    const renderTile = (itemType, index) => (
+      <DonateSubcategoryLink
+        disabled
+        count={ 0 }
+        info={ itemInfo[itemType] }
+        key={ index }
+        subcategory={ itemType }
+      />
+    );
+    return (
+      <React.Fragment>
+        {renderHeader()}
+        <div id="no-items">
+          <Row className="background">
+            {clothingTiles.slice(0, 4).map(renderTile)}
+          </Row>
+          <Row>
+            <p className="col-sm-12 col-xs-12">
+              <span className="intro">There are no needs right now</span>
+              <Link to="/request">Ask for an item</Link> or <Link to="/how-it-works">learn how Spare works</Link>
+            </p>
+          </Row>
+          <Row className="background">
+            {clothingTiles.slice(4).map(renderTile)}
+          </Row>
+        </div>
+      </React.Fragment>
+    );
+  };
+
   render() {
     const { requests, category, paths } = this.props;
+
+    if (Array.isArray(requests) && requests.length === 0) {
+      return this.renderNoRequests();
+    }
 
     const requestsByItemType = this.getRequestsByType(requests);
 
@@ -92,13 +141,7 @@ export default class DonateCategory extends Component {
 
     return (
       <div>
-        <Row className='hero text-center'>
-          <h2>
-            Give spare items directly to people in need.
-            <br />
-            What could you spare?
-          </h2>
-        </Row>
+        {renderHeader()}
         <Row>
           <CategoryNav paths={ paths  } />
           { requests !== null ? items : [] }
