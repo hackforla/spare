@@ -14,7 +14,7 @@ const shuffle = (array) => {
   }
 }
 
-const r = require.context('../../public/assets/teamphotos', false, /\.png$/);
+const r = require.context('../../public/assets/teamphotos', false, /\.jpg|png$/);
 const images = r.keys().reduce((acc, curr) => {
   acc.push(r(curr));
   return acc;
