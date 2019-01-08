@@ -50,13 +50,10 @@ export default class RequestItemsList extends Component {
 
     return (
       <div>
-        <Row className='hero text-center'>
-          <h2>
-            Choose an item you need
-          </h2>
-        </Row>
         <Row>
-          <CategoryNav paths={ paths } />
+          <h3>
+            {this.props.category}
+          </h3>
           <RequestItemsLinks { ...this.props } />
         </Row>
       </div>
