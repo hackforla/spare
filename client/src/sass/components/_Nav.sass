@@ -17,15 +17,16 @@
   li
     a
       height: 35px
-      width: 146px
-      margin-right: auto
-      margin-left: auto
+      margin-right: 15px
+      margin-left: 15px
 
-      @media (min-width : $desktop-width)
-        margin-left: initial
-        margin-right: initial
+      //@media (min-width : $desktop-width)
+      //  margin-left: initial
+      //  margin-right: initial
 
+      border: 1px solid
       border-radius: 17.5px
+      
 
       font-size: 14px
       font-weight: bold
@@ -37,11 +38,13 @@
       a:hover
         cursor: default
 
+
 =nav-styling($color)
   .nav-pills
     li
       a
         color: $color
+
       &.active a
         border: 1px solid $color
         background-color: $color
