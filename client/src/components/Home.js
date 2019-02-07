@@ -22,7 +22,7 @@ const Home = () => (
     
     <div className="nav-container">
       <ul className="nav nav-pills nav-justified">
-        <li className="active"><LinkContainer to="/donate"><Link to="/donate">Give an item</Link></LinkContainer></li>
+        <li><LinkContainer to="/donate"><Link to="/donate">Give an item</Link></LinkContainer></li>
         <li><LinkContainer to="/request"><Link to="/request">Ask for an item</Link></LinkContainer></li>
       </ul>
     </div>
@@ -35,23 +35,23 @@ const Home = () => (
     <ol>
       <li>
         <Image src={EmailIcon} alt="" className="icon"/><br />
-        <strong>Someone requests an item on our website.</strong>
+        <strong>Someone requests an item on our website.</strong><br />
         The request is displayed on the website without any personal information.
       </li>
       <li>
         <Image src={RequestIcon} alt="" className="icon"/><br />
-        <strong>A donor offers to donate that item.</strong>
+        <strong>A donor offers to donate that item.</strong><br />
         We let the recipient know someone is donating the item they need. 
       </li>
       <li>
         <Image src={DonationIcon} alt="" className="icon"/><br />
-        <strong>The donor gives the item to the recipient. </strong>
+        <strong>The donor gives the item to the recipient. </strong><br />
         The donor and recipent meet at a nonprofit site we provide to exchange the item. 
       </li>
     </ol>
   
     <p>
-      It’s a simple way to meet and help out your neighbors.
+      <strong>It’s a simple way to meet and help out your neighbors.</strong>
     </p>
   
   </div>
