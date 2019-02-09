@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row, Button } from 'react-bootstrap';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import { itemTypesByCategory } from '../utils/constants';
+import { withBreakpoints } from 'react-breakpoints';
 
 import RequestForm from './RequestForm';
 import RequestCategory from './RequestCategory';
 
-export default class Request extends Component {
+export default withBreakpoints(class Request extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -25,6 +26,12 @@ export default class Request extends Component {
 
     const routes = [];
     const requestCategories = [];
+
+    // Vary button text depending on width
+    const { breakpoints, currentBreakpoint } = this.props;
+    const confirmButtonText = (
+      breakpoints[currentBreakpoint] >= breakpoints.tablet ? 'Confirm Request' : 'Confirm'
+    );
 
     const renderItemTypeForCategory = (category) => (itemType) => {
       const path = paths[category] + '/' + itemType + '/';
@@ -52,10 +59,15 @@ export default class Request extends Component {
             <React.Fragment>
               <Row className='hero text-center'>
                 <h2>
-                  Choose an item you need
+                  Select up to 3 items you need.
                 </h2>
               </Row>
-              { requestCategories }
+                { requestCategories }
+                <form onSubmit={ this.handleSubmit } className="col-sm-6 col-sm-offset-3">
+                  <div className="text-center">
+                    <Button type="submit" className="text-center">{ confirmButtonText }</Button>
+                  </div>
+              </form>
             </React.Fragment>
           </Route>
           { routes }
@@ -63,4 +75,4 @@ export default class Request extends Component {
       </div>
     )
   }
-};
+});
