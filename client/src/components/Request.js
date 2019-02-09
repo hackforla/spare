@@ -26,6 +26,12 @@ export default withBreakpoints(class Request extends Component {
 
     const routes = [];
     const requestCategories = [];
+    const selectedCategories = [];
+
+    const handleSelectItemType = (itemType) => {
+      console.log(itemType)
+      selectedCategories.push(itemType);
+    }
 
     // Vary button text depending on width
     const { breakpoints, currentBreakpoint } = this.props;
@@ -37,7 +43,7 @@ export default withBreakpoints(class Request extends Component {
       const path = paths[category] + '/' + itemType + '/';
       routes.push(
         <Route exact path={ path } key={ path }>
-          <RequestForm itemType={ itemType }/>
+          <RequestForm itemType={ itemType } />
         </Route>
       );
     };
@@ -49,7 +55,7 @@ export default withBreakpoints(class Request extends Component {
     
     for (var category in itemTypesByCategory) {
       requestCategories.push(
-        <RequestCategory category={ category } paths={ paths } />
+        <RequestCategory category={ category } paths={ paths } handleSelectItemType= { handleSelectItemType }/>
       )
     }
     return (

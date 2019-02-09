@@ -9,6 +9,13 @@ class Tile extends Component {
    * alt (name for alt text field of image)
    */
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      iconClass: ''
+    }
+  }
+
   render() {
     const {
       category,
@@ -17,8 +24,11 @@ class Tile extends Component {
       side,
       subcategory,
       icon,
-      hoverText
+      hoverText,
+      handleSelectItemType
     } = this.props;
+
+    const { iconClass } = this.state;
 
     //<Link to={ '/donate/' + category + '/' + subcategory + '/' } >
     const href = `/${side}/${category}/${subcategory}/`;
@@ -32,17 +42,24 @@ class Tile extends Component {
       if (hoverText) hover = <div className="tile-hover-text">{ hoverText }</div>;
     }
 
+    const handleClick = () => {
+      this.setState({iconClass: "selected"})
+      handleSelectItemType(subcategory)
+    }
+
+    console.log(iconClass)
+
     let content = (
       <Fragment>
-        <div className='tile'>
-          <ReactSVG alt={displayName} src={src} />
+        <div className='tile' onClick={handleClick} >
+          <ReactSVG svgClassName={iconClass} alt={displayName} src={src} />
           { hover }
         </div>
         {!disabled && <div className='text-label'>{ displayName }</div>}
       </Fragment>
     );
     if (!disabled) {
-      content = <Link to={ href }>{ content }</Link>;
+      // content = <Link to={ href }>{ content }</Link>;
     }
 
     return <div className="tile-container">{ content }</div>;

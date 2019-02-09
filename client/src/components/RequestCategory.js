@@ -7,7 +7,7 @@ import Tile from './Tile';
 
 class RequestItem extends Component {
   render() {
-    const { itemType, category } = this.props;
+    const { itemType, category, handleSelectItemType } = this.props;
     const { displayName, icon } = this.props.info;
 
     return (
@@ -18,6 +18,7 @@ class RequestItem extends Component {
           icon={ icon }
           category={ category }
           subcategory={ itemType }
+          handleSelectItemType = { handleSelectItemType }
         />
       </Col>
     )
@@ -27,7 +28,7 @@ class RequestItem extends Component {
 
 class RequestItemsLinks extends Component {
   render() {
-    const { category } = this.props;
+    const { category, handleSelectItemType } = this.props;
 
     const categoryItems = itemTypesByCategory[category];
 
@@ -35,7 +36,13 @@ class RequestItemsLinks extends Component {
       <Row>
         {
           categoryItems.map((item) => {
-            return (<RequestItem category={ category } key={ item } itemType={ item } info={ itemInfo[item] }/>)
+            return (<RequestItem 
+                category={ category } 
+                key={ item } 
+                itemType={ item } 
+                info={ itemInfo[item] } 
+                handleSelectItemType = { handleSelectItemType }
+              />)
           })
         }
       </Row>
