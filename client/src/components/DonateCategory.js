@@ -32,10 +32,9 @@ class DonateSubcategoryLink extends Component {
 const renderHeader = () => (
   <Row className='hero text-center'>
     <h2>
-      Give spare items directly to people in need.
-      <br />
-      What could you spare?
+      Select the gently used or new items you can give to those in need.
     </h2>
+    <p>All hygiene items must be new.</p>
   </Row>
 );
 
@@ -89,7 +88,7 @@ export default class DonateCategory extends Component {
           <Row>
             <p className="col-sm-12 col-xs-12">
               <span className="intro">There are no needs right now</span>
-              <Link to="/request">Ask for an item</Link> or <Link to="/how-it-works">learn how Spare works</Link>
+              <Link to="/request">Ask for an item</Link>
             </p>
           </Row>
           <Row className="background">

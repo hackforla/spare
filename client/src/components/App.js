@@ -6,6 +6,7 @@ import { Grid  } from "react-bootstrap"
 import Request from "./Request"
 import Donate from "./Donate"
 import Header from "./Header";
+import Home from "./Home";
 import About from "./About";
 import Footer from "./Footer";
 import HowItWorks from "./HowItWorks";
@@ -21,11 +22,13 @@ class App extends Component {
         <Grid fluid={true} className="main-container">
           <Grid>
             <Switch>
+              <Route exact path='/'>
+                <Home />
+              </Route>
               <Route
                 path="/donate"
                 render={props => <Donate {...props} />}
               />
-              <Redirect exact from="/" to="/donate" />
               <Route
                 path="/request"
                 render={props => <Request {...props} />}
