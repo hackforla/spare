@@ -6,8 +6,13 @@
 .main-container
   display: flex
   justify-content: center
+  margin-bottom: calc(72px * 2)
   & > .container
-    max-width: 800px
+    max-width: $main-container-width
+
+// SHIM: Override fixed width on the .container element (to avoid horizontal scrollbars)
+.container
+  width: auto
 
 .alert
   position: fixed

@@ -1,5 +1,6 @@
 .home-page
   text-align: center
+  margin-top: 46px
 
   .main-headline
     max-width: 20em
@@ -7,20 +8,76 @@
     margin-right: auto
 
   h2
-    margin-top: 72px
+    margin-top: 96px
 
   ol
     list-style: none
     padding-left: 0
     margin-left: auto
     margin-right: auto
-    margin-bottom: 72px
+    margin-bottom: 96px
     max-width: 26em
     li
       list-style: none
       padding-left: 0
       margin-left: 0
+      strong
+        display: block
+        margin-bottom: 0.75em
+      br
+        display: none
+  .icon
+    height: 46px
+    width: auto
 
+  .intro-image
+    height: auto
+    width: calc(96px + 20vmax)
+    max-width: 100%
+
+@supports (grid-template-columns: 1fr) and (width: 1vw)
+  @media (min-width: 90em)
+    .home-page
+      display: grid
+      grid-template-columns: 1fr 1fr
+      grid-column-gap: 46px
+      grid-row-gap: 32px
+      $margin-shim: calc( -50vw + #{ $main-container-width / 2 } )
+      margin-left:  $margin-shim
+      margin-right: $margin-shim
+      margin-top: 96px
+
+      .intro-image
+        grid-column: 2 / 3
+        grid-row: 1 / 2
+        align-self: center
+        justify-self: center
+        margin-right: 33%
+        width: auto
+        height: calc(96px * 3.5)
+
+      .intro-text
+        grid-column: 1 / 2
+        grid-row: 1 / 2
+        align-self: center
+        justify-self: end
+
+        h2
+          margin-top: 0
+
+      .nav-pills
+        margin-left: 0
+
+      .how-spare-works
+        grid-column: 1 / -1
+
+        ol
+          display: grid
+          grid-template-columns: 1fr 1fr 1fr
+          grid-column-gap: 96px
+          padding-right: 96px
+          padding-left: 96px
+          max-width: none
 
   #announcement
     margin-bottom: 36px
