@@ -476,7 +476,7 @@ class RequestForm extends Component {
                 id="accepted"
                 onChange={ this.handleInput }
                 checked={ this.state.accepted }
-              >I agree not to share contact info with Spare users and accept the site's <Link to="/terms-of-service">terms of service</Link> and <Link to="/privacy-policy">privacy policy</Link>.</Checkbox>
+              >I agree not to share contact info with Spare users and accept the site's <Link to="/terms-of-service" target="_blank">terms of service</Link> and <Link to="/privacy-policy" target="_blank">privacy policy</Link>.</Checkbox>
               { this.getError('accepted') }
             </FormGroup>
             <div className="text-center">

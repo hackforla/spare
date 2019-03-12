@@ -12,9 +12,14 @@
 .footer
   height: 60px
   line-height: 50px
-  margin-top: 72px
   margin-bottom: 40px
   text-align: center
+
+  @media (min-width: $desktop-width)
+    position: absolute
+    top: 40px
+    right: 72px
+    margin: 0
 
   a
     padding-bottom: 4px
