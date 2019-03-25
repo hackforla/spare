@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { itemTypesByCategory, itemInfo } from '../utils/constants';
 import { Col, Row } from 'react-bootstrap';
-import CategoryNav from './CategoryNav';
 import Tile from './Tile';
 
 
@@ -28,15 +26,6 @@ class DonateSubcategoryLink extends Component {
     )
   }
 }
-
-const renderHeader = () => (
-  <Row className='hero text-center'>
-    <h2>
-      Select the gently used or new items you can give to those in need.
-    </h2>
-    <p>All hygiene items must be new.</p>
-  </Row>
-);
 
 export default class DonateCategory extends Component {
   getRequestsByType(requests) {
@@ -67,44 +56,10 @@ export default class DonateCategory extends Component {
 
 
 
-  renderNoRequests () {
-    const clothingTiles = itemTypesByCategory.clothing;
-    const renderTile = (itemType, index) => (
-      <DonateSubcategoryLink
-        disabled
-        count={ 0 }
-        info={ itemInfo[itemType] }
-        key={ index }
-        subcategory={ itemType }
-      />
-    );
-    return (
-      <React.Fragment>
-        {renderHeader()}
-        <div id="no-items">
-          <Row className="background">
-            {clothingTiles.slice(0, 4).map(renderTile)}
-          </Row>
-          <Row>
-            <p className="col-sm-12 col-xs-12">
-              <span className="intro">There are no needs right now</span>
-              <Link to="/request">Ask for an item</Link>
-            </p>
-          </Row>
-          <Row className="background">
-            {clothingTiles.slice(4).map(renderTile)}
-          </Row>
-        </div>
-      </React.Fragment>
-    );
-  };
+  
 
   render() {
     const { requests, category, paths } = this.props;
-
-    if (Array.isArray(requests) && requests.length === 0) {
-      return this.renderNoRequests();
-    }
 
     const requestsByItemType = this.getRequestsByType(requests);
 
@@ -140,9 +95,10 @@ export default class DonateCategory extends Component {
 
     return (
       <div>
-        {renderHeader()}
         <Row>
-          <CategoryNav paths={ paths  } />
+          <h3>
+            {this.props.category}
+          </h3>
           { requests !== null ? items : [] }
         </Row>
       </div>

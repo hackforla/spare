@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Switch, Redirect, Route } from 'react-router-dom';
-import { itemTypesByCategory } from '../utils/constants';
+import { Col, Row } from 'react-bootstrap';
+import { Link, Switch, Route } from 'react-router-dom';
+import { itemTypesByCategory, itemInfo } from '../utils/constants';
 import DonateCategory from './DonateCategory';
 import DonateItemsTable from './DonateItemsTable';
 import FulfillmentForm from './FulfillmentForm';
+import Tile from './Tile';
 
 class DonationDetail extends Component {
   render() {
@@ -55,6 +57,50 @@ export default class Donate extends Component {
       });
   }
 
+  /*
+   * When there are no donation requests, just show the clothing icons.
+   */
+  renderNoRequests() {
+    const category = 'clothing';
+    const clothingTiles = itemTypesByCategory[category];
+
+    const renderTile = (itemType, index) => {
+      const { displayName, icon } = itemInfo[itemType];
+      return (
+        <Col sm={3} xs={6} key={ index }>
+          <Tile
+            disabled
+            side='donate'
+            displayName={displayName}
+            icon={ icon }
+            hoverText={ '0 requests' }
+            category={ category }
+            subcategory={ itemType }
+          />
+        </Col>
+      )
+    };
+      
+    return (
+      <React.Fragment>
+        <div id="no-items">
+          <Row className="background">
+            {clothingTiles.slice(0, 4).map(renderTile)}
+          </Row>
+          <Row>
+            <p className="col-sm-12 col-xs-12">
+              <span className="intro">There are no needs right now</span>
+              <Link to="/request">Ask for an item</Link>
+            </p>
+          </Row>
+          <Row className="background">
+            {clothingTiles.slice(4).map(renderTile)}
+          </Row>
+        </div>
+      </React.Fragment>
+    );
+  }
+
   render() {
     const { match } = this.props;
     const { requests } = this.state;
@@ -68,6 +114,7 @@ export default class Donate extends Component {
     };
 
     let routes = [];
+    let donateCategories = [];
 
     const renderItemTypeForCategory = (category) => (itemType) => {
       const itemTypePath = paths[category] + '/' + itemType + '/';
@@ -76,30 +123,38 @@ export default class Donate extends Component {
           <DonateItemsTable itemType={ itemType } category={ category } requests={ requests } paths={ paths } />
         </Route>
       );
-    }
-
-    for (var category in itemTypesByCategory) {
-      routes.push(
-        <Route exact path={ paths[category] } key={ paths[category] }>
-          <DonateCategory category={ category } requests={ requests } paths={ paths } />
-        </Route>
-      );
-
-      const renderItemType = renderItemTypeForCategory(category);
-      itemTypesByCategory[category].forEach(renderItemType);
-    }
+    };
 
     const requestPath = "/donate/:category/:item/:id";
 
     routes.push(
-      <Route exact path={ requestPath } key={ requestPath } render={ props => <DonationDetail {...props} requests={ requests } /> }/ >
+      <Route exact path={ requestPath } key={ requestPath } render={ props => <DonationDetail {...props} requests={ requests } /> } />
     );
+
+    for (var category in itemTypesByCategory) {
+      const renderItemType = renderItemTypeForCategory(category);
+      itemTypesByCategory[category].forEach(renderItemType);
+
+      donateCategories.push(
+        <DonateCategory category={ category } requests={ requests } paths={ paths } />
+      );
+    }
 
     return (
       <div id="donate-container">
         <Switch>
+          <Route exact path="/donate/">
+            <React.Fragment>
+              <Row className='hero text-center'>
+                <h2>
+                  Select the gently used or new items you can give to those in need.
+                </h2>
+                <p>All hygiene items must be new.</p>
+              </Row>
+              { (Array.isArray(requests) && requests.length === 0) ? this.renderNoRequests() : donateCategories }
+            </React.Fragment>
+          </Route>
           { routes }
-          <Redirect to={ paths.clothing }/>
         </Switch>
       </div>
     )
