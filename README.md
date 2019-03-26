@@ -133,6 +133,10 @@ You can now login to the Django Admin for your user at:
 
 http://localhost:8000/admin/
 
+### 10. Initial database setup
+
+In order for the app to be usable, an admin must create entries in both the `donations/location` and `donations/dropofftime` tables.
+
 
 ## Important URLs
 
