@@ -17,6 +17,10 @@ terraform.tfvars
 .tox
 .cache
 
+backend.tfvars
+terraform.tfvars
+.terraform
+
 client/src/css
 
 server/static/
