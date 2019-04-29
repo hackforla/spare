@@ -1,3 +1,7 @@
 build:
   docker:
     web: server/Dockerfile.web
+release:
+  image: web
+  command:
+    - server/scripts/deployment.sh
