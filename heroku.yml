@@ -4,4 +4,4 @@ build:
 release:
   image: web
   command:
-    - server/scripts/deployment.sh
+    - scripts/deployment.sh
