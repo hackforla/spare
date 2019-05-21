@@ -11,6 +11,9 @@ __pycache__/
 node_modules/
 bower_components/
 
+.terraform
+terraform.tfvars
+
 .tox
 .cache
 
