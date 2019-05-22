@@ -5,3 +5,5 @@ release:
   image: web
   command:
     - scripts/deployment.sh
+run:
+  web: uwsgi uwsgi.ini
