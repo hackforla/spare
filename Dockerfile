@@ -38,3 +38,5 @@ COPY --from=build /app/build/favicon.ico /app/core/static
 COPY --from=build /app/build/manifest.json /app/core/static
 COPY --from=build /app/build/asset-manifest.json /app/core/static
 COPY --from=build /app/build/service-worker.js /app/core/static
+
+CMD "scripts/startup.sh"
