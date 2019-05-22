@@ -1,6 +1,6 @@
 build:
   docker:
-    web: server/Dockerfile.web
+    web: Dockerfile
 release:
   image: web
   command:
