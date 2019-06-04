@@ -48,7 +48,7 @@ cd spare
 ### 2. Create local env variable file
 
 Copy `.env` to `.env.dev`, then edit dev file
-to change SECRET_KEY value. 
+to change SECRET_KEY value.
 
 (Note the SECRET_KEY value, used by django, can be any string you choose)
 
@@ -137,7 +137,6 @@ http://localhost:8000/admin/
 
 In order for the app to be usable, an admin must create entries in both the `donations/location` and `donations/dropofftime` tables.
 
-
 ## Important URLs
 
 * Admin - http://localhost:8000/admin/
@@ -149,67 +148,17 @@ In order for the app to be usable, an admin must create entries in both the `don
 
 ## Deployment
 
-Note: Deployment requires access to associated Heroku apps.
+### Staging
 
-### 1. Install the Heroku CLI
+https://spare-staging.herokuapp.com/
 
-Heroku CLI
+Changes to `staging` branch are automatically deployed to above staging server.
 
-https://devcenter.heroku.com/articles/heroku-cli
+### Production
 
+https://www.whatcanyouspare.org/
 
-### 2. Log in to Heroku via CLI
-
-`heroku login`
-
-### 3. Build containers
-
-Follow [setup instructions](#setup-instructions) to build and run all necessary containers.
-
-### 4. Access client bash shell
-
-Run the following to get ID of client container:
-
-`docker ps`
-
-Run the following to access client bash shell:
-
-`docker exec -t -i CONTAINER_ID bash`
-
-### 5. Run client build script
-
-From inside the client bash shell, run the following:
-
-`npm run build`
-
-This will create a production build of the client and copy all necessary files to the
-server container.
-
-### 6. Exit client bash shell
-
-Run the following the exist the client bash shell:
-
-`exit`
-
-### 7. Log in to Heroku container registry
-
-Run the following to log in to Heroku container registry:
-
-`heroku container:login`
-
-**Note**: This is specific to the container registry and is required
-in *addition* to the Heroku login above.
-
-### 8. Push container to Heroku registry
-
-Navigate to the project root, and run the following to push the server container
-to the Heroku container registry:
-
-`heroku container:push web --recursive -a spare-production`
-
-### 9. Release server container
-
-`heroku container:release web -a spare-production`
+Changes to `master` branch are automatically deployed to above production server.
 
 ## Product and Design Contributors
 
