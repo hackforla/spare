@@ -23,7 +23,7 @@ const Home = () => (
       
       <div className="nav-container">
         <ul className="nav nav-pills nav-justified">
-          <li><LinkContainer to="/donate"><Link to="/donate">Give an item</Link></LinkContainer></li>
+          <li><LinkContainer to="/donate"><Link to="/donate" className="primary">Give an item</Link></LinkContainer></li>
           <li><LinkContainer to="/request"><Link to="/request">Ask for an item</Link></LinkContainer></li>
         </ul>
       </div>
