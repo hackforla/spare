@@ -12,6 +12,7 @@ import Footer from "./Footer";
 import HowItWorks from "./HowItWorks";
 import PrivacyPolicy from './PrivacyPolicy';
 import TermsOfService from './TermsOfService';
+import FrequentlyAskedQuestions from "./FrequentlyAskedQuestions";
 
 
 class App extends Component {
@@ -44,6 +45,9 @@ class App extends Component {
               </Route>
               <Route path="/how-it-works">
                 <HowItWorks/>
+              </Route>
+              <Route path="/faqs">
+                <FrequentlyAskedQuestions/>
               </Route>
               {/* TODO: 404 not working for nested routes */}
               <Route>

@@ -11,7 +11,7 @@ const Footer = () => {
       <nav className="footer">
         <ul>
           <li><LinkContainer to="/about"><Link to="/about">About</Link></LinkContainer></li>
-          <li><a href="mailto:team@whatcanyouspare.org">Contact</a></li>
+          <li><LinkContainer to="/faqs"><Link to="/faqs">FAQs</Link></LinkContainer></li>
         </ul>
       </nav>
     </div>
