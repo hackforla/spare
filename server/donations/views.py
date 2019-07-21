@@ -83,7 +83,7 @@ class NeighborhoodViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     # Only show neighborhoods with at least one dropoff time
     queryset = Neighborhood.objects.filter(
         locations__dropoff_times__isnull=False
-    )
+    ).distinct()
     serializer_class = NeighborhoodSerializer
 
 
