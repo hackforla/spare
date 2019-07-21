@@ -87,6 +87,11 @@ class FulfillmentForm extends Component {
   validateField = (fieldName, value) => {
     const field = this.fields[fieldName];
 
+    // Handle cases of links, etc.
+    if (!fieldName) {
+      return { status: null };
+    }
+
     // If not required, return null
     if (!field.isRequired && (value === '')) {
       return { status: null };
