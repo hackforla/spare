@@ -7,7 +7,7 @@ services:
             context: ./server
             dockerfile: Dockerfile.web
         env_file: .env.dev
-        command: bash -c "pytest"
+        command: ./scripts/run_tests
     client:
         image: hackforla/spare:client
         build:
