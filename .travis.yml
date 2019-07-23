@@ -6,12 +6,7 @@ services:
 notifications:
     email:
         recipients:
-            - ryanbhenao@gmail.com
             - shawnhmh@gmail.com
-            - shawnhmh@gmail.com
-            - jordankusel@gmail.com
-            - vonettastevenson@gmail.com
-            - ltime243@gmail.com
     on_success: change
     on_failure: always
 
