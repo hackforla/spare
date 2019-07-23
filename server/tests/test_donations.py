@@ -4,7 +4,6 @@ import pytest
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.test import APIClient
 
 from donations.models import DonationFulfillment, DonationRequest
 
@@ -28,7 +27,8 @@ def test_throttling(client, donation_request):
         'city': donation_request.city,
         'item': donation_request.item.tag,
         'size': donation_request.size,
-        'neighborhood': donation_request.neighborhood.id
+        'neighborhood': donation_request.neighborhood.id,
+        'accepted': True
     }
 
     assert DonationRequest.objects.count() == 1
@@ -86,7 +86,8 @@ def test_donation_valid_dropoff_date(client, donation_request, dropoff_time):
         'name': 'Jimbo Jones',
         'request': donation_request.id,
         'dropoff_time': dropoff_time.id,
-        'dropoff_date': valid_date.isoformat()
+        'dropoff_date': valid_date.isoformat(),
+        'accepted': True,
     }
 
     response = client.post(
@@ -159,7 +160,7 @@ def test_donation_invalid_mismatch_dropoff_date(client, donation_request, dropof
         'name': 'Jimbo Jones',
         'request': donation_request.id,
         'dropoff_time': dropoff_time.id,
-        'dropoff_date': invalid_date.isoformat()
+        'accepted': True
     }
 
     response = client.post(

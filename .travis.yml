@@ -1,17 +1,12 @@
 sudo: required
 
-services: 
+services:
     - docker
 
 notifications:
     email:
         recipients:
-            - ryanbhenao@gmail.com
             - shawnhmh@gmail.com
-            - shawnhmh@gmail.com
-            - jordankusel@gmail.com
-            - vonettastevenson@gmail.com
-            - ltime243@gmail.com
     on_success: change
     on_failure: always
 
@@ -19,10 +14,13 @@ language: node_js
 
 install: true
 
+env:
+  SECRET_KEY: keepitsecret
+  DJANGO_SETTINGS_MODULE: spare.settings.ci
+
 script:
-    - sed "s/SECRET_KEY=/SECRET_KEY=${DJANGO_SECRET_KEY}/g" .env > .env.dev
-    - docker-compose -f docker-compose.test.yml pull
-    - docker-compose -f docker-compose.test.yml up
+    - docker build -t hackforla/spare .
+    - docker run -e DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE -e SECRET_KEY=$SECRET_KEY -it hackforla/spare './scripts/run_tests.sh'
 
 after_success:
     - echo "Successful!"

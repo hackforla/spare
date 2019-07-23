@@ -22,6 +22,7 @@ terraform.tfvars
 .terraform
 
 client/src/css
+client/jest*
 
 server/static/
 server/core/templates/index.html
