@@ -10,7 +10,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 # Set database URL
-db = dj_database_url.config(default=os.environ['DATABASE_URL'], conn_max_age=600)
+db = dj_database_url.config(default=os.environ.get('DATABASE_URL'), conn_max_age=600)
 db['ATOMIC_REQUESTS'] = True
 DATABASES = {
     'default': db
