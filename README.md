@@ -14,17 +14,12 @@ A project that connects people in need of clothing and other essentials with peo
 - [Spare Team](#spare-team)
 
 ## Project Status
-Currently, we’re working on [building this prototype](https://projects.invisionapp.com/share/YKH1L8TAB56#/291938149_Home). The first objective is to provide a way to request items, share those requests with potential donors and then connect them through an outreach coalition or a nonprofit. While, we’re building this app, we’re also working on a lightweight solution (using Google Forms and email) to gather requests and ask for donations in just a few neighborhoods. You can see that at [whatcanyouspare.org](http://whatcanyouspare.org)
-
-We’re looking for a nonprofit partner right now that can provide a consistent time and location to do the donation handoffs. We’re also considering facilitating “meetup style” events to trade donations.
+We are currently aiming to launch Spare sometime in late 2019.
 
 ### Milestones
-1) Send out a survey to answer the questions in “What we want to learn” (Complete)
-2) Launch a survey to take requests manually and build a mailing list of potential donors (In progress)
-3) Launch a web app that can take requests, show donations and provide options for dropoff time/location (In progress)
-4) Get feedback from donors and requesters on the initial web app
-5) Iterate on the website
-
+1) Complete core functionality required for launch (In Progress)
+2) Prepare demo of app to be presented to partner organizations (TBD)
+3) Launch app and begin accepting requests (TBD)
 
 ## Ways to Contribute
 * Pick up an [engineering task from Github](https://github.com/hackforla/spare/issues)
@@ -123,7 +118,7 @@ This will be the main superuser admin for your app.
 
 ### Shortcut SetUp Management Command
 
-To run initial migrations and create a superuser, run this command:
+To run initial migrations, create a superuser, and populate demo data, run this command:
 
 `docker-compose run server python manage.py get_started`
 
@@ -145,12 +140,11 @@ In order for the app to be usable, an admin must create entries in both the `don
 * API Docs - http://localhost:8000/docs/
 * Client App - http://localhost:3000/
 
-
 ## Deployment
 
 ### Staging
 
-https://spare-staging.herokuapp.com/
+https://hackforla-spare-staging.herokuapp.com/
 
 Changes to `staging` branch are automatically deployed to above staging server.
 
