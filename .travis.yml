@@ -1,14 +1,15 @@
 sudo: required
 
 services:
-    - docker
+  - docker
+  - postgresql
 
 notifications:
-    email:
-        recipients:
-            - shawnhmh@gmail.com
-    on_success: change
-    on_failure: always
+  email:
+    recipients:
+      - shawnhmh@gmail.com
+  on_success: change
+  on_failure: always
 
 language: node_js
 
@@ -16,12 +17,20 @@ install: true
 
 env:
   SECRET_KEY: keepitsecret
-  DJANGO_SETTINGS_MODULE: spare.settings.ci
+  DJANGO_SETTINGS_MODULE: spare.settings.prod
+  DATABASE_URL: postgres://postgres@dbhost:5432/postgres_db
+
+before_script:
+  - psql -c 'create database postgres_db;' -U postgres
 
 script:
-    - docker build -t hackforla/spare .
-    - echo $DJANGO_SETTINGS_MODULE
-    - docker run -e DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE -e SECRET_KEY=$SECRET_KEY -it hackforla/spare './scripts/run_tests.sh'
+  - echo "abcd"
+  - lsof
+  - echo "/etc/services"
+  - cat /etc/services
+  - docker build -f Dockerfile.travis -t hackforla/spare .
+  - echo $DJANGO_SETTINGS_MODULE
+  - docker run --add-host=dbhost:0.0.0.0 -e DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE -e SECRET_KEY=$SECRET_KEY -e DATABASE_URL=$DATABASE_URL -e PGHOST=dbhost -it hackforla/spare './scripts/run_tests.sh'
 
 after_success:
-    - echo "Successful!"
+  - echo "Successful!"
