@@ -1,14 +1,13 @@
 from django.contrib import admin
+from rangefilter.filter import DateRangeFilter
 
 from donations.models import (
     Category, DonationFulfillment, DonationRequest, DropoffTime, Item,
     Location, ManualDropoffDate, Neighborhood
 )
 
-from rangefilter.filter import DateRangeFilter
 
 class DonationFulfillmentAdmin(admin.ModelAdmin):
-    #list_filter = (DropoffDateFilter,)
     list_filter = (
         ('dropoff_date', DateRangeFilter),
     )

@@ -3,10 +3,8 @@ from __future__ import unicode_literals
 
 from django.core.management.base import BaseCommand
 
-
-from donations.tasks import send_email_message
 from donations.messages import EMAIL_MESSAGE_TEMPLATES
-
+from donations.tasks import send_email_message
 
 TEST_CONTEXT = {
     # Request info

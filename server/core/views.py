@@ -1,7 +1,7 @@
-from django.views.generic.base import TemplateView
 from django.http import Http404
-from django.template.loader import get_template
 from django.template import TemplateDoesNotExist
+from django.template.loader import get_template
+from django.views.generic.base import TemplateView
 
 
 class AppView(TemplateView):

@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 from django.core.validators import RegexValidator
 from django.db import models

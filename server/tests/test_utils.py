@@ -1,7 +1,6 @@
 import pytest
 
-
-from core.utils import is_test_email, is_test_phone
+from core.utils import is_test_email
 
 
 @pytest.mark.parametrize('email,expected', [

@@ -151,7 +151,7 @@ def test_donation_invalid_future_dropoff_date(client, donation_request, dropoff_
 def test_donation_invalid_mismatch_dropoff_date(client, donation_request, dropoff_time):
     future_date = timezone.now().date() + timedelta(weeks=8)
     valid_date = get_closest_matching_dropoff_date(future_date, dropoff_time)
-    invalid_date = valid_date + timedelta(days=1)
+    # invalid_date = valid_date + timedelta(days=1)
 
     assert not DonationFulfillment.objects.exists()
 

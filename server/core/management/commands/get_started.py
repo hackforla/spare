@@ -14,11 +14,11 @@ from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 from django.db.utils import IntegrityError
+from faker import Faker
+from faker_e164.providers import E164Provider
 
 from core.models import User
 from donations.models import DaysOfWeek, DropoffTime, Location, Neighborhood
-from faker import Faker
-from faker_e164.providers import E164Provider
 
 fake = Faker()
 fake.add_provider(E164Provider)

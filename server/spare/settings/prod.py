@@ -1,8 +1,8 @@
-from .base import *  # noqa
+import os
 
-import os
 import dj_database_url
-import os
+
+from .base import *  # noqa
 
 DEBUG = False
 
@@ -46,4 +46,4 @@ X_FRAME_OPTIONS = 'DENY'
 
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
-ADMIN_URL = os.environ.get('ADMIN_URL','admin/')
+ADMIN_URL = os.environ.get('ADMIN_URL', 'admin/')

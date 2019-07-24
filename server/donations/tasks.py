@@ -1,11 +1,11 @@
 from django.conf import settings
+from templated_email import send_templated_mail
 
 from core.utils import is_test_email
 from donations.messages import (
     DonationRequestReceivedSMS, EMAIL_MESSAGE_TEMPLATES,
     FulfillmentRequestorSMS
 )
-from templated_email import send_templated_mail
 
 
 def send_email_message(message_name, to_email, context=None):

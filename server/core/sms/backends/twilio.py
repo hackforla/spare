@@ -13,6 +13,7 @@ client = Client(
     settings.TWILIO_AUTH_TOKEN
 )
 
+
 class SMSBackend(BaseSMSBackend):
     def send_message(self, message):
         message = client.messages.create(
@@ -20,12 +21,12 @@ class SMSBackend(BaseSMSBackend):
             from_=self.from_,
             to=message.to
         )
-        logger.info(message.body,
+        logger.info(
+            message.body,
             extra={
-            'from_': self.from_,
-            'sid': message.sid,
-            'status': message.status,
-            'to':message.to,
-            'dt': timezone.now()
-            }
-        )
+                'from_': self.from_,
+                'sid': message.sid,
+                'status': message.status,
+                'to': message.to,
+                'dt': timezone.now()
+            })

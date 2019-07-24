@@ -4,8 +4,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from donations.models import (
-    DonationFulfillment, DonationRequest, DropoffTime, Item, Location,
-    Neighborhood
+    DonationFulfillment, DonationRequest, Item, Location, Neighborhood
 )
 
 

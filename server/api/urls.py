@@ -2,8 +2,8 @@ from django.conf.urls import url
 from rest_framework import routers
 
 from donations.views import (
-    DonationFulfillmentViewSet, DonationRequestCodeDetailView,
-    DonationRequestViewSet, DropoffTimeListView, NeighborhoodViewSet
+    DonationFulfillmentViewSet, DonationRequestViewSet, DropoffTimeListView,
+    NeighborhoodViewSet
 )
 
 router = routers.DefaultRouter()

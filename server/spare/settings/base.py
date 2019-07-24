@@ -136,8 +136,8 @@ elif os.environ.get('EMAIL_BACKEND', 'console') == 'console':
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Django Templated Email
-TEMPLATED_EMAIL_EMAIL_MESSAGE_CLASS='anymail.message.AnymailMessage'
-TEMPLATED_EMAIL_EMAIL_MULTIALTERNATIVES_CLASS='anymail.message.AnymailMessage'
+TEMPLATED_EMAIL_EMAIL_MESSAGE_CLASS = 'anymail.message.AnymailMessage'
+TEMPLATED_EMAIL_EMAIL_MULTIALTERNATIVES_CLASS = 'anymail.message.AnymailMessage'
 TEMPLATED_EMAIL_FILE_EXTENSION = 'html'
 
 # Email Addresses
