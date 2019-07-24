@@ -23,8 +23,8 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED 1
 
 # Install requirements
-COPY server/requirements.txt /app/requirements.txt
-RUN pip install -r requirements.txt
+COPY server/requirements /app/requirements
+RUN pip install -r requirements/prod.txt
 
 # Must be before static file copies
 # https://stackoverflow.com/questions/51115856/docker-failed-to-export-image-failed-to-create-image-failed-to-get-layer
