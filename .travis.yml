@@ -20,6 +20,7 @@ env:
 
 script:
     - docker build -t hackforla/spare .
+    - echo $DJANGO_SETTINGS_MODULE
     - docker run -e DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE -e SECRET_KEY=$SECRET_KEY -it hackforla/spare './scripts/run_tests.sh'
 
 after_success:
