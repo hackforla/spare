@@ -1,5 +1,5 @@
 # Base image
-FROM node:6
+FROM node:8
 
 # Create app directory and install packages
 WORKDIR /app
