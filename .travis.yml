@@ -24,8 +24,7 @@ before_script:
   - psql -c 'create database postgres_db;' -U postgres
 
 script:
-  - ls
-  - pip install -r requirement.txt
+  - pip install -r server/requirement.txt
   - docker build -f Dockerfile.travis -t hackforla/spare .
   - echo $DJANGO_SETTINGS_MODULE
   - ls /var/lib
