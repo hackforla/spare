@@ -5,7 +5,7 @@ set -e
 
 # Fail if missing migrations
 echo "Checking for missing migrations"
-python manage.py makemigrations --check
+python3 manage.py makemigrations --check
 
 # Style linting checks
 echo "Running flake linting tests"

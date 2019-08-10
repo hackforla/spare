@@ -11,7 +11,13 @@ notifications:
   on_success: change
   on_failure: always
 
-language: node_js
+language: python
+python:
+  - '3.6'
+install:
+  - pip install pipenv
+  - pipenv --python 3.6
+  - pipenv install -r server/requirements/travis.txt
 
 install: true
 
@@ -24,12 +30,9 @@ before_script:
   - psql -c 'create database postgres_db;' -U postgres
 
 script:
-  - pip install -r server/requirements/travis.txt
-  - docker build -f Dockerfile.travis -t hackforla/spare .
-  - echo $DJANGO_SETTINGS_MODULE
-  - sh server/scripts/run_tests.sh
-  #- docker run -v postgres-data:/var/lib/postgresql/9.2/data -e DJANGO_SETTINGS_MODULE=spare.settings.prod -e SECRET_KEY=alsdlksdjafkll -e DATABASE_URL="postgres://postgres_user:postgres_pass@localhost:5432/postgres_db" -it hackforla/spare './scripts/run_tests.sh'
-  #- docker run -e DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE -e SECRET_KEY=$SECRET_KEY -e DATABASE_URL=$DATABASE_URL -e PGHOST=dbhost -it hackforla/spare './scripts/run_tests.sh'
+  - pipenv install -r server/requirements/travis.txt
+  - cd server
+  - sh scripts/run_tests.sh
 
 after_success:
   - echo "Successful!"
