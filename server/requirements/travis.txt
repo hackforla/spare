@@ -1,0 +1,3 @@
+-r base.txt
+
+djangorestframework~=3.9.4
