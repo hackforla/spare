@@ -36,7 +36,9 @@ script:
   - pipenv --python 3.6
   - pipenv install -r server/requirements/prod.txt
   - cd server && sh scripts/run_tests.sh
-  - cd ../client/ && npm install && npm run build
+  - cd ../client/ && npm install
+  - npm run build-js
+  - npm run build-css
 
 after_success:
   - echo "Successful!"
