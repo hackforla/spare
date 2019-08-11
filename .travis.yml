@@ -19,6 +19,7 @@ install: true
 
 before_install:
   - nvm install v8
+  - nvm alias default v8
   - pip install pipenv
   - pipenv --python 3.6
   - pipenv install -r server/requirements/prod.txt
