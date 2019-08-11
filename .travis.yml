@@ -1,26 +1,36 @@
 sudo: required
 
 services:
-    - docker
+  - docker
+  - postgresql
 
 notifications:
-    email:
-        recipients:
-            - shawnhmh@gmail.com
-    on_success: change
-    on_failure: always
+  email:
+    recipients:
+      - shawnhmh@gmail.com
+  on_success: change
+  on_failure: always
 
-language: node_js
+language: python
+python:
+  - '3.6'
 
 install: true
 
 env:
   SECRET_KEY: keepitsecret
-  DJANGO_SETTINGS_MODULE: spare.settings.ci
+  DJANGO_SETTINGS_MODULE: spare.settings.prod
+  DATABASE_URL: postgres://postgres:postgres_pass@localhost:5432/postgres_db
+
+before_script:
+  - psql -c 'create database postgres_db;' -U postgres
 
 script:
-    - docker build -t hackforla/spare .
-    - docker run -e DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE -e SECRET_KEY=$SECRET_KEY -it hackforla/spare './scripts/run_tests.sh'
+  - pip install pipenv
+  - pipenv --python 3.6
+  - pipenv install -r server/requirements/travis.txt
+  - cd server && sh scripts/run_tests.sh
+  - cd ../client/ && npm install --quiet && npm run build
 
 after_success:
-    - echo "Successful!"
+  - echo "Successful!"
