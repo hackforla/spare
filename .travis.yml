@@ -24,6 +24,7 @@ before_install:
   - pipenv install -r server/requirements/prod.txt
 
 env:
+  PIPENV_VERBOSITY: -1
   SECRET_KEY: keepitsecret
   DJANGO_SETTINGS_MODULE: spare.settings.prod
   DATABASE_URL: postgres://postgres:postgres_pass@localhost:5432/postgres_db
@@ -37,7 +38,9 @@ script:
   - pipenv install -r server/requirements/prod.txt
   - cd server && sh scripts/run_tests.sh
   - cd ../client/
-  - ls
+  - pwd
+  - ls /home/travis/build/hackforla/spare/client
+  - ls /home/travis/build/hackforla/spare/client/src
   - npm install
   - npm rebuild node-sass
   - npm run build-js
