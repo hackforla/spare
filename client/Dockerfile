@@ -6,3 +6,5 @@ WORKDIR /app
 
 # Use live app files
 COPY . /app
+
+RUN npm rebuild node-sass
