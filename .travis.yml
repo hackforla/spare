@@ -13,11 +13,8 @@ notifications:
 
 language:
   - python
-  - node_js
 python:
   - '3.6'
-node_js:
-  - '8.16.1'
 
 install: true
 
@@ -34,7 +31,6 @@ script:
   - pipenv --python 3.6
   - pipenv install -r server/requirements/travis.txt
   - cd server && sh scripts/run_tests.sh
-  - cd ../client/ && npm install --quiet && npm run build --verbose
 
 after_success:
   - echo "Successful!"
