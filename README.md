@@ -3,7 +3,6 @@
 A project that connects people in need of clothing and other essentials with people in the community who have things to spare. It's kind of like one on one Goodwill. The main objective is to foster interactions between the housed and unhoused. The donation is the mechanism for building these connections throughout our community. \o/
 
 ## Table of Contents
-
 - [Project Status](#project-status)
 - [Milestones](#milestones)
 - [Ways to Contribute](#ways-to-contribute)
@@ -75,11 +74,11 @@ Add your user to the docker group
 
 ### 4. Build Docker images
 
-`docker-compose build`
+`make build`
 
 ### 5. Run Docker containers
 
-`docker-compose up`
+`make up`
 
 At any point, `Ctrl-C` stops the containers.
 
@@ -87,50 +86,19 @@ Note: On first setup, the server may sometimes start before the
       database, causing an error. In this case, `Ctrl-C` to stop
       all containers and re-run Docker Compose.
 
-### 6. Access container bash shell
-Next, open a second terminal and execute the following command to list all
-docker containers currently running:
+### 6. Run initial migrations and create default superuser and demo data
 
-`docker ps`
+`make init`
 
-Find the the server container image (probably `spare_server`), and
-copy the container ID.
+### 7. Start local Django server
 
-Next, execute the following command to access the container's bash shell,
-replacing `CONTAINER_ID` with the container's ID hash.
+`make serve`
 
-`docker exec -t -i CONTAINER_ID bash`
+### 8. Log in to Django Admin
 
-### 7. Run initial migrations
-
-Once running bash inside of the server container (above), execute the
-following to run the initial database migrations:
-
-`python3 manage.py migrate`
-
-### 8. Create a superuser
-
-Execute the following command to create a superuser for the project:
-
-`python3 manage.py createsuperuser`
-
-This will be the main superuser admin for your app.
-
-### Shortcut SetUp Management Command
-
-To run initial migrations, create a superuser, and populate demo data, run this command:
-
-`docker-compose run server python manage.py get_started`
-
-### 9. Login to Django Admin
-
-You can now login to the Django Admin for your user at:
+You can now log in to the Django Admin for your user at:
 
 http://localhost:8000/admin/
-
-### 10. Initial database setup
-
-In order for the app to be usable, an admin must create entries in both the `donations/location` and `donations/dropofftime` tables.
 
 ## Important URLs
 
@@ -182,4 +150,3 @@ Spare Team is
 * [@contrecc](https://github.com/contrecc)
 * [@kelseydieterich](https://github.com/kelseydieterich)
 * [@tonymichaelhead](https://github.com/tonymichaelhead)
-

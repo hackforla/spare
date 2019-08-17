@@ -6,10 +6,9 @@ ENV PYTHONUNBUFFERED 1
 
 # Install requirements
 COPY requirements /app/requirements/
-RUN pip install -r requirements/prod.txt
 
 WORKDIR /app
-RUN pip install -r requirements/prod.txt
+RUN pip install -r requirements/local.txt
 
 COPY . /app
 

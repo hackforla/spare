@@ -11,7 +11,8 @@ notifications:
   on_success: change
   on_failure: always
 
-language: python
+language:
+  - python
 python:
   - '3.6'
 
@@ -30,7 +31,6 @@ script:
   - pipenv --python 3.6
   - pipenv install -r server/requirements/travis.txt
   - cd server && sh scripts/run_tests.sh
-  - cd ../client/ && npm install --quiet && npm run build
 
 after_success:
   - echo "Successful!"
