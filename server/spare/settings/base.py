@@ -7,6 +7,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 INSTALLED_APPS = [
+    # Must be before contrib.admin
+    'suit',
+    'core',
+
     # Django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -18,7 +22,6 @@ INSTALLED_APPS = [
 
     # Project-specific apps
     'api',
-    'core',
     'donations',
 
     # Dependencies
