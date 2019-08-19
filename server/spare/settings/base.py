@@ -8,8 +8,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 INSTALLED_APPS = [
     # Must be before contrib.admin
-    'suit',
     'core',
+    'suit',
 
     # Django apps
     'django.contrib.admin',
