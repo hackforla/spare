@@ -1,6 +1,5 @@
 from django import template
 from django.http import HttpRequest
-
 from suit import utils
 from suit.templatetags.suit_menu import get_admin_site, Menu
 
@@ -13,36 +12,26 @@ simple_tag = register.simple_tag
 
 @simple_tag(takes_context=True)
 def get_menu(context, request):
-    """
-    :type request: HttpRequest
-    """
+    # Mostly duplicated from Django-Suit's `get_menu` tag (which
+    # we're overriding in templates), only returns menu dynamically
+    # based on user type.
     if not isinstance(request, HttpRequest):
         return None
 
-    # Try to get app list
-    if hasattr(request, 'current_app'):
-        # Django 1.8 uses request.current_app instead of context.current_app
-        template_response = get_admin_site(request.current_app).index(request)
-    else:
-        try:
-            template_response = get_admin_site(context.current_app).index(request)
-        # Django 1.10 removed the current_app parameter for some classes and functions.
-        # Check the release notes.
-        except AttributeError:
-            template_response = get_admin_site(context.request.resolver_match.namespace).index(request)
+    template_response = get_admin_site(request.current_app).index(request)
 
     try:
         app_list = template_response.context_data['app_list']
     except Exception:
         return
 
-    return CustomMenu(context, request, app_list).get_app_list()
+    return DynamicMenu(context, request, app_list).get_app_list()
 
 
-class CustomMenu(Menu):
+class DynamicMenu(Menu):
     def init_config(self):
         """
-        Override default behavior and determine menu dynamically (based on user)
+        Override default behavior and return menu dynamically based on user type.
         """
         super().init_config()
 
@@ -80,11 +69,12 @@ class CustomMenu(Menu):
                         }
                     ]
                 },
-                'core',
                 {
                     'label': 'Users',
                     'icon': 'icon-user',
-                    'models': ('core.user',)
+                    'models': (
+                        'core.user',
+                        'organizations.org')
                 },
                 {
                     'label': 'Locations',
@@ -102,14 +92,6 @@ class CustomMenu(Menu):
                         {
                             'model': 'donations.item',
                             'label': 'Items',
-                        },
-                    ]
-                },
-                {
-                    'app': 'organizations',
-                    'models': [
-                        {
-                            'model': 'donations.organization',
                         },
                     ]
                 },
@@ -147,11 +129,12 @@ class CustomMenu(Menu):
                         }
                     ]
                 },
-                'core',
                 {
                     'label': 'Users',
                     'icon': 'icon-user',
-                    'models': ('core.user',)
+                    'models': (
+                        'core.user',
+                        'organizations.org')
                 },
                 {
                     'label': 'Locations',

@@ -9,6 +9,11 @@ from rules.contrib.admin import ObjectPermissionsModelAdmin
 from core.models import RelatedOrgPermissionModel, User
 
 
+class AccessLevel:
+    SUPERUSER = 'superuser'
+    RESTRICTED = 'restricted'
+
+
 class RelatedOrgPermissionModelAdmin(ObjectPermissionsModelAdmin):
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -23,7 +28,7 @@ class RelatedOrgPermissionModelAdmin(ObjectPermissionsModelAdmin):
             Model = formfield.queryset.model
 
             if issubclass(Model, RelatedOrgPermissionModel):
-                formfield.queryset = Model.objects.for_org_user(
+                formfield.queryset = Model.objects.all().for_org_user(
                     request.org, request.user
                 )
 
@@ -43,21 +48,15 @@ class RelatedOrgPermissionModelAdmin(ObjectPermissionsModelAdmin):
     def save_model(self, request, obj, form, change):
         # If not a superuser, force to default org
         if not request.user.is_superuser:
-            obj.org = request.user.org
+            try:
+                obj.org = request.user.org
+            except AttributeError:
+                pass
 
         super().save_model(request, obj, form, change)
 
 
-class UserAdmin(UserAdminBase):
-    # add_form_template = 'admin/auth/user/add_form.html'
-    # change_user_password_template = None
-    fieldsets = (
-        (None, {'fields': ('email', 'password')}),
-        (_('Personal info'), {'fields': ('display_name', 'email')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                       'groups', 'user_permissions')}),
-        (_('Important dates'), {'fields': ('last_login',)}),
-    )
+class UserAdmin(RelatedOrgPermissionModelAdmin, UserAdminBase):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
@@ -72,6 +71,84 @@ class UserAdmin(UserAdminBase):
     search_fields = ('email', 'display_name', 'email')
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions',)
+
+    _add_fieldset_choices = {
+        AccessLevel.SUPERUSER: (
+            (None, {
+                'classes': ('wide',),
+                'fields': ('display_name', 'email', 'password1', 'password2')
+            }),
+        ),
+        AccessLevel.RESTRICTED: (
+            (None, {
+                'classes': ('wide',),
+                'fields': ('display_name', 'email', 'password1', 'password2')
+            }),
+        ),
+    }
+
+    _fieldset_choices = {
+        AccessLevel.SUPERUSER: (
+            (None, {'fields': ('display_name', 'email', 'password')}),
+            (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+                                           'groups', 'user_permissions')}),
+            (_('Important dates'), {'fields': ('last_login',)}),
+        ),
+        AccessLevel.RESTRICTED: (
+            (None, {'fields': ('display_name', 'email', 'password')}),
+            (_('Permissions'), {'fields': ('is_active',)}),
+        )
+    }
+
+    def get_fieldsets(self, request, obj=None):
+        if obj is None:
+            fieldset_choices = self._add_fieldset_choices
+        else:
+            fieldset_choices = self._fieldset_choices
+
+        if request.user.is_superuser:
+            return fieldset_choices[AccessLevel.SUPERUSER]
+        else:
+            return fieldset_choices[AccessLevel.RESTRICTED]
+
+    @property
+    def inlines(self):
+        # Avoid circular imports (otherwise would need to move
+        # OrgUserRoleInline to this file, but it seems better to keep
+        # in organizations app).
+        from organizations.admin import OrgUserRoleInline
+
+        return [
+            OrgUserRoleInline
+        ]
+
+    def get_inline_instances(self, request, obj=None):
+        # Avoid circular imports (otherwise would need to move
+        # OrgUserRoleInline to this file, but it seems better to keep
+        # in organizations app).
+        from organizations.admin import OrgUserRoleInline
+
+        inline_instances = []
+        inline_class = OrgUserRoleInline
+
+        inline = inline_class(self.model, self.admin_site)
+        inline.max_num = 1
+
+        if request:
+            inline.max_num = 1
+
+            # Not sure if this is needed (from ModelAdmin.get_inline_instances)
+            if not (inline.has_add_permission(request) or
+                    inline.has_change_permission(request, obj) or
+                    inline.has_delete_permission(request, obj)):
+                return []
+
+            if not inline.has_add_permission(request):
+                inline.max_num = 0
+
+        inline_instances.append(inline)
+
+        return inline_instances
 
 
 admin.site.register(User, UserAdmin)

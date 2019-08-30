@@ -1,18 +1,27 @@
 from django.db import models
 from enumfields import Enum, EnumIntegerField
+from rules.contrib.models import RulesModel
 
 from core.models import AddressModel
 
 
-class OrgUserRole(Enum):
+class OrgUserRoleType(Enum):
     ADMIN = 1
     READ_ONLY = 2
 
 
-class OrgUser(models.Model):
-    role = EnumIntegerField(OrgUserRole, default=OrgUserRole.READ_ONLY)
-    user = models.ForeignKey('core.User', on_delete=models.CASCADE)
-    org = models.ForeignKey('Org', on_delete=models.CASCADE)
+class OrgUserRole(RulesModel):
+    type = EnumIntegerField(OrgUserRoleType, default=OrgUserRoleType.READ_ONLY)
+    user = models.ForeignKey(
+        'core.User',
+        on_delete=models.CASCADE,
+        related_name='org_roles'
+    )
+    org = models.ForeignKey(
+        'Org',
+        on_delete=models.CASCADE,
+        related_name='user_roles',
+    )
 
     class Meta:
         unique_together = ('user', 'org')
@@ -21,14 +30,12 @@ class OrgUser(models.Model):
         return '{} ({})'.format(str(self.user), str(self.org))
 
 
-class Org(AddressModel):
-    name = models.CharField(max_length=100, blank=True)
-    owner = models.ForeignKey(
-        'core.User', on_delete=models.SET_NULL, blank=True, null=True,
-        related_name='owned_orgs')
+class Org(AddressModel, RulesModel):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=False, blank=True)
     users = models.ManyToManyField(
         'core.User',
-        through=OrgUser,
+        through=OrgUserRole,
         related_name='orgs'
     )
     ein = models.CharField(max_length=10, blank=True)

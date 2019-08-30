@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_rq',
     'phonenumber_field',
-    'rangefilter',
+    'date_range_filter',
     'rules.apps.AutodiscoverRulesConfig',
 
     # Late dependencies
@@ -187,68 +187,4 @@ SMS_FROM_NUMBER = os.environ.get('SMS_FROM_NUMBER')
 SUIT_CONFIG = {
     'ADMIN_NAME': 'Spare',
     'HEADER_TIME_FORMAT': 'h:iA',
-    'MENU': (
-        {
-            'app': 'donations',
-            'label': 'Donations',
-            'models': [
-                {
-                    'model': 'donations.donationrequest',
-                    'label': 'Requests',
-                },
-                {
-                    'model': 'donations.donationfulfillment',
-                    'label': 'Fulfillments',
-                }
-            ]
-        },
-        {
-            'label': 'Scheduling',
-            'icon': 'icon-calendar',
-            'models': [
-                {
-                    'model': 'donations.dropofftime',
-                    'label': 'Dropoff Times',
-                },
-                {
-                    'model': 'donations.manualdropoffdate',
-                    'label': 'Manual Dropoff Date',
-                }
-            ]
-        },
-        'core',
-        {
-            'label': 'Users',
-            'icon': 'icon-user',
-            'models': ('core.user',)
-        },
-        {
-            'label': 'Locations',
-            'icon': 'icon-map-marker',
-            'models': ('donations.location', 'donations.neighborhood')
-        },
-        {
-            'label': 'Settings',
-            'icon': 'icon-cog',
-            'models': [
-                {
-                    'model': 'donations.category',
-                    'label': 'Categories'
-                },
-                {
-                    'model': 'donations.item',
-                    'label': 'Items',
-                },
-            ]
-        },
-        {
-            'app': 'organizations',
-            'models': [
-                {
-                    'model': 'donations.organization',
-                },
-            ]
-        },
-        'sites',
-    ),
 }
