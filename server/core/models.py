@@ -4,8 +4,81 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
+from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Q
+from django.db.models.manager import BaseManager
 from django.utils.translation import ugettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+from rules.contrib.models import RulesModel, RulesModelBase
+
+zipcode_validator = RegexValidator(
+    message='Invalid zip code format (must be 5 or 9 digits)',
+    code='invalid_zipcode',
+)
+
+
+class RelatedOrgQuerySet(models.QuerySet):
+    def get_visibility_filter(self, user):
+        raise NotImplementedError
+
+    def for_org_user(self, org, user):
+        if user.is_superuser:
+            return self.all()
+
+        elif not org:
+            return self.none()
+
+        else:
+            return self.filter(**self.model.get_visibility_filter_params(org))
+
+
+class RelatedOrgManager(BaseManager.from_queryset(RelatedOrgQuerySet)):
+    pass
+
+
+class RelatedOrgPermissionModel(RulesModel):
+    # To bypass, set to 'None'
+    org_lookup = 'org'
+
+    def get_related_org(self):
+        # If already has related org, just return org
+        if hasattr(self, 'org'):
+            return getattr(self, 'org')
+
+        # Otherwise, subclass must define behavior
+        raise NotImplementedError('Subclass must define related orgs')
+
+    @classmethod
+    def get_visibility_filter_params(cls, org):
+        # If using default lookup, query by default
+        lookup = cls.org_lookup
+
+        if lookup:
+            return {
+                cls.org_lookup: org
+            }
+
+        # Otherwise, sublcass must define behavior
+        raise NotImplementedError('Subclass must define visibility filter params')
+
+    objects = RelatedOrgManager()
+
+    class Meta(RulesModelBase):
+        abstract = True
+
+
+class AddressModel(models.Model):
+    street_address_1 = models.CharField(max_length=150)
+    street_address_2 = models.CharField(max_length=150, blank=True)
+    city = models.CharField(max_length=50, default='Los Angeles')
+    state = models.CharField(max_length=2, default='CA')
+    zipcode = models.CharField(max_length=10, validators=[zipcode_validator], default='90042')
+    phone = PhoneNumberField(blank=True)
+    website = models.URLField(max_length=100, blank=True)
+
+    class Meta:
+        abstract = True
 
 
 class UserManager(BaseUserManager):
@@ -69,6 +142,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     REQUIRED_FIELDS = ['display_name']
+
+    @property
+    def org(self):
+        from organizations.models import Org
+
+        # Return first related org (either owner or staff)
+        return Org.objects.filter(
+            Q(users=self) | Q(owner=self)).first()
+
+    # Possible solution (if this is too slow):
+    # @cached_property
+    @property
+    def is_org_user(self):
+        return bool(self.org)
 
     def __str__(self):
         return self.email

@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     # Must be before contrib.admin
     'core',
     'suit',
+    'organizations',
 
     # Django apps
     'django.contrib.admin',
@@ -32,6 +33,10 @@ INSTALLED_APPS = [
     'django_rq',
     'phonenumber_field',
     'rangefilter',
+    'rules.apps.AutodiscoverRulesConfig',
+
+    # Late dependencies
+    'overrides',
 ]
 
 MIDDLEWARE = [
@@ -43,9 +48,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'organizations.middleware.OrgMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
+    'rules.permissions.ObjectPermissionBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
@@ -97,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -174,3 +181,74 @@ else:
     raise ValueError("SMS_BACKEND must be set to either 'twilio', 'locmem', or 'console'")
 
 SMS_FROM_NUMBER = os.environ.get('SMS_FROM_NUMBER')
+
+# Django Suit
+
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'Spare',
+    'HEADER_TIME_FORMAT': 'h:iA',
+    'MENU': (
+        {
+            'app': 'donations',
+            'label': 'Donations',
+            'models': [
+                {
+                    'model': 'donations.donationrequest',
+                    'label': 'Requests',
+                },
+                {
+                    'model': 'donations.donationfulfillment',
+                    'label': 'Fulfillments',
+                }
+            ]
+        },
+        {
+            'label': 'Scheduling',
+            'icon': 'icon-calendar',
+            'models': [
+                {
+                    'model': 'donations.dropofftime',
+                    'label': 'Dropoff Times',
+                },
+                {
+                    'model': 'donations.manualdropoffdate',
+                    'label': 'Manual Dropoff Date',
+                }
+            ]
+        },
+        'core',
+        {
+            'label': 'Users',
+            'icon': 'icon-user',
+            'models': ('core.user',)
+        },
+        {
+            'label': 'Locations',
+            'icon': 'icon-map-marker',
+            'models': ('donations.location', 'donations.neighborhood')
+        },
+        {
+            'label': 'Settings',
+            'icon': 'icon-cog',
+            'models': [
+                {
+                    'model': 'donations.category',
+                    'label': 'Categories'
+                },
+                {
+                    'model': 'donations.item',
+                    'label': 'Items',
+                },
+            ]
+        },
+        {
+            'app': 'organizations',
+            'models': [
+                {
+                    'model': 'donations.organization',
+                },
+            ]
+        },
+        'sites',
+    ),
+}

@@ -1,10 +1,51 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as UserAdminBase
 from django.contrib.auth.forms import (
-    AdminPasswordChangeForm, UserChangeForm, UserCreationForm)
+    AdminPasswordChangeForm, UserChangeForm, UserCreationForm
+)
 from django.utils.translation import ugettext_lazy as _
+from rules.contrib.admin import ObjectPermissionsModelAdmin
 
-from core.models import User
+from core.models import RelatedOrgPermissionModel, User
+
+
+class RelatedOrgPermissionModelAdmin(ObjectPermissionsModelAdmin):
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+
+        return queryset.for_org_user(request.org, request.user)
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        formfield = super().formfield_for_dbfield(db_field, request, **kwargs)
+
+        # Restrict related permission model choices
+        if formfield and hasattr(formfield, 'queryset'):
+            Model = formfield.queryset.model
+
+            if issubclass(Model, RelatedOrgPermissionModel):
+                formfield.queryset = Model.objects.for_org_user(
+                    request.org, request.user
+                )
+
+        return formfield
+
+    def get_exclude(self, request, obj):
+        excluded = super().get_exclude(request, obj) or []
+
+        # If not a superuser, remove org choice from select
+        if not request.user.is_superuser:
+            excluded.append('org')
+
+        # If excluded is empty list, return None (to be
+        # consistent with Django)
+        return excluded or None
+
+    def save_model(self, request, obj, form, change):
+        # If not a superuser, force to default org
+        if not request.user.is_superuser:
+            obj.org = request.user.org
+
+        super().save_model(request, obj, form, change)
 
 
 class UserAdmin(UserAdminBase):

@@ -6,6 +6,11 @@ from django.utils import timezone
 from enumfields import Enum, EnumIntegerField
 from phonenumber_field.modelfields import PhoneNumberField
 
+from core.models import (
+    AddressModel, RelatedOrgManager, RelatedOrgPermissionModel,
+    RelatedOrgQuerySet
+)
+
 # Defaults for initial items and categories (used in migrations)
 # Each category tuple is mapped to a set (not dict) of tuples containing
 # the item tag ('sleeping_bags') and display name ('Sleeping Bags')
@@ -51,12 +56,6 @@ tag_validator = RegexValidator(
     regex='^[a-z_]*$',
     message='Only lower case letters and underscores allowed for tag',
     code='invalid_tag'
-)
-
-
-zipcode_validator = RegexValidator(
-    message='Invalid zip code format (must be 5 or 9 digits)',
-    code='invalid_zipcode',
 )
 
 
@@ -108,19 +107,19 @@ class Neighborhood(models.Model):
         return self.name
 
 
-class Location(models.Model):
+class Location(RelatedOrgPermissionModel, AddressModel):
     location_name = models.CharField(max_length=100, blank=True)
     organization_name = models.CharField(max_length=100, blank=True)
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='locations')
-    street_address_1 = models.CharField(max_length=150)
-    street_address_2 = models.CharField(max_length=150, blank=True)
-    city = models.CharField(max_length=50, default='Los Angeles')
-    state = models.CharField(max_length=2, default='CA')
-    zipcode = models.CharField(max_length=10, validators=[zipcode_validator], default='90042')
-    phone = PhoneNumberField(blank=True)
-    website = models.URLField(max_length=100, blank=True)
     maps_url = models.URLField(max_length=160, blank=True)
     notes = models.TextField(blank=True)
+
+    org = models.ForeignKey(
+        'organizations.Org',
+        on_delete=models.CASCADE,
+        related_name='locations',
+        null=True,
+        blank=True)
 
     def __str__(self):
         return self.location_name
@@ -136,11 +135,13 @@ class DaysOfWeek(Enum):
     SUNDAY = 6
 
 
-class DropoffTime(models.Model):
+class DropoffTime(RelatedOrgPermissionModel):
     time_start = models.TimeField()
     time_end = models.TimeField()
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='dropoff_times')
     day = EnumIntegerField(DaysOfWeek, default=DaysOfWeek.SUNDAY)
+
+    org_lookup = 'location__org'
 
     def get_visible_dates(self):
         results = []
@@ -170,11 +171,15 @@ class DropoffTime(models.Model):
 
         return results
 
+    def get_related_org(self):
+        if self.location:
+            return self.location.org
+
     def __str__(self):
         return '{} - {}'.format(self.location, self.time_start)
 
 
-class VisibleManualDropoffDates(models.Manager):
+class VisibleManualDropoffDates(RelatedOrgManager):
     def get_queryset(self):
         visibility_start = timezone.now() + timedelta(hours=24)
         visibility_end = timezone.now() + timedelta(days=15)
@@ -185,14 +190,21 @@ class VisibleManualDropoffDates(models.Manager):
         )
 
 
-class ManualDropoffDate(models.Model):
+class ManualDropoffDate(RelatedOrgPermissionModel):
     time_start = models.TimeField()
     time_end = models.TimeField()
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='manual_dropoff_dates')
     dropoff_date = models.DateField(null=True)
 
-    objects = models.Manager()
+    objects = RelatedOrgQuerySet.as_manager()
     visible = VisibleManualDropoffDates()
+
+    org_lookup = 'location__org'
+
+    @property
+    def org(self):
+        if self.location:
+            return self.location.org
 
     def __str__(self):
         return '{} - {}: {}'.format(self.location, self.dropoff_date, self.time_start)
@@ -213,14 +225,21 @@ class ActiveRequestManager(models.Manager):
         )
 
 
-class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
+class DonationRequest(RelatedOrgPermissionModel, ContactModelMixin, TimestampedModelMixin):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     size = models.CharField(max_length=16, blank=True)
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
     code = models.CharField(max_length=50)
     accepted = models.BooleanField(default=False)
 
-    objects = models.Manager()
+    org = models.ForeignKey(
+        'organizations.Org',
+        on_delete=models.SET_NULL,
+        related_name='donation_requests',
+        null=True,
+        blank=True)
+
+    objects = RelatedOrgManager()
     unfulfilled = UnfulfilledRequestManager()
     active = ActiveRequestManager()
 
@@ -228,12 +247,14 @@ class DonationRequest(ContactModelMixin, TimestampedModelMixin, models.Model):
         return '{} - {}'.format(self.item, self.created)
 
 
-class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, models.Model):
+class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, RelatedOrgPermissionModel):
     request = models.ForeignKey(DonationRequest, on_delete=models.CASCADE, related_name='fulfillments')
     dropoff_time = models.ForeignKey(DropoffTime, on_delete=models.CASCADE, null=True, blank=True)
     manual_dropoff_date = models.ForeignKey(ManualDropoffDate, on_delete=models.CASCADE, null=True, blank=True)
     accepted = models.BooleanField(default=False)
     dropoff_date = models.DateField(null=True, blank=True)
+
+    org_lookup = 'dropoff_time__location__org'
 
     def __str__(self):
         return '{} ({}) - {}'.format(self.request.item, self.location, self.dropoff_date)
