@@ -4,11 +4,84 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
+from django.core.validators import RegexValidator
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+from rules.contrib.models import RulesModel, RulesModelBase
+
+zipcode_validator = RegexValidator(
+    message='Invalid zip code format (must be 5 or 9 digits)',
+    code='invalid_zipcode',
+)
 
 
-class UserManager(BaseUserManager):
+class RelatedOrgQuerySet(models.QuerySet):
+    def get_visibility_filter(self, user):
+        raise NotImplementedError
+
+    def for_org_user(self, org, user):
+        if user.is_superuser:
+            return self.all()
+
+        elif not org:
+            return self.none()
+
+        else:
+            return self.filter(**self.model.get_visibility_filter_params(org))
+
+
+class RelatedOrgManager(models.Manager):
+    def get_queryset(self):
+        return RelatedOrgQuerySet(self.model)
+
+
+class RelatedOrgPermissionModel(RulesModel):
+    # To bypass, set to 'None'
+    org_lookup = 'org'
+
+    def get_related_org(self):
+        # If already has related org, just return org
+        if hasattr(self, 'org'):
+            return getattr(self, 'org')
+
+        # Otherwise, subclass must define behavior
+        raise NotImplementedError('Subclass must define related orgs')
+
+    @classmethod
+    def get_visibility_filter_params(cls, org):
+        # If using default lookup, query by default
+        lookup = cls.org_lookup
+
+        if lookup:
+            return {
+                cls.org_lookup: org
+            }
+
+        # Otherwise, sublcass must define behavior
+        raise NotImplementedError('Subclass must define visibility filter params')
+
+    objects = RelatedOrgManager()
+
+    class Meta(RulesModelBase):
+        abstract = True
+
+
+class AddressModel(models.Model):
+    street_address_1 = models.CharField(max_length=150)
+    street_address_2 = models.CharField(max_length=150, blank=True)
+    city = models.CharField(max_length=50, default='Los Angeles')
+    state = models.CharField(max_length=2, default='CA')
+    zipcode = models.CharField(max_length=10, validators=[zipcode_validator], default='90042')
+    phone = PhoneNumberField(blank=True)
+    website = models.URLField(max_length=100, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class UserManager(RelatedOrgManager, BaseUserManager):
     """
     A custom user manager to deal with emails as unique identifiers for auth
     instead of usernames.
@@ -44,7 +117,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(RelatedOrgPermissionModel, AbstractBaseUser, PermissionsMixin, metaclass=RulesModelBase):
     email = models.EmailField(unique=True, blank=False)
     display_name = models.CharField(
         _('display name'),
@@ -70,6 +143,29 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     REQUIRED_FIELDS = ['display_name']
 
+    org_lookup = 'org_roles__org'
+
+    @cached_property
+    def org(self):
+        # Return first related org
+        return self.orgs.first()
+
+    @cached_property
+    def is_org_user(self):
+        return bool(self.org)
+
+    def refresh_from_db(self, *args, **kwargs):
+        """
+        Clear any cached properties when fetching from db
+        """
+        self.invalidate_cached_properties()
+        return super().refresh_from_db(*args, **kwargs)
+
+    def invalidate_cached_properties(self):
+        for key, value in self.__class__.__dict__.items():
+            if isinstance(value, cached_property):
+                self.__dict__.pop(key, None)
+
     def __str__(self):
         return self.email
 
@@ -78,3 +174,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.display_name
+
+    # class Meta(RulesModelBase):
+    #     pass

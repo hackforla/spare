@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     # Must be before contrib.admin
     'core',
     'suit',
+    'organizations',
 
     # Django apps
     'django.contrib.admin',
@@ -31,8 +32,11 @@ INSTALLED_APPS = [
     'django_filters',
     'django_rq',
     'phonenumber_field',
-    'rangefilter',
+    'date_range_filter',
     'rules.apps.AutodiscoverRulesConfig',
+
+    # Late dependencies
+    'overrides',
 ]
 
 MIDDLEWARE = [
@@ -44,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'organizations.middleware.OrgMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -99,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -176,3 +181,10 @@ else:
     raise ValueError("SMS_BACKEND must be set to either 'twilio', 'locmem', or 'console'")
 
 SMS_FROM_NUMBER = os.environ.get('SMS_FROM_NUMBER')
+
+# Django Suit
+
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'Spare',
+    'HEADER_TIME_FORMAT': 'h:iA',
+}
