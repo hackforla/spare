@@ -1,5 +1,5 @@
+from date_range_filter import DateRangeFilter
 from django.contrib import admin
-from rangefilter.filter import DateRangeFilter
 
 from core.admin import RelatedOrgPermissionModelAdmin
 from donations.models import (

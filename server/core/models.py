@@ -6,8 +6,7 @@ from django.contrib.auth.models import (
 )
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Q
-from django.db.models.manager import BaseManager
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 from rules.contrib.models import RulesModel, RulesModelBase
@@ -33,8 +32,9 @@ class RelatedOrgQuerySet(models.QuerySet):
             return self.filter(**self.model.get_visibility_filter_params(org))
 
 
-class RelatedOrgManager(BaseManager.from_queryset(RelatedOrgQuerySet)):
-    pass
+class RelatedOrgManager(models.Manager):
+    def get_queryset(self):
+        return RelatedOrgQuerySet(self.model)
 
 
 class RelatedOrgPermissionModel(RulesModel):
@@ -81,7 +81,7 @@ class AddressModel(models.Model):
         abstract = True
 
 
-class UserManager(BaseUserManager):
+class UserManager(RelatedOrgManager, BaseUserManager):
     """
     A custom user manager to deal with emails as unique identifiers for auth
     instead of usernames.
@@ -117,7 +117,7 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(RelatedOrgPermissionModel, AbstractBaseUser, PermissionsMixin, metaclass=RulesModelBase):
     email = models.EmailField(unique=True, blank=False)
     display_name = models.CharField(
         _('display name'),
@@ -143,19 +143,28 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     REQUIRED_FIELDS = ['display_name']
 
-    @property
+    org_lookup = 'org_roles__org'
+
+    @cached_property
     def org(self):
-        from organizations.models import Org
+        # Return first related org
+        return self.orgs.first()
 
-        # Return first related org (either owner or staff)
-        return Org.objects.filter(
-            Q(users=self) | Q(owner=self)).first()
-
-    # Possible solution (if this is too slow):
-    # @cached_property
-    @property
+    @cached_property
     def is_org_user(self):
         return bool(self.org)
+
+    def refresh_from_db(self, *args, **kwargs):
+        """
+        Clear any cached properties when fetching from db
+        """
+        self.invalidate_cached_properties()
+        return super().refresh_from_db(*args, **kwargs)
+
+    def invalidate_cached_properties(self):
+        for key, value in self.__class__.__dict__.items():
+            if isinstance(value, cached_property):
+                self.__dict__.pop(key, None)
 
     def __str__(self):
         return self.email
@@ -165,3 +174,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.display_name
+
+    # class Meta(RulesModelBase):
+    #     pass

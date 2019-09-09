@@ -7,8 +7,7 @@ from enumfields import Enum, EnumIntegerField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from core.models import (
-    AddressModel, RelatedOrgManager, RelatedOrgPermissionModel,
-    RelatedOrgQuerySet
+    AddressModel, RelatedOrgManager, RelatedOrgPermissionModel
 )
 
 # Defaults for initial items and categories (used in migrations)
@@ -196,7 +195,7 @@ class ManualDropoffDate(RelatedOrgPermissionModel):
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='manual_dropoff_dates')
     dropoff_date = models.DateField(null=True)
 
-    objects = RelatedOrgQuerySet.as_manager()
+    objects = RelatedOrgManager()
     visible = VisibleManualDropoffDates()
 
     org_lookup = 'location__org'
@@ -210,14 +209,14 @@ class ManualDropoffDate(RelatedOrgPermissionModel):
         return '{} - {}: {}'.format(self.location, self.dropoff_date, self.time_start)
 
 
-class UnfulfilledRequestManager(models.Manager):
+class UnfulfilledRequestManager(RelatedOrgManager):
     def get_queryset(self):
         return super().get_queryset().filter(
             fulfillments__isnull=True
         )
 
 
-class ActiveRequestManager(models.Manager):
+class ActiveRequestManager(RelatedOrgManager):
     def get_queryset(self):
         return super().get_queryset().filter(
             created__gte=timezone.now() - timedelta(days=10),
@@ -255,6 +254,13 @@ class DonationFulfillment(ContactModelMixin, TimestampedModelMixin, RelatedOrgPe
     dropoff_date = models.DateField(null=True, blank=True)
 
     org_lookup = 'dropoff_time__location__org'
+
+    @property
+    def org(self):
+        try:
+            return self.dropoff_time.location.org
+        except AttributeError:
+            return None
 
     def __str__(self):
         return '{} ({}) - {}'.format(self.request.item, self.location, self.dropoff_date)
