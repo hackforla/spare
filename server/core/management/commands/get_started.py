@@ -100,7 +100,9 @@ class Command(BaseCommand):
             if not options['no_migrations']:
                 call_command('migrate')
             try:
-                User.objects.create_superuser('admin@example.com', 'password')
+                User.objects.create_superuser(
+                    'admin@example.com', 'password',
+                    display_name='Admin')
 
                 self.stdout.write(self.style.SUCCESS("You are migrated and have an admin user"))
                 self.stdout.write(self.style.SUCCESS("Email: admin@example.com"))

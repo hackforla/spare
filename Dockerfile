@@ -22,6 +22,9 @@ WORKDIR /app
 # Use python -u/unbuffered setting
 ENV PYTHONUNBUFFERED 1
 
+# Upgrade pip
+RUN pip install --upgrade pip
+
 # Install requirements
 COPY server/requirements /app/requirements
 RUN pip install -r requirements/prod.txt
