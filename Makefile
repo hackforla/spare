@@ -43,7 +43,7 @@ get_started:
 .PHONY: init
 init: migrate get_started
 
-.PHONY: tests
+.PHONY: reset_db
 reset_db:
 	docker exec -it ${NAME}_server_1 python manage.py reset_db
 
