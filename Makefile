@@ -28,6 +28,10 @@ serve:
 migrate:
 	docker exec -it ${NAME}_server_1 python manage.py migrate
 
+.PHONY: migrations
+migrations:
+	docker exec -it ${NAME}_server_1 python manage.py makemigrations
+
 .PHONY: superuser
 superuser:
 	docker exec -it ${NAME}_server_1 python manage.py createsuperuser

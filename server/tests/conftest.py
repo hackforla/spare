@@ -40,7 +40,6 @@ def donation_request(shirts, neighborhood):
 @pytest.fixture
 def location(neighborhood):
     return Location.objects.create(
-        organization_name='Hands of Hope',
         location_name='LA Coffee',
         neighborhood=neighborhood,
         street_address_1='123 Fake St',

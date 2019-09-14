@@ -19,6 +19,7 @@ from faker_e164.providers import E164Provider
 
 from core.models import User
 from donations.models import DaysOfWeek, DropoffTime, Location, Neighborhood
+from organizations.models import Org, OrgUserRole
 
 fake = Faker()
 fake.add_provider(E164Provider)
@@ -38,16 +39,14 @@ class Command(BaseCommand):
         parser.add_argument(
             '--ignore-duplicates', action='store_true', help='Ignore duplicate objects')
 
-    def create_locations(self, neighborhoods):
-        locations = []
+    def create_orgs(self):
+        orgs = []
 
         for _ in range(DEMO_OBJECT_COUNT):
-            neighborhood = random.choice(neighborhoods)
-
-            location = Location(
-                organization_name=fake.company(),
-                location_name=fake.company(),
-                neighborhood=neighborhood,
+            org = Org(
+                name=fake.company(),
+                email=fake.email(),
+                ein=fake.ein(),
                 street_address_1=fake.street_address(),
                 city='Los Angeles',
                 state='CA',
@@ -55,6 +54,74 @@ class Command(BaseCommand):
                 zipcode=fake.postcode_in_state(state_abbr='CA'),
             )
 
+            orgs.append(org)
+
+        Org.objects.bulk_create(orgs)
+
+        return orgs
+
+    def create_org_users(self, ignore_duplicates=False):
+        org_users = []
+        org_user_roles = []
+        count = 1
+
+        for _ in range(DEMO_OBJECT_COUNT):
+            org_user = User(
+                display_name=fake.first_name(),
+                email='org_user_{}@example.com'.format(count),
+                is_staff=True,
+                is_active=False,
+            )
+
+            count += 1
+            org_users.append(org_user)
+
+        try:
+            User.objects.bulk_create(org_users)
+        except IntegrityError:
+            if not ignore_duplicates:
+                raise CommandError('Existing user(s) found')
+            else:
+                self.stdout.write(self.style.WARNING('Duplicate users found, skipping'))
+                return None
+
+        count = 0
+
+        for org_user in org_users:
+            org_user.set_password('password')
+            org_user.save()
+
+            org_user_role = OrgUserRole(
+                user=org_user,
+                org=self.orgs[count % len(self.orgs)]
+            )
+
+            count += 1
+            org_user_roles.append(org_user_role)
+
+        OrgUserRole.objects.bulk_create(org_user_roles)
+
+        return org_users
+
+    def create_locations(self, neighborhoods):
+        locations = []
+        count = 0
+
+        for _ in range(DEMO_OBJECT_COUNT):
+            neighborhood = random.choice(neighborhoods)
+
+            location = Location(
+                location_name=fake.company(),
+                neighborhood=neighborhood,
+                street_address_1=fake.street_address(),
+                city='Los Angeles',
+                state='CA',
+                phone=fake.e164(region_code='US', valid=True, possible=True),
+                zipcode=fake.postcode_in_state(state_abbr='CA'),
+                org=self.orgs[count % len(self.orgs)]
+            )
+
+            count += 1
             locations.append(location)
 
         Location.objects.bulk_create(locations)
@@ -86,8 +153,15 @@ class Command(BaseCommand):
 
         return dropoff_times
 
-    def load_demo_data(self):
+    def load_demo_data(self, ignore_duplicates=False):
         neighborhoods = Neighborhood.objects.all()
+
+        self.orgs = self.create_orgs()
+        self.stdout.write(self.style.SUCCESS('Successfully create %s orgs' % len(self.orgs)))
+
+        org_users = self.create_org_users(ignore_duplicates=ignore_duplicates)
+        if org_users:
+            self.stdout.write(self.style.SUCCESS('Successfully created %s org users' % len(org_users)))
 
         locations = self.create_locations(neighborhoods)
         self.stdout.write(self.style.SUCCESS('Successfully created %s locations' % len(locations)))
@@ -114,7 +188,7 @@ class Command(BaseCommand):
 
             if not options['skip_demo_data']:
                 self.stdout.write(self.style.SUCCESS('Loading demo data...'))
-                self.load_demo_data()
+                self.load_demo_data(ignore_duplicates=options['ignore_duplicates'])
             else:
                 self.stdout.write(self.style.WARNING('Skipping demo data...'))
         else:
