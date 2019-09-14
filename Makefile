@@ -20,6 +20,10 @@ down:
 shell:
 	docker exec -it ${NAME}_server_1 /bin/bash
 
+.PHONY: shell_plus
+shell_plus:
+	docker exec -it ${NAME}_server_1 python manage.py shell_plus
+
 .PHONY: serve
 serve:
 	docker exec -it ${NAME}_server_1 python manage.py runserver 0.0.0.0:8000
@@ -38,7 +42,7 @@ superuser:
 
 .PHONY: get_started
 get_started:
-	docker exec -it ${NAME}_server_1 python manage.py get_started --no-migrations --ignore-duplicates
+	docker exec -it ${NAME}_server_1 python manage.py get_started --no-migrations
 
 .PHONY: init
 init: migrate get_started
