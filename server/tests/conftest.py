@@ -3,10 +3,12 @@ from unittest.mock import Mock
 import pytest
 from rest_framework.test import APIClient
 
+from core.models import User
 from donations.models import (
     DaysOfWeek, DonationFulfillment, DonationRequest, DropoffTime, Item,
     Location, Neighborhood
 )
+from organizations.models import Org, OrgUserRole, OrgUserRoleType
 
 
 @pytest.fixture
@@ -38,9 +40,43 @@ def donation_request(shirts, neighborhood):
 
 
 @pytest.fixture
-def location(neighborhood):
+def org():
+    org = Org.objects.create(
+        name='Test Org',
+        email='org_owner@example.com',
+        ein='111222333',
+        street_address_1='456 Fake Ave',
+        city='Los Angeles',
+        state='CA',
+        phone='5550000000',
+        zipcode='90100',
+    )
+
+    return org
+
+
+@pytest.fixture
+def org_user(org):
+    org_user = User.objects.create(
+        email='org_user@example.com',
+        display_name='Org User',
+        is_staff=True,
+        is_superuser=False
+    )
+    OrgUserRole(
+        type=OrgUserRoleType.ADMIN,
+        user=org_user,
+        org=org,
+    )
+
+    return org_user
+
+
+@pytest.fixture
+def location(neighborhood, org):
     return Location.objects.create(
         location_name='LA Coffee',
+        org=org,
         neighborhood=neighborhood,
         street_address_1='123 Fake St',
         city='Los Angeles',
