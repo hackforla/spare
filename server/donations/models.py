@@ -115,9 +115,7 @@ class Location(RelatedOrgPermissionModel, AddressModel):
     org = models.ForeignKey(
         'organizations.Org',
         on_delete=models.CASCADE,
-        related_name='locations',
-        null=True,
-        blank=True)
+        related_name='locations')
 
     def __str__(self):
         return self.location_name
