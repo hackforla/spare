@@ -31,13 +31,17 @@ DEMO_OBJECT_COUNT = 10
 class Command(BaseCommand):
     help = 'Create an admin for development purposes'
 
+    def display_success(self, message):
+        self.stdout.write(self.style.SUCCESS(message))
+
+    def display_warning(self, message):
+        self.stdout.write(self.style.WARNING(message))
+
     def add_arguments(self, parser):
         parser.add_argument(
             '--no-migrations', action='store_true', help='Skip running migrations')
         parser.add_argument(
             '--skip-demo-data', action='store_true', help='Skip creating demo data')
-        parser.add_argument(
-            '--ignore-duplicates', action='store_true', help='Ignore duplicate objects')
 
     def create_orgs(self):
         orgs = []
@@ -60,7 +64,7 @@ class Command(BaseCommand):
 
         return orgs
 
-    def create_org_users(self, ignore_duplicates=False):
+    def create_org_users(self):
         org_users = []
         org_user_roles = []
         count = 1
@@ -79,11 +83,8 @@ class Command(BaseCommand):
         try:
             User.objects.bulk_create(org_users)
         except IntegrityError:
-            if not ignore_duplicates:
-                raise CommandError('Existing user(s) found')
-            else:
-                self.stdout.write(self.style.WARNING('Duplicate users found, skipping'))
-                return None
+            self.display_warning('Duplicate users found, skipping')
+            return
 
         count = 0
 
@@ -102,6 +103,8 @@ class Command(BaseCommand):
             org_user_roles.append(org_user_role)
 
         OrgUserRole.objects.bulk_create(org_user_roles)
+
+        self.display_success('Successfully created %s org users' % len(org_users))
 
         return org_users
 
@@ -155,43 +158,46 @@ class Command(BaseCommand):
 
         return dropoff_times
 
-    def load_demo_data(self, ignore_duplicates=False):
+    def load_demo_data(self):
         neighborhoods = Neighborhood.objects.all()
 
         self.orgs = self.create_orgs()
-        self.stdout.write(self.style.SUCCESS('Successfully create %s orgs' % len(self.orgs)))
+        self.display_success('Successfully create %s orgs' % len(self.orgs))
 
-        org_users = self.create_org_users(ignore_duplicates=ignore_duplicates)
-        if org_users:
-            self.stdout.write(self.style.SUCCESS('Successfully created %s org users' % len(org_users)))
+        org_users = self.create_org_users()
 
         locations = self.create_locations(neighborhoods)
-        self.stdout.write(self.style.SUCCESS('Successfully created %s locations' % len(locations)))
+        self.display_success('Successfully created %s locations' % len(locations))
 
         dropoff_times = self.create_dropoff_times(locations)
-        self.stdout.write(self.style.SUCCESS('Successfully created %s dropoff times' % len(dropoff_times)))
+        self.display_success('Successfully created %s dropoff times' % len(dropoff_times))
+
+
+    def create_admin(self):
+        user = User.objects.create_superuser(
+            'admin@example.com', 'password',
+            display_name='Admin')
+
+        self.display_success("An admin user has been created")
+        self.display_success("Email: admin@example.com")
+        self.display_success("Password: password")
+
+        return user
 
     def handle(self, *args, **options):
         if settings.DEBUG is True:
             if not options['no_migrations']:
                 call_command('migrate')
             try:
-                User.objects.create_superuser(
-                    'admin@example.com', 'password',
-                    display_name='Admin')
-
-                self.stdout.write(self.style.SUCCESS("You are migrated and have an admin user"))
-                self.stdout.write(self.style.SUCCESS("Email: admin@example.com"))
-                self.stdout.write(self.style.SUCCESS("Password: password"))
+                self.create_admin()
 
             except IntegrityError:
-                if not options['ignore_duplicates']:
-                    raise CommandError("User admin@example.com already exists")
+                self.display_warning("User admin@example.com already exists")
 
             if not options['skip_demo_data']:
-                self.stdout.write(self.style.SUCCESS('Loading demo data...'))
-                self.load_demo_data(ignore_duplicates=options['ignore_duplicates'])
+                self.display_success('Loading demo data...')
+                self.load_demo_data()
             else:
-                self.stdout.write(self.style.WARNING('Skipping demo data...'))
+                self.warning('Skipping demo data...')
         else:
             raise CommandError("Command can only be run in debug mode")
