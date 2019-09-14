@@ -164,14 +164,13 @@ class Command(BaseCommand):
         self.orgs = self.create_orgs()
         self.display_success('Successfully create %s orgs' % len(self.orgs))
 
-        org_users = self.create_org_users()
+        self.create_org_users()
 
         locations = self.create_locations(neighborhoods)
         self.display_success('Successfully created %s locations' % len(locations))
 
         dropoff_times = self.create_dropoff_times(locations)
         self.display_success('Successfully created %s dropoff times' % len(dropoff_times))
-
 
     def create_admin(self):
         user = User.objects.create_superuser(
