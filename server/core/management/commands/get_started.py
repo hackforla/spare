@@ -19,7 +19,7 @@ from faker_e164.providers import E164Provider
 
 from core.models import User
 from donations.models import DaysOfWeek, DropoffTime, Location, Neighborhood
-from organizations.models import Org, OrgUserRole
+from organizations.models import Org, OrgUserRole, OrgUserRoleType
 
 fake = Faker()
 fake.add_provider(E164Provider)
@@ -88,10 +88,12 @@ class Command(BaseCommand):
         count = 0
 
         for org_user in org_users:
+            # Set password (must be done after bulk create)
             org_user.set_password('password')
             org_user.save()
 
             org_user_role = OrgUserRole(
+                type=OrgUserRoleType.ADMIN,
                 user=org_user,
                 org=self.orgs[count % len(self.orgs)]
             )
