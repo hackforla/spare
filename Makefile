@@ -55,6 +55,9 @@ reset_db:
 tests:
 	docker exec -it ${NAME}_server_1 ./scripts/run_tests.sh
 
+.PHONY: update
+update: update.server update.client
+
 .PHONY: update.server
 update.server:
 	docker exec -it ${NAME}_server_1 pip install -r requirements/local.txt
@@ -66,9 +69,6 @@ install:
 .PHONY: update.client
 update.client: install
 
-.PHONY: update
-update: update.server update.client
-
 .PHONY: shell.client
 shell.client:
 	docker exec -it ${NAME}_client_1 /bin/bash
@@ -76,3 +76,7 @@ shell.client:
 .PHONY: client
 client:
 	docker exec -it ${NAME}_client_1 npm run start
+
+.PHONY: clean
+clean:
+	rm -rf client/node_modules/

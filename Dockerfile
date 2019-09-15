@@ -1,5 +1,5 @@
 # Build client application
-FROM node:8 AS build
+FROM node:10 AS build
 
 WORKDIR /app
 
