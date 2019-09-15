@@ -69,6 +69,10 @@ update.client: install
 .PHONY: update
 update: update.server update.client
 
+.PHONY: shell.client
+shell.client:
+	docker exec -it ${NAME}_client_1 /bin/bash
+
 .PHONY: client
 client:
 	docker exec -it ${NAME}_client_1 npm run start
