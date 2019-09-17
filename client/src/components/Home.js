@@ -1,8 +1,7 @@
 import React from 'react';
 import { Image } from "react-bootstrap";
-import { Col, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { withRouter, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import BlanketImage from '../assets/home/blanket.svg';
 

@@ -59,7 +59,7 @@ export default class DonateCategory extends Component {
   
 
   render() {
-    const { requests, category, paths } = this.props;
+    const { requests, category } = this.props;
 
     const requestsByItemType = this.getRequestsByType(requests);
 

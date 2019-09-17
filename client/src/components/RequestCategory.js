@@ -45,8 +45,6 @@ class RequestItemsLinks extends Component {
 
 export default class RequestItemsList extends Component {
   render() {
-    const { paths } = this.props;
-
     return (
       <div>
         <Row>

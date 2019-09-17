@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { Switch, Redirect, Route } from 'react-router-dom';
+import { Row } from 'react-bootstrap';
+import { Switch, Route } from 'react-router-dom';
 import { itemTypesByCategory } from '../utils/constants';
 
 import RequestForm from './RequestForm';
@@ -35,12 +35,14 @@ export default class Request extends Component {
       );
     };
 
-    for (var category in itemTypesByCategory) {
+    var category;
+
+    for (category in itemTypesByCategory) {
       const renderItemType = renderItemTypeForCategory(category);
       itemTypesByCategory[category].forEach(renderItemType);
     }
     
-    for (var category in itemTypesByCategory) {
+    for (category in itemTypesByCategory) {
       requestCategories.push(
         <RequestCategory category={ category } paths={ paths } />
       )

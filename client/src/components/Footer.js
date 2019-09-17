@@ -1,9 +1,6 @@
 import React from 'react';
-import { Image } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { withRouter, Route, Link } from 'react-router-dom';
-
-import LearnMoreIcon from '../assets/icons/donors/learnmore.svg';
+import { withRouter, Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
