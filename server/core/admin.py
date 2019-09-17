@@ -15,6 +15,8 @@ class AccessLevel:
 
 
 class RelatedOrgPermissionModelAdmin(ObjectPermissionsModelAdmin):
+    list_display_choices = None
+
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
 
@@ -54,6 +56,16 @@ class RelatedOrgPermissionModelAdmin(ObjectPermissionsModelAdmin):
                 pass
 
         super().save_model(request, obj, form, change)
+
+    def get_list_display(self, request):
+        # If not explicitly set, return default list display
+        if not self.list_display_choices:
+            return super().get_list_display(request)
+
+        if request.user.is_superuser:
+            return self.list_display_choices[AccessLevel.SUPERUSER]
+        else:
+            return self.list_display_choices[AccessLevel.RESTRICTED]
 
 
 class UserAdmin(RelatedOrgPermissionModelAdmin, UserAdminBase):

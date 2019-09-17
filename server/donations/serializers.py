@@ -140,11 +140,12 @@ class DonationRequestPublicSerializer(serializers.ModelSerializer):
 
 class LocationSerializer(serializers.ModelSerializer):
     neighborhood = NeighborhoodSerializer()
+    org = serializers.CharField(source='org.name', read_only=True)
 
     class Meta:
         model = Location
         fields = (
-            'organization_name', 'location_name', 'neighborhood', 'street_address_1',
+            'org', 'location_name', 'neighborhood', 'street_address_1',
             'street_address_2', 'city', 'state', 'zipcode', 'phone', 'website', 'maps_url'
         )
 

@@ -41,20 +41,7 @@ class DynamicMenu(Menu):
         elif self.request.user.is_superuser:
 
             self.conf_menu = [
-                {
-                    'app': 'donations',
-                    'label': 'Donations',
-                    'models': [
-                        {
-                            'model': 'donations.donationrequest',
-                            'label': 'Requests',
-                        },
-                        {
-                            'model': 'donations.donationfulfillment',
-                            'label': 'Fulfillments',
-                        }
-                    ]
-                },
+                '-',
                 {
                     'label': 'Scheduling',
                     'icon': 'icon-calendar',
@@ -70,16 +57,31 @@ class DynamicMenu(Menu):
                     ]
                 },
                 {
+                    'label': 'Locations',
+                    'icon': 'icon-map-marker',
+                    'models': ('donations.location', 'donations.neighborhood')
+                },
+                {
+                    'app': 'donations',
+                    'label': 'Donations',
+                    'models': [
+                        {
+                            'model': 'donations.donationrequest',
+                            'label': 'Requests',
+                        },
+                        {
+                            'model': 'donations.donationfulfillment',
+                            'label': 'Fulfillments',
+                        }
+                    ]
+                },
+                '-',
+                {
                     'label': 'Users',
                     'icon': 'icon-user',
                     'models': (
                         'core.user',
                         'organizations.org')
-                },
-                {
-                    'label': 'Locations',
-                    'icon': 'icon-map-marker',
-                    'models': ('donations.location', 'donations.neighborhood')
                 },
                 {
                     'label': 'Settings',
@@ -95,26 +97,14 @@ class DynamicMenu(Menu):
                         },
                     ]
                 },
+                '-',
                 'sites',
             ]
 
         elif self.request.user.is_org_user:
 
             self.conf_menu = [
-                {
-                    'app': 'donations',
-                    'label': 'Donations',
-                    'models': [
-                        {
-                            'model': 'donations.donationrequest',
-                            'label': 'Requests',
-                        },
-                        {
-                            'model': 'donations.donationfulfillment',
-                            'label': 'Fulfillments',
-                        }
-                    ]
-                },
+                '-',
                 {
                     'label': 'Scheduling',
                     'icon': 'icon-calendar',
@@ -130,15 +120,30 @@ class DynamicMenu(Menu):
                     ]
                 },
                 {
+                    'label': 'Locations',
+                    'icon': 'icon-map-marker',
+                    'models': ('donations.location', 'donations.neighborhood')
+                },
+                {
+                    'app': 'donations',
+                    'label': 'Donations',
+                    'models': [
+                        {
+                            'model': 'donations.donationrequest',
+                            'label': 'Requests',
+                        },
+                        {
+                            'model': 'donations.donationfulfillment',
+                            'label': 'Fulfillments',
+                        }
+                    ]
+                },
+                '-',
+                {
                     'label': 'Users',
                     'icon': 'icon-user',
                     'models': (
                         'core.user',
                         'organizations.org')
-                },
-                {
-                    'label': 'Locations',
-                    'icon': 'icon-map-marker',
-                    'models': ('donations.location', 'donations.neighborhood')
                 },
             ]

@@ -108,7 +108,6 @@ class Neighborhood(models.Model):
 
 class Location(RelatedOrgPermissionModel, AddressModel):
     location_name = models.CharField(max_length=100, blank=True)
-    organization_name = models.CharField(max_length=100, blank=True)
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='locations')
     maps_url = models.URLField(max_length=160, blank=True)
     notes = models.TextField(blank=True)
@@ -116,9 +115,8 @@ class Location(RelatedOrgPermissionModel, AddressModel):
     org = models.ForeignKey(
         'organizations.Org',
         on_delete=models.CASCADE,
-        related_name='locations',
-        null=True,
-        blank=True)
+        related_name='locations'
+    )
 
     def __str__(self):
         return self.location_name

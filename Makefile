@@ -20,6 +20,10 @@ down:
 shell:
 	docker exec -it ${NAME}_server_1 /bin/bash
 
+.PHONY: shell_plus
+shell_plus:
+	docker exec -it ${NAME}_server_1 python manage.py shell_plus
+
 .PHONY: serve
 serve:
 	docker exec -it ${NAME}_server_1 python manage.py runserver 0.0.0.0:8000
@@ -28,24 +32,31 @@ serve:
 migrate:
 	docker exec -it ${NAME}_server_1 python manage.py migrate
 
+.PHONY: migrations
+migrations:
+	docker exec -it ${NAME}_server_1 python manage.py makemigrations
+
 .PHONY: superuser
 superuser:
 	docker exec -it ${NAME}_server_1 python manage.py createsuperuser
 
 .PHONY: get_started
 get_started:
-	docker exec -it ${NAME}_server_1 python manage.py get_started --no-migrations --ignore-duplicates
+	docker exec -it ${NAME}_server_1 python manage.py get_started --no-migrations
 
 .PHONY: init
 init: migrate get_started
 
-.PHONY: tests
+.PHONY: reset_db
 reset_db:
 	docker exec -it ${NAME}_server_1 python manage.py reset_db
 
 .PHONY: tests
 tests:
 	docker exec -it ${NAME}_server_1 ./scripts/run_tests.sh
+
+.PHONY: update
+update: update.server update.client
 
 .PHONY: update.server
 update.server:
@@ -58,9 +69,14 @@ install:
 .PHONY: update.client
 update.client: install
 
-.PHONY: update
-update: update.server update.client
+.PHONY: shell.client
+shell.client:
+	docker exec -it ${NAME}_client_1 /bin/bash
 
 .PHONY: client
 client:
 	docker exec -it ${NAME}_client_1 npm run start
+
+.PHONY: clean
+clean:
+	rm -rf client/node_modules/
