@@ -10,6 +10,7 @@ services:
     env_file: .env.dev
     volumes:
       - ./server:/app
+      - /usr/local/lib/python3.6/
     ports:
       - "8000:8000"
     depends_on:
@@ -35,7 +36,7 @@ services:
     volumes:
       - ./client:/app
       - ./server:/app/server
-      - node_modules:/app/node_modules
+      - /app/node_modules
     ports:
       - "${CLIENT_PORT:-3000}:3000"
     depends_on:
@@ -58,5 +59,3 @@ services:
       - db
     stdin_open: true # These two lines allow us to use pdb via stdin:
     tty: true     # docker attach <container>
-volumes:
-  node_modules:
