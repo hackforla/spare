@@ -10,7 +10,6 @@ from donations.models import (
 )
 from organizations.models import Org, OrgUserRole, OrgUserRoleType
 
-
 @pytest.fixture
 def client():
     return APIClient()
@@ -27,8 +26,10 @@ def neighborhood():
 
 
 @pytest.fixture
-def donation_request(shirts, neighborhood):
-    return DonationRequest.objects.create(
+def donation_request(shirts, neighborhood, mailoutbox):
+    assert not mailoutbox
+
+    result = DonationRequest.objects.create(
         name='Jimbo',
         phone='+5556667777',
         email='jimbojones@example.com',
@@ -37,6 +38,12 @@ def donation_request(shirts, neighborhood):
         size='L',
         neighborhood=neighborhood
     )
+
+    # Clear outbox
+    assert mailoutbox
+    del mailoutbox[:]
+
+    return result
 
 
 @pytest.fixture
@@ -124,9 +131,3 @@ def smsoutbox():
     sms.outbox = []
 
     return sms.outbox
-
-
-@pytest.fixture(autouse=True)
-def mock_tasks(monkeypatch):
-    import donations.signals
-    monkeypatch.setattr(donations.signals, 'enqueue', Mock())
