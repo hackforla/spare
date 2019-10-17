@@ -124,9 +124,3 @@ def smsoutbox():
     sms.outbox = []
 
     return sms.outbox
-
-
-@pytest.fixture(autouse=True)
-def mock_tasks(monkeypatch):
-    import donations.signals
-    monkeypatch.setattr(donations.signals, 'enqueue', Mock())
