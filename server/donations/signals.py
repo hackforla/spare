@@ -4,7 +4,6 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from rest_framework.exceptions import ValidationError
 
-from core.queues import enqueue
 from donations.models import DonationFulfillment, DonationRequest
 from donations.tasks import (
     send_fulfillment_confirmation_messages, send_request_confirmation_message
@@ -48,7 +47,7 @@ def create_code(sender, instance, **kwargs):
 @receiver(post_save, sender=DonationRequest)
 def donation_created_email(sender, instance, created, **kwargs):
     if (created):
-        enqueue(send_request_confirmation_message, instance)
+        send_request_confirmation_message(instance)
 
 
 @receiver(post_save, sender=DonationFulfillment)
@@ -61,4 +60,4 @@ def donation_fulfilled_email(sender, instance, created, **kwargs):
                 dropoff_date=instance.manual_dropoff_date.dropoff_date
             )
 
-        enqueue(send_fulfillment_confirmation_messages, instance)
+        send_fulfillment_confirmation_messages(instance)

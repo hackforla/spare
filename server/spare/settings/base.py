@@ -30,7 +30,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
-    'django_rq',
     'phonenumber_field',
     'date_range_filter',
     'rules.apps.AutodiscoverRulesConfig',
@@ -153,20 +152,6 @@ TEMPLATED_EMAIL_FILE_EXTENSION = 'html'
 # Email Addresses
 DEFAULT_FROM_EMAIL = "Spare Team <team@whatcanyouspare.org>"
 ADMINS = [('Team', DEFAULT_FROM_EMAIL)]
-
-# RQ Settings
-RQ_QUEUES = {
-    'default': {
-        'HOST': 'redis',
-        'PORT': 6379,
-        'DB': 0,
-        'DEFAULT_TIMEOUT': 360,
-    }
-}
-if os.environ.get('ENQUEUE_TASKS', 'false') not in ('false', 'true'):
-    raise ValueError("ENQUEUE_TASKS must be set to either 'true' or 'false'")
-
-ENQUEUE_TASKS = os.environ.get('ENQUEUE_TASKS', 'false') == 'true'
 
 # SMS Settings
 if os.environ.get('SMS_BACKEND') == 'twilio':

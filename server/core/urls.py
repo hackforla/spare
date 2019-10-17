@@ -22,9 +22,6 @@ urlpatterns = [
         permission_classes=[],
     )),
 
-    # Django RQ
-    url(r'^django-rq/', include('django_rq.urls')),
-
     # Pages admin
     url(r'^(?!api/).*$', AppView.as_view(), name='app_home'),
 
