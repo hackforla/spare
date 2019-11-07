@@ -6,6 +6,7 @@ from django.contrib.auth.models import (
 )
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Max, F
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
@@ -64,7 +65,7 @@ class RelatedOrgPermissionModel(RulesModel):
 
     objects = RelatedOrgManager()
 
-    class Meta(RulesModelBase):
+    class Meta:
         abstract = True
 
 
@@ -79,6 +80,34 @@ class AddressModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class OrderedModel(models.Model):
+    _order = models.PositiveIntegerField(db_index=True)
+
+    class Meta:
+        abstract = True
+
+    def get_ordering_queryset(self):
+        raise NotImplementedError('Unknown ordering queryset')
+
+    def save(self, *args, **kwargs):
+        if self._order is None:
+            # Get current max order value
+            qs = self.get_ordering_queryset()
+            qs = qs.aggregate(Max('_order'))
+            curr_max = qs.get('_order__max')
+
+            self._order = 0 if curr_max is None else curr_max + 1
+
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        qs = self.get_ordering_queryset()
+        qs.filter(_order__gt=self._order).update(
+            _order=F('_order') - 1)
+
+        super().delete(*args, **kwargs)
 
 
 class UserManager(RelatedOrgManager, BaseUserManager):
@@ -175,5 +204,19 @@ class User(RelatedOrgPermissionModel, AbstractBaseUser, PermissionsMixin, metacl
     def get_short_name(self):
         return self.display_name
 
-    # class Meta(RulesModelBase):
-    #     pass
+
+class ContactModel(models.Model):
+    name = models.CharField(max_length=120)
+    phone = PhoneNumberField(blank=True)
+    email = models.EmailField(blank=True)
+    city = models.CharField(max_length=16, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class TimestampedModel(models.Model):
+    created = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True

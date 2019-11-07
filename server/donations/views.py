@@ -6,16 +6,21 @@ from rest_framework.throttling import UserRateThrottle
 
 from core.utils import is_test_email, is_test_phone
 from donations.models import (
-    DonationFulfillment, DonationRequest, DropoffTime, ManualDropoffDate,
-    Neighborhood
+    Request,
+    Event,
+    Neighborhood,
+    Category
 )
 from donations.serializers import (
-    DonationFulfillmentSerializer, DonationRequestPublicSerializer,
-    DonationRequestSerializer, DropoffTimeSerializer, NeighborhoodSerializer
+    RequestPublicSerializer,
+    RequestSerializer,
+    DatedEventSerializer,
+    NeighborhoodSerializer,
+    CategorySerializer
 )
 
 
-class DonationRequestThrottle(UserRateThrottle):
+class RequestThrottle(UserRateThrottle):
     rate = '12/day'
 
     def get_cache_key(self, request, view):
@@ -34,10 +39,10 @@ class DonationRequestThrottle(UserRateThrottle):
             return super().get_cache_key(request, view)
 
 
-class DonationRequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class RequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     # Limit to unfulfilled requests made within last 10 days
     def get_queryset(self):
-        queryset = DonationRequest.active.all()
+        queryset = Request.active.all()
         neighborhood = self.request.query_params.get('neighborhood', None)
         if neighborhood is not None:
             queryset = queryset.filter(neighborhood=neighborhood)
@@ -45,59 +50,58 @@ class DonationRequestViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, vie
         return queryset
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('item__category__tag', 'item__tag',)
+    #filter_fields = ('request__items__item_type__category__slug, request__items__item_type__slug',)
 
     def get_serializer_class(self):
         if self.action == 'create':
-            return DonationRequestSerializer
+            return RequestSerializer
         else:
-            return DonationRequestPublicSerializer
+            return RequestPublicSerializer
 
     def get_throttles(self):
         if self.request.method == 'GET':
             return []
         else:
-            return [DonationRequestThrottle()]
+            return [RequestThrottle()]
 
 
-class DonationFulfillmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
-    queryset = DonationFulfillment.objects.all()
-    serializer_class = DonationFulfillmentSerializer
+# class DonationFulfillmentViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+#     queryset = DonationFulfillment.objects.all()
+#     serializer_class = DonationFulfillmentSerializer
 
-    def get_throttles(self):
-        if self.request.method == 'GET':
-            return []
-        else:
-            return [DonationRequestThrottle()]
+#     def get_throttles(self):
+#         if self.request.method == 'GET':
+#             return []
+#         else:
+#             return [RequestThrottle()]'
 
-
-class DonationRequestCodeDetailView(generics.RetrieveAPIView):
-    # NOTE: This view is currently not being used, but potentially planned for future
-    #       use
-    queryset = DonationRequest.objects.all()
-    serializer_class = DonationRequestSerializer
-    lookup_field = 'code'
+class CategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 
 class NeighborhoodViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    # Only show neighborhoods with at least one dropoff time
-    queryset = Neighborhood.objects.filter(
-        locations__dropoff_times__isnull=False
-    ).distinct()
+    # TODO: Only show neighborhoods with at least one dropoff time
+    queryset = Neighborhood.objects.all()
     serializer_class = NeighborhoodSerializer
 
 
-class DropoffTimeListView(generics.GenericAPIView):
-    def get_queryset(self):
-        return DropoffTime.objects.all()
+class EventListView(generics.GenericAPIView):
+    queryset = Event.objects.public()
 
     def get(self, request, request_id):
-        request_obj = get_object_or_404(DonationRequest, id=request_id)
+        request_obj = get_object_or_404(Request, id=request_id)
 
-        # TODO: Allow selection from nearby neighborhoods
-        neighborhood = request_obj.neighborhood
-        dropoff_times = DropoffTime.objects.filter(location__neighborhood=neighborhood)
-        manual_dropoff_dates = ManualDropoffDate.visible.filter(location__neighborhood=neighborhood)
+        # If restricted to specific appointment times, return
+        # these values
+        valid_events = request_obj.valid_events.filter(
+            #is_public=True
+        )
 
-        serializer = DropoffTimeSerializer(list(dropoff_times) + list(manual_dropoff_dates), many=True)
+        if not valid_events:
+            neighborhood = request_obj.neighborhood
+            valid_events = Event.objects.public().filter(location__neighborhood=neighborhood)
+
+        serializer = DatedEventSerializer(valid_events.all(), many=True)
+
         return Response(serializer.data)

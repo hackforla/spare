@@ -19,8 +19,8 @@ class DonateSubcategoryLink extends Component {
           displayName={displayName}
           icon={ icon }
           hoverText={ neededText }
-          category={ category }
-          subcategory={ subcategory }
+          category={ category.slug }
+          subcategory={ subcategory.slug }
         />
       </Col>
     )
@@ -29,60 +29,55 @@ class DonateSubcategoryLink extends Component {
 
 export default class DonateCategory extends Component {
   getRequestsByType(requests) {
-    const { category } = this.props;
-
     const results = {};
 
     if (!requests) {
       return null;
     }
     else {
-      // Initialize empty list for each item type
-      itemTypesByCategory[category].forEach((itemType) => {
-        results[itemType] = [];
-      });
-
       //  Add request to each list
-      requests.forEach((itemRequest) => {
-        const itemType = itemRequest.item.tag;
-        if (itemRequest.item.category_tag === category) {
-          results[itemType].push(itemRequest);
-        }
+      requests.forEach((request) => {
+        request.request_items.forEach((requestItem) => {
+          const slug = requestItem.type.slug;
+
+          if (results[slug] == null) {
+            results[slug] = [];
+          }
+
+          results[slug].push(requestItem);
+        });
       });
 
-      return results;
     }
+
+    return results;
   }
 
 
-
-  
-
   render() {
-    const { requests, category } = this.props;
+    const { requests, category, subcategories } = this.props;
 
     const requestsByItemType = this.getRequestsByType(requests);
 
     let items = [];
 
     // Value is only null when there are no requests
-    if (requestsByItemType !== null) {
-      for (var index in itemTypesByCategory[category]) {
-        const itemType = itemTypesByCategory[category][index];
-        const itemTypeRequests = requestsByItemType[itemType];
+    if (requestsByItemType !== null && subcategories) {
+      subcategories.forEach((subcategory) => {
+        const subcategoryRequests = requestsByItemType[subcategory.slug];
 
-        if (itemTypeRequests.length > 0) {
+        if (subcategoryRequests && (subcategoryRequests.length > 0)) {
           items.push(
             <DonateSubcategoryLink
               { ...this.props }
-              count={ itemTypeRequests.length }
-              info={ itemInfo[itemType] }
-              key={ index }
-              subcategory={ itemType }
+              count={ subcategoryRequests.length }
+              info={ itemInfo[subcategory.slug] }
+              key={ subcategory.slug }
+              subcategory={ subcategory }
             />
           );
         }
-      }
+      });
     }
 
     if (items.length < 1) {
@@ -97,7 +92,7 @@ export default class DonateCategory extends Component {
       <div>
         <Row>
           <h3>
-            {this.props.category}
+            {this.props.category.display_name}
           </h3>
           { requests !== null ? items : [] }
         </Row>

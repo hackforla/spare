@@ -6,11 +6,11 @@ import { itemInfo } from '../utils/constants';
 
 class CategoryBreadcrumb extends Component {
   render() {
-    const {mode, item} = this.props.match.params;
+    const {mode, subcategory} = this.props.match.params;
 
     const modeName = mode === 'request' ? 'Request' : 'Donate';
 
-    const info = itemInfo[item];
+    const info = itemInfo[subcategory];
 
     if (!info) {
       return null;
@@ -30,11 +30,11 @@ class CategoryBreadcrumb extends Component {
 
 class DetailBreadcrumb extends Component {
   render() {
-    const {mode, category, item} = this.props.match.params;
+    const {mode, category, subcategory} = this.props.match.params;
 
     const modeName = mode === 'request' ? 'Request' : 'Donate';
 
-    const info = itemInfo[item];
+    const info = itemInfo[subcategory];
 
     if (!info) {
       return null;
@@ -43,7 +43,7 @@ class DetailBreadcrumb extends Component {
       return (
         <Breadcrumb className={ `${ mode }-text` }>
           <Breadcrumb.Item href={`/${ mode }`}>{ modeName }</Breadcrumb.Item>
-          <Breadcrumb.Item href={`/${ mode }/${ category }/${ item }`}>{ info.displayName }</Breadcrumb.Item>
+          <Breadcrumb.Item href={`/${ mode }/${ category }/${ subcategory }`}>{ subcategory }</Breadcrumb.Item>
           <Breadcrumb.Item active>Detail</Breadcrumb.Item>
         </Breadcrumb>
       )
@@ -58,11 +58,11 @@ export default class BreadcrumbNav extends Component {
       <div>
         <Switch>
           <Route
-            exact path='/:mode/:category/:item/:id/'
+            exact path='/:mode/:category/:subcategory/:id?'
             component={ DetailBreadcrumb }
           />
           <Route
-            exact path='/:mode/:category/:item/'
+            exact path='/:mode/:category/:subcategory/'
             component={ CategoryBreadcrumb }
           />
         </Switch>

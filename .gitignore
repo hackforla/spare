@@ -25,6 +25,7 @@ client/src/css
 client/jest*
 
 server/static/
+server/media/
 server/core/templates/index.html
 server/core/static/
 

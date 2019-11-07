@@ -7,6 +7,7 @@ import FulfillmentConfirmation from './FulfillmentConfirmation';
 import { Alert, Button, Checkbox, ControlLabel, FormControl, FormGroup, Radio, Row } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { withBreakpoints } from 'react-breakpoints';
+import { BasketConsumer } from '../providers/BasketProvider';
 import MaskedInput from 'react-maskedinput';
 
 const now = moment();
@@ -23,11 +24,11 @@ const formatTime = (time) => {
 };
 
 class FulfillmentForm extends Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
 
     // Attach item info to component
-    this.info = itemInfo[props.request.item.tag];
+    this.info = itemInfo[props.request.request_items[0].type.slug];
     this.sizes = {};
 
     this.state = {
@@ -193,86 +194,90 @@ class FulfillmentForm extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const data = this.getSerializedData();
+    const subcategory = this.props.request.request_items[0].type.slug;
+    //const data = this.getSerializedData();
 
-    axios.post('/api/fulfillments/', data)
-      .then((res) => {
-        this.setState({
-          submitSuccess: true,
-          data: data,
-        });
-      })
-      .catch((err) => {
-        switch (err.response.status) {
-          case 400:
-            // Serializer/validation errors
-            const errors = err.response.data
-            if (errors['non_field_errors']) {
-              this.setState({
-                alert: {
-                  level: 'danger',
-                  message: (<div>
-                    <p>
-                      { errors['non_field_errors'] }
-                    </p>
-                  </div>)
-                }
-              });
-            }
+    this.props.addToBasket(subcategory, 1);
+    //console.log(data);
 
-            const validationStates = this.state.validationStates;
-            for (let field in this.fields) {
-              if (err.response.data[field]) {
-                validationStates[field] = {
-                  status: 'error',
-                  msg: err.response.data[field][0]
-                }
-              }
-            }
+    //axios.post('/api/fulfillments/', data)
+    //  .then((res) => {
+    //    this.setState({
+    //      submitSuccess: true,
+    //      data: data,
+    //    });
+    //  })
+    //  .catch((err) => {
+    //    switch (err.response.status) {
+    //      case 400:
+    //        // Serializer/validation errors
+    //        const errors = err.response.data
+    //        if (errors['non_field_errors']) {
+    //          this.setState({
+    //            alert: {
+    //              level: 'danger',
+    //              message: (<div>
+    //                <p>
+    //                  { errors['non_field_errors'] }
+    //                </p>
+    //              </div>)
+    //            }
+    //          });
+    //        }
 
-            // Special cases
-            if ( errors['dropoff_time'] || errors['dropoff_date'] ) {
-              validationStates['dropoffTime'] = {
-                status: 'error',
-                msg: 'Please select a valid dropoff time'
-              }
-            }
+    //        const validationStates = this.state.validationStates;
+    //        for (let field in this.fields) {
+    //          if (err.response.data[field]) {
+    //            validationStates[field] = {
+    //              status: 'error',
+    //              msg: err.response.data[field][0]
+    //            }
+    //          }
+    //        }
 
-            this.setState({
-              validationStates
-            })
-            break;
-          // User is being throttled
-          case 429:
-            this.setState({
-              alert: {
-                level: 'danger',
-                message: (<div>
-                  <p>
-                    <strong>Request limit reached</strong><br />
-                    Looks like you've reached the donation limit! :(<br />
-                    Please try again in 24 hours
-                  </p>
-                </div>)
-              }
-            });
-            break;
-          // All other errors
-          default:
-            this.setState({
-              alert: {
-                level: 'danger',
-                message: (<div>
-                  <p>
-                    <strong>Problem fulfilling request</strong><br />
-                    Please contact us if problems persist.<br />
-                  </p>
-                </div>)
-              }
-            });
-        }
-        console.error(err);
-      });
+    //        // Special cases
+    //        if ( errors['dropoff_time'] || errors['dropoff_date'] ) {
+    //          validationStates['dropoffTime'] = {
+    //            status: 'error',
+    //            msg: 'Please select a valid dropoff time'
+    //          }
+    //        }
+
+    //        this.setState({
+    //          validationStates
+    //        })
+    //        break;
+    //      // User is being throttled
+    //      case 429:
+    //        this.setState({
+    //          alert: {
+    //            level: 'danger',
+    //            message: (<div>
+    //              <p>
+    //                <strong>Request limit reached</strong><br />
+    //                Looks like you've reached the donation limit! :(<br />
+    //                Please try again in 24 hours
+    //              </p>
+    //            </div>)
+    //          }
+    //        });
+    //        break;
+    //      // All other errors
+    //      default:
+    //        this.setState({
+    //          alert: {
+    //            level: 'danger',
+    //            message: (<div>
+    //              <p>
+    //                <strong>Problem fulfilling request</strong><br />
+    //                Please contact us if problems persist.<br />
+    //              </p>
+    //            </div>)
+    //          }
+    //        });
+    //    }
+    //    console.error(err);
+    //  });
   }
 
   addDirtyField = (field) => {
@@ -303,7 +308,7 @@ class FulfillmentForm extends Component {
     const { request } = this.props;
 
     // Populate dropoff times
-    axios.get(`/api/requests/${request.id}/dropoff_times/`)
+    axios.get(`/api/requests/${request.id}/events/`)
       .then((res) => {
         this.setState({
           loading: false,
@@ -321,7 +326,7 @@ class FulfillmentForm extends Component {
 
     return dropoffTimes.map((dropoff, index) => {
       const dropoffDate = moment(dropoff.date).format('dddd, LL');
-      const dropoffTime = formatTime(dropoff.time_start);
+      const dropoffTime = formatTime(dropoff.start_time);
       const location = dropoff.location;
       return (
         <Radio
@@ -502,4 +507,24 @@ class FulfillmentForm extends Component {
 }
 
 
-export default withBreakpoints(FulfillmentForm);
+class ConnectedFulfillmentForm extends Component {
+  render() {
+    return (
+      <BasketConsumer>
+        {({basket, addToBasket, removeFromBasket}) => {
+          return (
+            <FulfillmentForm
+              {...this.props }
+              basket={ basket }
+              addToBasket={ addToBasket }
+              removeFromBasket={ removeFromBasket }
+            />
+          )}
+        }
+      </BasketConsumer>
+    );
+  }
+}
+
+
+export default withBreakpoints(ConnectedFulfillmentForm);

@@ -74,7 +74,7 @@ class Command(BaseCommand):
                 display_name=fake.first_name(),
                 email='org_user_{}@example.com'.format(count),
                 is_staff=True,
-                is_active=False,
+                is_active=True,
             )
 
             count += 1

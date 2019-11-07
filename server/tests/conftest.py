@@ -5,10 +5,19 @@ from rest_framework.test import APIClient
 
 from core.models import User
 from donations.models import (
-    DaysOfWeek, DonationFulfillment, DonationRequest, DropoffTime, Item,
-    Location, Neighborhood
+    DaysOfWeek, Request, Location, Neighborhood, ItemType,
+    Category
 )
 from organizations.models import Org, OrgUserRole, OrgUserRoleType
+
+@pytest.fixture
+def clothing():
+    category, _ = Category.objects.get_or_create(
+        display_name='Clothing',
+        slug='clothing'
+    )
+
+    return category
 
 @pytest.fixture
 def client():
@@ -16,8 +25,12 @@ def client():
 
 
 @pytest.fixture
-def shirts():
-    return Item.objects.get(tag='shirts')
+def shirts(clothing):
+    return ItemType.objects.create(
+        category=clothing,
+        slug='shirts',
+        plural_pronoun=False
+    )
 
 
 @pytest.fixture
@@ -29,13 +42,14 @@ def neighborhood():
 def donation_request(shirts, neighborhood, mailoutbox):
     assert not mailoutbox
 
-    result = DonationRequest.objects.create(
+    result = Request.objects.create(
         name='Jimbo',
         phone='+5556667777',
         email='jimbojones@example.com',
         city='Los Angeles',
-        item=shirts,
-        size='L',
+        #item=shirts,
+        #size='L',
+        accepted_terms=True,
         neighborhood=neighborhood
     )
 
@@ -103,26 +117,26 @@ def dropoff_time(location):
     )
 
 
-@pytest.fixture
-def donation_fulfillment(dropoff_time, shirts, neighborhood):
-    donation_request = DonationRequest.objects.create(
-        name='Nelson',
-        phone='+5554443333',
-        email='nelsonmuntz@example.com',
-        city='Los Angeles',
-        item=shirts,
-        size='XL',
-        neighborhood=neighborhood
-    )
+# @pytest.fixture
+# def donation_fulfillment(dropoff_time, shirts, neighborhood):
+#     donation_request = Request.objects.create(
+#         name='Nelson',
+#         phone='+5554443333',
+#         email='nelsonmuntz@example.com',
+#         city='Los Angeles',
+#         item=shirts,
+#         size='XL',
+#         neighborhood=neighborhood
+#     )
 
-    return DonationFulfillment.objects.create(
-        name='Lisa',
-        phone='+5553337777',
-        email='lsimpson@example.com',
-        city='Los Angeles',
-        request=donation_request,
-        dropoff_time=dropoff_time,
-    )
+#     return DonationFulfillment.objects.create(
+#         name='Lisa',
+#         phone='+5553337777',
+#         email='lsimpson@example.com',
+#         city='Los Angeles',
+#         request=donation_request,
+#         dropoff_time=dropoff_time,
+#     )
 
 
 @pytest.fixture(autouse=True)

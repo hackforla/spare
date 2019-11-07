@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as UserAdminBase
 from django.contrib.auth.forms import (
@@ -15,7 +16,28 @@ class AccessLevel:
 
 
 class RelatedOrgPermissionModelAdmin(ObjectPermissionsModelAdmin):
+    fieldset_choices = None
     list_display_choices = None
+    add_fieldset_choice = None
+
+    def _restrict_field_queryset(self, field, org, user, obj=None):
+        """
+        """
+        if not hasattr(field, 'queryset') or not field.queryset.model:
+            return
+
+        Model = field.queryset.model
+
+        # Allow overriding of queryset based on field name (i.e., get_somefield_queryset),
+        # and if not defined will default to all instances of user-owned objects
+        if issubclass(Model, RelatedOrgPermissionModel):
+            method_name = "get_{}_queryset".format(Model._meta.model_name)
+            queryset_method = getattr(self, method_name, None)
+
+            if queryset_method:
+                field.queryset = queryset_method(obj=obj)
+            else:
+                field.queryset = Model.objects.all().for_org_user(org, user)
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
@@ -33,6 +55,26 @@ class RelatedOrgPermissionModelAdmin(ObjectPermissionsModelAdmin):
                 formfield.queryset = Model.objects.all().for_org_user(
                     request.org, request.user
                 )
+
+        return formfield
+
+    def get_form(self, request, obj=None, **kwargs):
+        # NOTE: Reserved for overriding default behavior
+        form = super().get_form(request, obj=obj, **kwargs)
+        for name, field in form.base_fields.items():
+            # NOTE: This updates field.queryset
+            self._restrict_field_queryset(field, request.org, request.user, obj=obj)
+        return form
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        # NOTE: Reserved for overriding default behavior
+        formfield = super().formfield_for_manytomany(db_field, request, **kwargs)
+
+        return formfield
+
+    def formfield_for_choice_field(self, db_field, request, **kwargs):
+        # NOTE: Reserved for overriding default behavior
+        formfield = super().formfield_for_choice_field(db_field, request, **kwargs)
 
         return formfield
 
@@ -67,6 +109,30 @@ class RelatedOrgPermissionModelAdmin(ObjectPermissionsModelAdmin):
         else:
             return self.list_display_choices[AccessLevel.RESTRICTED]
 
+    def get_fieldsets(self, request, obj=None):
+        # If creating a object, default to add choices (if defined), otherwise
+        # default field choices
+        if not obj:
+            fieldset_choices = self.add_fieldset_choices or self.fieldset_choices
+        else:
+            fieldset_choices = self.fieldset_choices
+
+        if request.user.is_superuser:
+            return fieldset_choices[AccessLevel.SUPERUSER]
+        else:
+            return fieldset_choices[AccessLevel.RESTRICTED]
+
+
+    def get_fieldsets(self, request, obj=None):
+        # If not explicitly set, return default fieldsets
+        if not self.fieldset_choices:
+            return super().get_fieldsets(request, obj=obj)
+
+        if request.user.is_superuser:
+            return self.fieldset_choices[AccessLevel.SUPERUSER]
+        else:
+            return self.list_display_choices[AccessLevel.RESTRICTED]
+
 
 class UserAdmin(RelatedOrgPermissionModelAdmin, UserAdminBase):
     add_fieldsets = (
@@ -84,7 +150,7 @@ class UserAdmin(RelatedOrgPermissionModelAdmin, UserAdminBase):
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions',)
 
-    _add_fieldset_choices = {
+    add_fieldset_choices = {
         AccessLevel.SUPERUSER: (
             (None, {
                 'classes': ('wide',),
@@ -99,7 +165,7 @@ class UserAdmin(RelatedOrgPermissionModelAdmin, UserAdminBase):
         ),
     }
 
-    _fieldset_choices = {
+    fieldset_choices = {
         AccessLevel.SUPERUSER: (
             (None, {'fields': ('display_name', 'email', 'password')}),
             (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
@@ -111,17 +177,6 @@ class UserAdmin(RelatedOrgPermissionModelAdmin, UserAdminBase):
             (_('Permissions'), {'fields': ('is_active',)}),
         )
     }
-
-    def get_fieldsets(self, request, obj=None):
-        if obj is None:
-            fieldset_choices = self._add_fieldset_choices
-        else:
-            fieldset_choices = self._fieldset_choices
-
-        if request.user.is_superuser:
-            return fieldset_choices[AccessLevel.SUPERUSER]
-        else:
-            return fieldset_choices[AccessLevel.RESTRICTED]
 
     @property
     def inlines(self):

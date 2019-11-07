@@ -9,13 +9,13 @@ import { LinkContainer } from 'react-router-bootstrap';
 class DonateItemsTypeTableSmall extends Component {
   render() {
 
-    const { category, requestsForItemType } = this.props;
+    const { category, requestsForSubcategory, subcategory } = this.props;
 
     return (
       <div>
         {
-          requestsForItemType ? requestsForItemType.map((request) => {
-            if (category === request.item.category_tag){
+          requestsForSubcategory ? requestsForSubcategory.map((request) => {
+            if (subcategory.slug === request.type.slug){
               return (
                 <Table responsive className='table-requests-mobile' key={request.id}>
                   <tbody key={request.id}>
@@ -33,7 +33,7 @@ class DonateItemsTypeTableSmall extends Component {
                     </tr>
                     <tr>
                       <td>
-                        <LinkContainer to={`/donate/${ category }/${ request.item.tag }/${ request.id }`}>
+                        <LinkContainer to={`/donate/${ category.tag }/${ request.item.category_tag }/${ request.id }`}>
                           <Button>Donate</Button>
                         </LinkContainer>
                       </td>
@@ -56,7 +56,7 @@ class DonateItemsTypeTableSmall extends Component {
 class DonateItemsTypeTableLarge extends Component {
   render() {
 
-    const { category, requestsForItemType } = this.props;
+    const { category, subcategory, requestsForSubcategory } = this.props;
 
     return (
       <Table responsive>
@@ -68,14 +68,14 @@ class DonateItemsTypeTableLarge extends Component {
         </thead>
         <tbody>
           {
-            requestsForItemType ? requestsForItemType.map((request) => {
-              if (category === request.item.category_tag){
+            requestsForSubcategory ? requestsForSubcategory.map((request) => {
+              if (subcategory.slug === request.type.slug){
                 return (
                   <tr key={request.id}>
                     <td className="col-md-5">{ request.size || 'N/A' }</td>
                     <td className="col-md-4">{ request.neighborhood.name }</td>
                     <td className="col-md-3 text-right">
-                      <LinkContainer to={`/donate/${ category }/${ request.item.tag }/${ request.id }`}>
+                      <LinkContainer to={`/donate/${ category.slug }/${ request.type.slug }/${ request.id }`}>
                         <Button>Donate</Button>
                       </LinkContainer>
                     </td>
@@ -97,56 +97,57 @@ class DonateItemsTypeTableLarge extends Component {
 
 class DonateItemsTypeTable extends Component {
   getRequestsByType(requests) {
-    const { category } = this.props;
-
     const results = {};
 
     if (!requests) {
       return null;
     }
     else {
-      // Initialize empty list for each item type
-      itemTypesByCategory[category].forEach((itemType) => {
-        results[itemType] = [];
-      });
-
       //  Add request to each list
-      requests.forEach((itemRequest) => {
-        const itemType = itemRequest.item.tag;
-        if (itemRequest.item.category_tag === category) {
-          results[itemType].push(itemRequest);
-        }
+      requests.forEach((request) => {
+        request.request_items.forEach((requestItem) => {
+          const slug = requestItem.type.slug;
+
+          if (results[slug] == null) {
+            results[slug] = [];
+          }
+
+          requestItem = {...requestItem, ...request};
+
+          results[slug].push(requestItem);
+        });
       });
 
-      return results;
     }
+
+    return results;
   }
 
   render() {
-    const { breakpoints, currentBreakpoint, category, itemType, requests } = this.props;
+    const { breakpoints, currentBreakpoint, category, subcategory, requests } = this.props;
 
     const requestsByItemType = this.getRequestsByType(requests);
-    let requestsForItemType = [];
+    let requestsForSubcategory = [];
     if (requestsByItemType !== null) {
-      requestsForItemType = requestsByItemType[itemType];
+      requestsForSubcategory = requestsByItemType[subcategory.slug];
     }
 
     let itemsTable = null;
     if (breakpoints[currentBreakpoint] >= breakpoints.tablet) {
       itemsTable = (
-        <DonateItemsTypeTableLarge requests={requests} category={category} requestsForItemType={requestsForItemType} />
+        <DonateItemsTypeTableLarge requests={requests} category={category} subcategory={subcategory} requestsForSubcategory={requestsForSubcategory} />
       )
     }
     else {
       itemsTable = (
-        <DonateItemsTypeTableSmall requests={requests} category={category} requestsForItemType={requestsForItemType} />
+        <DonateItemsTypeTableSmall requests={requests} category={category} subcategory={subcategory} requestsForSubcategory={requestsForSubcategory} />
       )
     }
 
     return (
       <div>
         <Row className="hero text-center">
-          <h2>Here are all of the requests for { itemInfo[itemType].verboseName }</h2>
+          <h2>Here are all of the requests for { subcategory.inline_text_name }</h2>
         </Row>
         { itemsTable }
       </div>
@@ -157,18 +158,18 @@ class DonateItemsTypeTable extends Component {
 
 class DonateItemsTable extends Component {
   render() {
+    const { category, paths, requests } = this.props;
+    const items = [];
 
-    const { category, paths } = this.props;
+    category.subcategories.forEach((subcategory) => {
+      const path = paths[category.slug] + '/' + subcategory.slug + '/';
 
-    let items = [];
-    for (var item in itemTypesByCategory[category]) {
-      const itemType = itemTypesByCategory[category][item]
       items.push(
-        <Route exact path={ paths[category] + '/' + itemType + '/' } key={ item }>
+        <Route exact path={ path } key={ subcategory.slug }>
           <DonateItemsTypeTable { ...this.props } />
         </Route>
       );
-    }
+    });
 
 
     return (

@@ -19,7 +19,7 @@ resource "heroku_app" "default" {
 
   config_vars = {
     SECRET_KEY             = "${var.secret_key}"
-    DJANGO_SETTINGS_MODULE = "spare.settings.prod"
+    DJANGO_SETTINGS_MODULE = "config.settings.prod"
   }
 }
 

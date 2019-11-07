@@ -5,11 +5,26 @@ import { itemTypesByCategory } from '../utils/constants';
 
 import RequestForm from './RequestForm';
 import RequestCategory from './RequestCategory';
+import RequestModal from './RequestModal';
+
 
 export default class Request extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      modalIsOpen: false,
+    }
+
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  openModal() {
+    this.setState({modalIsOpen: true});
+  }
+
+  closeModal() {
+    this.setState({modalIsOpen: false});
   }
 
   render() {
@@ -41,12 +56,26 @@ export default class Request extends Component {
       const renderItemType = renderItemTypeForCategory(category);
       itemTypesByCategory[category].forEach(renderItemType);
     }
-    
+
     for (category in itemTypesByCategory) {
       requestCategories.push(
-        <RequestCategory category={ category } paths={ paths } />
+        <RequestCategory category={ category } paths={ paths } openModal={ this.openModal }/>
       )
     }
+
+    const modalStyle = {
+      overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.25)'
+      },
+      content : {
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: '60%',
+        border: '1px solid #ccc',
+        borderRadius: '2px'
+      }
+    }
+
     return (
       <div id="request-container">
         <Switch>
@@ -62,6 +91,11 @@ export default class Request extends Component {
           </Route>
           { routes }
         </Switch>
+        <RequestModal
+          style={ modalStyle }
+          isOpen={ this.state.modalIsOpen }
+          onRequestClose={ this.closeModal }
+        />
       </div>
     )
   }

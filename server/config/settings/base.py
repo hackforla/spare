@@ -73,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'spare.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Default site id

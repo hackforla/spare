@@ -6,7 +6,7 @@ import Tile from './Tile';
 
 class RequestItem extends Component {
   render() {
-    const { itemType, category } = this.props;
+    const { itemType, category, openModal } = this.props;
     const { displayName, icon } = this.props.info;
 
     return (
@@ -16,6 +16,7 @@ class RequestItem extends Component {
           displayName={ displayName }
           icon={ icon }
           category={ category }
+          openModal={ openModal }
           subcategory={ itemType }
         />
       </Col>
@@ -26,7 +27,7 @@ class RequestItem extends Component {
 
 class RequestItemsLinks extends Component {
   render() {
-    const { category } = this.props;
+    const { category, openModal } = this.props;
 
     const categoryItems = itemTypesByCategory[category];
 
@@ -34,7 +35,14 @@ class RequestItemsLinks extends Component {
       <Row>
         {
           categoryItems.map((item) => {
-            return (<RequestItem category={ category } key={ item } itemType={ item } info={ itemInfo[item] }/>)
+            return (
+              <RequestItem
+                category={ category }
+                key={ item }
+                itemType={ item }
+                openModal={ openModal }
+                info={ itemInfo[item] }/>
+            )
           })
         }
       </Row>

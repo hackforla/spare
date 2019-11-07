@@ -2,7 +2,10 @@ import rules
 
 from organizations.rules import is_org_user, is_related_org_user
 
-model_names = ['location', 'dropofftime', 'donationfulfillment', 'manualdropoffdate', 'donationrequest']
+model_names = [
+    'location', 'dropofftime', 'donationfulfillment', 'manualdropoffdate',
+    'donationrequest', 'appointmenttime', 'appointment', 'requestitem'
+]
 
 rules.add_perm('donations', is_org_user)
 

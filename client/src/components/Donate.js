@@ -10,7 +10,7 @@ import Tile from './Tile';
 
 class DonationDetail extends Component {
   render() {
-    const { requests } = this.props;
+    const { requests } = this.props
     const matchParams = this.props.match.params;
 
     const requestsById = {};
@@ -40,7 +40,8 @@ export default class Donate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      requests: null
+      requests: null,
+      categories: null,
     };
   }
 
@@ -52,8 +53,25 @@ export default class Donate extends Component {
         }));
       })
       .catch((err) => {
-        this.setState((oldState) => ({alert: 'danger', message: 'Unable to get donation data. Please try again later.'}));
-        console.log(err)
+        this.setState((oldState) => ({
+          alert: 'danger',
+          message: 'Unable to get donation data. Please try again later.'
+        }));
+        console.log(err);
+      });
+
+    axios.get('/api/categories/')
+      .then((res) => {
+        this.setState((oldState) => ({
+          categories: res.data
+        }));
+      })
+      .catch((err) => {
+        this.setState((oldState) => ({
+          alert: 'danger',
+          message: 'Unable to get category data. Please try again later.'
+        }));
+        console.log(err);
       });
   }
 
@@ -80,7 +98,7 @@ export default class Donate extends Component {
         </Col>
       )
     };
-      
+
     return (
       <React.Fragment>
         <div id="no-items">
@@ -103,7 +121,7 @@ export default class Donate extends Component {
 
   render() {
     const { match } = this.props;
-    const { requests } = this.state;
+    const { requests, categories } = this.state;
 
     const paths = {
       'clothing': match.path + '/clothing',
@@ -116,28 +134,27 @@ export default class Donate extends Component {
     let routes = [];
     let donateCategories = [];
 
-    const renderItemTypeForCategory = (category) => (itemType) => {
-      const itemTypePath = paths[category] + '/' + itemType + '/';
-      routes.push(
-        <Route exact path={ itemTypePath } key={ itemTypePath }>
-          <DonateItemsTable itemType={ itemType } category={ category } requests={ requests } paths={ paths } />
-        </Route>
-      );
-    };
-
     const requestPath = "/donate/:category/:item/:id";
 
     routes.push(
       <Route exact path={ requestPath } key={ requestPath } render={ props => <DonationDetail {...props} requests={ requests } /> } />
     );
 
-    for (var category in itemTypesByCategory) {
-      const renderItemType = renderItemTypeForCategory(category);
-      itemTypesByCategory[category].forEach(renderItemType);
+    if (categories) {
+      categories.forEach((category) => {
+        category.subcategories.forEach((subcategory) => {
+          const path = paths[category.slug] + '/' + subcategory.slug + '/';
+          routes.push(
+            <Route exact path={ path } key={ subcategory.slug }>
+              <DonateItemsTable subcategory={ subcategory } category={ category } requests={ requests } paths={ paths } />
+            </Route>
+          );
+        });
 
-      donateCategories.push(
-        <DonateCategory category={ category } requests={ requests } paths={ paths } />
-      );
+        donateCategories.push(
+          <DonateCategory category={ category } subcategories={ category.subcategories } requests={ requests } paths={ paths } />
+        );
+      });
     }
 
     return (

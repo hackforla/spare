@@ -11,7 +11,7 @@ class RequestSMSBase(SMSMessage):
 
         return {
             'name': instance.name,
-            'item': instance.item.display_name.lower()
+            'items': [item.id for item in instance.request_items.all()],
         }
 
 
@@ -25,7 +25,7 @@ class FulfillmentRequestorSMSBase(SMSMessage):
         return {
             'requestor_name': instance.request.name,
             'donator_name': instance.name,
-            'item': instance.request.item.display_name.lower(),
+            'items': [item.id for item in instance.request_items.all()],
             'location': instance.location,
             'start_time': instance.time_start,
             'end_time': instance.time_end,
@@ -33,7 +33,7 @@ class FulfillmentRequestorSMSBase(SMSMessage):
         }
 
 
-class DonationRequestReceivedSMS(RequestSMSBase):
+class RequestReceivedSMS(RequestSMSBase):
     msg = (
         "Thank you {{ name }}! We've received your request for {{ item }} "
         "and we'll let you know when one becomes available."

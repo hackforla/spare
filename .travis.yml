@@ -20,7 +20,7 @@ install: true
 
 env:
   SECRET_KEY: keepitsecret
-  DJANGO_SETTINGS_MODULE: spare.settings.prod
+  DJANGO_SETTINGS_MODULE: config.settings.prod
   DATABASE_URL: postgres://postgres:postgres_pass@localhost:5432/postgres_db
 
 before_script:

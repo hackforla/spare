@@ -1,5 +1,6 @@
 from django import template
 from django.http import HttpRequest
+
 from suit import utils
 from suit.templatetags.suit_menu import get_admin_site, Menu
 
@@ -29,121 +30,124 @@ def get_menu(context, request):
 
 
 class DynamicMenu(Menu):
-    def init_config(self):
-        """
-        Override default behavior and return menu dynamically based on user type.
-        """
-        super().init_config()
+    pass
+    # def init_config(self):
+    #     """
+    #     Override default behavior and return menu dynamically based on user type.
+    #     """
+    #     super().init_config()
 
-        if not self.request.user.is_authenticated:
-            self.conf_menu = []
+    #     if not self.request.user.is_authenticated:
+    #         self.conf_menu = []
 
-        elif self.request.user.is_superuser:
+    #     elif self.request.user.is_superuser:
 
-            self.conf_menu = [
-                '-',
-                {
-                    'label': 'Scheduling',
-                    'icon': 'icon-calendar',
-                    'models': [
-                        {
-                            'model': 'donations.dropofftime',
-                            'label': 'Dropoff Times',
-                        },
-                        {
-                            'model': 'donations.manualdropoffdate',
-                            'label': 'Manual Dropoff Date',
-                        }
-                    ]
-                },
-                {
-                    'label': 'Locations',
-                    'icon': 'icon-map-marker',
-                    'models': ('donations.location', 'donations.neighborhood')
-                },
-                {
-                    'app': 'donations',
-                    'label': 'Donations',
-                    'models': [
-                        {
-                            'model': 'donations.donationrequest',
-                            'label': 'Requests',
-                        },
-                        {
-                            'model': 'donations.donationfulfillment',
-                            'label': 'Fulfillments',
-                        }
-                    ]
-                },
-                '-',
-                {
-                    'label': 'Users',
-                    'icon': 'icon-user',
-                    'models': (
-                        'core.user',
-                        'organizations.org')
-                },
-                {
-                    'label': 'Settings',
-                    'icon': 'icon-cog',
-                    'models': [
-                        {
-                            'model': 'donations.category',
-                            'label': 'Categories'
-                        },
-                        {
-                            'model': 'donations.item',
-                            'label': 'Items',
-                        },
-                    ]
-                },
-                '-',
-                'sites',
-            ]
+    #         self.conf_menu = [
+    #             '-',
+    #             {
+    #                 'label': 'Scheduling',
+    #                 'icon': 'icon-calendar',
+    #                 'models': [
+    #                     {
+    #                         'model': 'donations.dropofftime',
+    #                         'label': 'Dropoff Times',
+    #                     },
+    #                     {
+    #                         'model': 'donations.manualdropoffdate',
+    #                         'label': 'Manual Dropoff Date',
+    #                     }
+    #                 ]
+    #             },
+    #             {
+    #                 'label': 'Locations',
+    #                 'icon': 'icon-map-marker',
+    #                 'models': ('donations.location', 'donations.neighborhood')
+    #             },
+    #             {
+    #                 'app': 'donations',
+    #                 'label': 'Donations',
+    #                 'models': [
+    #                     {
+    #                         'model': 'donations.donationrequest',
+    #                         'label': 'Requests',
+    #                     },
+    #                     {
+    #                         'model': 'donations.donationfulfillment',
+    #                         'label': 'Fulfillments',
+    #                     }
+    #                 ]
+    #             },
+    #             '-',
+    #             {
+    #                 'label': 'Users',
+    #                 'icon': 'icon-user',
+    #                 'models': (
+    #                     'core.user',
+    #                     'organizations.org')
+    #             },
+    #             {
+    #                 'label': 'Settings',
+    #                 'icon': 'icon-cog',
+    #                 'models': [
+    #                     {
+    #                         'model': 'donations.category',
+    #                         'label': 'Categories'
+    #                     },
+    #                     {
+    #                         'model': 'donations.item',
+    #                         'label': 'Items',
+    #                     },
+    #                 ]
+    #             },
+    #             '-',
+    #             'sites',
+    #             'donations',
+    #         ]
 
-        elif self.request.user.is_org_user:
+    #     elif self.request.user.is_org_user:
 
-            self.conf_menu = [
-                '-',
-                {
-                    'label': 'Scheduling',
-                    'icon': 'icon-calendar',
-                    'models': [
-                        {
-                            'model': 'donations.dropofftime',
-                            'label': 'Dropoff Times',
-                        },
-                        {
-                            'model': 'donations.manualdropoffdate',
-                            'label': 'Manual Dropoff Date',
-                        }
-                    ]
-                },
-                {
-                    'label': 'Locations',
-                    'icon': 'icon-map-marker',
-                    'models': ('donations.location', 'donations.neighborhood')
-                },
-                {
-                    'app': 'donations',
-                    'label': 'Donations',
-                    'models': [
-                        {
-                            'model': 'donations.donationrequest',
-                            'label': 'Requests',
-                        },
-                        {
-                            'model': 'donations.donationfulfillment',
-                            'label': 'Fulfillments',
-                        }
-                    ]
-                },
-                '-',
-                {
-                    'label': 'Users',
-                    'icon': 'icon-user',
-                    'models': (
-                        'core.user',
-                        'organizations.org')
-                },
-            ]
+    #         self.conf_menu = [
+    #             '-',
+    #             {
+    #                 'label': 'Scheduling',
+    #                 'icon': 'icon-calendar',
+    #                 'models': [
+    #                     {
+    #                         'model': 'donations.dropofftime',
+    #                         'label': 'Dropoff Times',
+    #                     },
+    #                     {
+    #                         'model': 'donations.manualdropoffdate',
+    #                         'label': 'Manual Dropoff Date',
+    #                     }
+    #                 ]
+    #             },
+    #             {
+    #                 'label': 'Locations',
+    #                 'icon': 'icon-map-marker',
+    #                 'models': ('donations.location', 'donations.neighborhood')
+    #             },
+    #             {
+    #                 'app': 'donations',
+    #                 'label': 'Donations',
+    #                 'models': [
+    #                     {
+    #                         'model': 'donations.donationrequest',
+    #                         'label': 'Requests',
+    #                     },
+    #                     {
+    #                         'model': 'donations.donationfulfillment',
+    #                         'label': 'Fulfillments',
+    #                     }
+    #                 ]
+    #             },
+    #             '-',
+    #             {
+    #                 'label': 'Users',
+    #                 'icon': 'icon-user',
+    #                 'models': (
+    #                     'core.user',
+    #                     'organizations.org')
+    #             },
+    #             'donations',
+    #         ]

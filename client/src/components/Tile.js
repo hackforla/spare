@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ReactSVG from 'react-svg'
 
@@ -17,11 +18,12 @@ class Tile extends Component {
       side,
       subcategory,
       icon,
-      hoverText
+      hoverText,
+      openModal
     } = this.props;
 
     //<Link to={ '/donate/' + category + '/' + subcategory + '/' } >
-    const href = `/${side}/${category}/${subcategory}/`;
+    //const href = `/${side}/${category}/${subcategory}/`;
 
     // If production environment, prefix asset URL with `/static`
     // TODO: Find a better way to do this (PUBLIC_URL doesn't quite fit our use case)
@@ -42,7 +44,7 @@ class Tile extends Component {
       </Fragment>
     );
     if (!disabled) {
-      content = <Link to={ href }>{ content }</Link>;
+      content = <a onClick={ openModal }>{ content }</a>;
     }
 
     return <div className="tile-container">{ content }</div>;
