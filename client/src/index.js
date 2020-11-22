@@ -2,6 +2,7 @@ import React from 'react';
 import ReactBreakpoints from 'react-breakpoints';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import './i18n';
 
 // Import bootstrap styles
 import 'bootstrap/dist/css/bootstrap.css';
