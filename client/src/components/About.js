@@ -32,13 +32,9 @@ const About = () => {
         <h2>{t('about.aboutSpare')}</h2>
       </div>
       <div>
-        <p className="about-quote">"During this homelessness crisis, we believe every gesture of human kindness makes a difference. A jacket not only brings comfort physically but also, it can build a tiny connection that turns a stranger into a friend."</p>
-        <h3>About</h3>
-        <p>
-          Spare connects people in need of clothing and other essentials with people in the community who have things to spare.
-          It is like a one-on-one Goodwill. The main objective is to foster interactions between the housed and unhoused.
-          We are hoping the donation can be a mechanism for building these connections throughout our community.
-        </p>
+        <p className="about-quote">{t('about.quote')}</p>
+          <h3>{t('about.label')}</h3>
+        <p>{t('about.description')}</p>
         <h3>How it works</h3>
         <p>
           There are two main pages, a donation page and a request page. If you want to donate, the donation page houses each request that comes in, and you can fulfill a specific request from there.
