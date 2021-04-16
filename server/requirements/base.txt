@@ -2,7 +2,7 @@ coreapi==2.3.3
 Django==1.11.22
 django-anymail==3.0
 django-cors-headers==2.1.0
-django-debug-toolbar==1.8
+django-debug-toolbar==1.11.1
 django-enumfields==0.10.1
 django-extensions==1.9.1
 django-filter==1.1.0
