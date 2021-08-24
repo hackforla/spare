@@ -8,6 +8,8 @@ i18n
   .init({
     fallbackLng: 'en',
     lng: 'en',
+    ns: ["common"],
+    defaultNS: "common",
     resources: {
         en: {
             common: en_translation
