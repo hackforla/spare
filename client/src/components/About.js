@@ -38,7 +38,7 @@ const About = () => {
         <h3>{t('about.how it work title')}</h3>
         <p>{t('about.how it work')}</p>
         <h3>The team</h3>
-        <Trans i18nKey="teamBody">
+        <Trans i18nKey="about.teamBody">
           We are a small team of volunteers with <a href={hackforlaUrl}> Hack for LA </a>. You can contribute to our <a href={githubUrl}>Github project</a> or find us on <a href={slackUrl}>Slack</a>. You can also email us at <a href='mailto:team@whatcanyouspare.org'>team@whatcanyouspare.org</a> but keep in mind that we are volunteers and may be slow to respond.
         </Trans>
         <div className="team-images">
