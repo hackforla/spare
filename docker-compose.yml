@@ -23,6 +23,7 @@ services:
     environment:
       POSTGRES_USER: postgres_user
       POSTGRES_DB: postgres_db
+      POSTGRES_PASSWORD: password
     ports:
       - "${DB_PORT:-5432}:5432"
   client:

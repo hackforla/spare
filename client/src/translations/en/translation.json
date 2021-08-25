@@ -1,0 +1,12 @@
+{
+    "about": {
+        "aboutSpare": "About Spare",
+        "quote": "During this homelessness crisis, we believe every gesture of human kindness makes a difference. A jacket not only brings comfort physically but also, it can build a tiny connection that turns a stranger into a friend.",
+        "label": "About",
+        "description": "Spare connects people in need of clothing and other essentials with people in the community who have things to spare. It is like a one-on-one Goodwill. The main objective is to foster interactions between the housed and unhoused. We are hoping the donation can be a mechanism for building these connections throughout our community.",
+        "teamHeader": "The team",
+        "teamBody": "We are a small team of volunteers with <1> Hack for LA </1>. You can contribute to our <2>Github project</2> or find us on <3>Slack</3>. You can also email us at <4>team@whatcanyouspare.org</4> but keep in mind that we are volunteers and may be slow to respond. foo",
+        "how it work title": "How it works",
+        "how it work": "There are two main pages, a donation page and a request page. If you want to donate, the donation page houses each request that comes in, and you can fulfill a specific request from there.If you’d like to request an item, the request page has categories you can fill out a short form to request. Once there is a match both the requester and donator will receive an email and text on when to pick-up/drop-off the item at the designated donation facility. These locations are well known established donation facilities, already in use for general donations."
+    }
+}
